@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RF Drive Control - Livro Caixa</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f0fff0; margin:0; padding:0; }
+    header { background-color: #006400; color: white; padding: 20px; text-align: center; }
+    header h1 { margin: 0; }
+    main { padding: 20px; margin-bottom: 40px; }
+    section { margin-bottom: 40px; }
+    label { display: inline-block; width: 150px; font-weight: bold; margin-bottom: 5px; }
+    input[type="number"], input[type="text"], select { margin-bottom: 10px; padding:5px; border-radius:5px; border:1px solid #ccc; width: calc(100% - 160px); }
+    .form-row { display:flex; align-items:center; margin-bottom:5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #999; padding: 8px; text-align: center; }
+    th { background-color: #c5e1a5; }
+    .summary-card { background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+    .btn { background-color: #388e3c; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; }
+    .btn:hover { background-color: #2e7d32; }
+    .card-title { font-weight: bold; margin-bottom: 5px; }
+    .flex { display: flex; gap: 10px; flex-wrap: wrap; }
+    .whatsapp-btn { background-color: #25d366; color: white; padding: 10px 20px; text-align: center; display: inline-block; border-radius: 5px; text-decoration: none; margin-top: 15px; }
+    footer { position: fixed; bottom: 10px; right: 20px; font-size: 12px; font-weight: bold; color: #333; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>RF Drive Control - Livro Caixa</h1>
+</header>
+
+<main>
+<section class="top-info">
+  <h2 style="text-align:center; margin-bottom:5px;">BUSCA DIÁRIA</h2>
+
+ <!-- Campo da Meta Diária -->
+<div class="form-row">
+  <label>🎯 Meta Diária:</label>
+  <input type="number" id="metaDiaria" placeholder="Valor" 
+         oninput="salvarMeta(); atualizarMeta();">
+</div>
+
+<script>
+// --- Salvar Meta Diária ---
+function salvarMeta() {
+  const meta = document.getElementById('metaDiaria').value;
+  localStorage.setItem('metaDiaria', meta);
+}
+
+// --- Carregar Meta Diária ao iniciar ---
+function carregarMeta() {
+  const metaSalva = localStorage.getItem('metaDiaria');
+  if (metaSalva !== null) {
+    document.getElementById('metaDiaria').value = metaSalva;
+  }
+  atualizarMeta(); // já atualiza exibição
+}
+
+// Chama no início
+carregarMeta();
+</script>
+
+  <!-- Caixa Atual -->
+  <div class="form-row">
+    <label>💰 Caixa Atual:</label>
+    <span id="caixaAtual">0.00</span>
+  </div>
+
+  <!-- Falta para Meta -->
+  <div class="form-row">
+    <label>📈 Falta para Meta:</label>
+    <span id="faltaMeta" style="font-weight:bold;">0.00</span>
+  </div>
+</section>
+
+  <section>
+    <h3>🚘 Dados para Manutenção Preventiva</h3>
+    <div class="form-row"><label>Km Inicial:</label><input type="number" id="kmInicial" oninput="atualizarKmTotal(); salvarCampo('kmInicial')"></div>
+    <div class="form-row"><label>Km Final:</label><input type="number" id="kmFinal" oninput="atualizarKmTotal(); salvarCampo('kmFinal')"></div>
+    <div class="form-row"><label>Km Total Rodado:</label><span id="kmTotal">0</span></div>
+    <div class="form-row"><label>Custo fixo por Km:</label><input type="number" id="custoKm" placeholder="R$/km" oninput="atualizarCustos(); salvarCampo('custoKm')"></div>
+    <div class="form-row"><label>🔧 Reserva Manutenção:</label><span id="reservaManutencao">0.00</span></div>
+  </section>
+
+
+  <section>
+    <h2>🚗 Viagens Realizadas</h2>
+    <input type="number" id="valorViagem" placeholder="Valor R$">
+    <input type="text" id="descricaoViagem" placeholder="Descrição">
+    <button class="btn" onclick="registrar('viagens')">Registrar</button>
+    <table id="tabelaViagens">
+      <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>📥 Entradas Adicionais</h2>
+    <input type="number" id="valorEntrada" placeholder="Valor R$">
+    <input type="text" id="descricaoEntrada" placeholder="Descrição">
+    <button class="btn" onclick="registrar('entradas')">Registrar</button>
+    <table id="tabelaEntradas">
+      <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>💸 Saídas</h2>
+    <select id="tipoDespesa">
+      <option value="Não se aplica">Não se aplica</option>
+      <option value="GNV">GNV</option>
+      <option value="Gasolina/Etanol">Gasolina/Etanol</option>
+      <option value="Manutenção">Manutenção</option>
+      <option value="Pagamentos">Pagamentos</option>
+      <option value="Café">Café</option>
+      <option value="Almoço">Almoço</option>
+      <option value="Janta">Janta</option>
+      <option value="Lanche">Lanche</option>
+      <option value="Outros">Outros</option>
+    </select>
+    <input type="number" id="valorDespesa" placeholder="Valor R$">
+    <input type="text" id="descricaoDespesa" placeholder="Descrição">
+    <button class="btn" onclick="registrar('despesas')">Registrar</button>
+    <table id="tabelaDespesas">
+      <tr><th>Data/Hora</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>📊 Resumo Geral</h2>
+    <label>Buscar por data:</label>
+    <input type="date" id="filtroResumo">
+    <button class="btn" onclick="buscarData()">Buscar</button>
+    <div id="resumoContainer" class="flex"></div>
+    <a href="#" id="whatsappLink" class="whatsapp-btn" target="_blank">📤 Enviar via WhatsApp</a>
+  </section>
+</main>
+
+<footer>
+  <div id="dataHora"></div>
+</footer>
+
+<script>
+function atualizarDataHora() {
+  document.getElementById('dataHora').textContent = new Date().toLocaleString('pt-BR');
+}
+setInterval(atualizarDataHora, 1000);
+
+function carregarDados(chave) {
+  return JSON.parse(localStorage.getItem(chave) || "[]");
+}
+function salvarDados(chave, dados) {
+  localStorage.setItem(chave, JSON.stringify(dados));
+}
+
+let registros = {
+  viagens: carregarDados('viagens'),
+  entradas: carregarDados('entradas'),
+  despesas: carregarDados('despesas')
+};
+
+// --- ATUALIZA RESERVA ---
+function atualizarCustos() {
+  const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
+  const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
+  const reserva = kmTotal * custoKm;
+  document.getElementById('reservaManutencao').textContent = reserva.toFixed(2);
+}
+
+function atualizarKmTotal() {
+  const kmIni = parseFloat(document.getElementById('kmInicial').value) || 0;
+  const kmFin = parseFloat(document.getElementById('kmFinal').value) || 0;
+  const total = kmFin - kmIni;
+  document.getElementById('kmTotal').textContent = total.toFixed(1);
+  atualizarCustos();
+}
+
+function registrar(tipo) {
+  const now = new Date();
+  const dataHoraVisivel = now.toLocaleString('pt-BR');
+  const timestamp = now.getTime();
+
+  let valor, desc, tipoDesp;
+  if (tipo === 'viagens') {
+    valor = parseFloat(document.getElementById('valorViagem').value);
+    desc = document.getElementById('descricaoViagem').value;
+  }
+  if (tipo === 'entradas') {
+    valor = parseFloat(document.getElementById('valorEntrada').value);
+    desc = document.getElementById('descricaoEntrada').value;
+  }
+  if (tipo === 'despesas') {
+    valor = parseFloat(document.getElementById('valorDespesa').value);
+    desc = document.getElementById('descricaoDespesa').value;
+    tipoDesp = document.getElementById('tipoDespesa').value;
+  }
+  if (!isFinite(valor)) {
+    alert('Preencha o valor');
+    return;
+  }
+
+  let registro = { dataHora: dataHoraVisivel, timestamp, valor, descricao: desc };
+  if (tipo === 'despesas') registro.tipo = tipoDesp;
+
+  registros[tipo].push(registro);
+  salvarDados(tipo, registros[tipo]);
+  atualizarTabela(tipo);
+  atualizarCaixaAtual();
+
+  if (tipo === 'viagens') { document.getElementById('valorViagem').value=''; document.getElementById('descricaoViagem').value=''; }
+  if (tipo === 'entradas') { document.getElementById('valorEntrada').value=''; document.getElementById('descricaoEntrada').value=''; }
+  if (tipo === 'despesas') { document.getElementById('valorDespesa').value=''; document.getElementById('descricaoDespesa').value=''; }
+}
+
+function atualizarTabela(tipo) {
+  const tabela = document.getElementById('tabela' + tipo.charAt(0).toUpperCase() + tipo.slice(1));
+  const cabecalho = (tipo === 'despesas')
+    ? '<tr><th>Data/Hora</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>'
+    : '<tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>';
+
+  tabela.innerHTML = cabecalho;
+
+  registros[tipo].forEach((r, i) => {
+    const valorFmt = (parseFloat(r.valor) || 0).toFixed(2);
+    tabela.innerHTML += `<tr>
+      <td>${r.dataHora || ''}</td>
+      ${tipo === 'despesas' ? `<td>${r.tipo || ''}</td>` : ''}
+      <td>${valorFmt}</td>
+      <td>${r.descricao || ''}</td>
+      <td>
+        <button onclick="editar('${tipo}',${i})">✏️</button>
+        <button onclick="excluir('${tipo}',${i})">❌</button>
+      </td>
+    </tr>`;
+  });
+}
+
+function excluir(tipo, index) {
+  registros[tipo].splice(index, 1);
+  salvarDados(tipo, registros[tipo]);
+  atualizarTabela(tipo);
+  atualizarCaixaAtual();
+}
+
+function editar(tipo, index) {
+  let r = registros[tipo][index];
+  let novoValor = prompt('Novo valor:', r.valor);
+  if (novoValor !== null) r.valor = parseFloat(novoValor) || r.valor;
+  let novaDesc = prompt('Nova descrição:', r.descricao);
+  if (novaDesc !== null) r.descricao = novaDesc;
+  salvarDados(tipo, registros[tipo]);
+  atualizarTabela(tipo);
+  atualizarCaixaAtual();
+}
+
+function atualizarCaixaAtual() {
+  const soma = arr => arr.reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
+  const totalViagens  = soma(registros.viagens);
+  const totalEntradas = soma(registros.entradas);
+  const totalDespesas = soma(registros.despesas);
+  document.getElementById('caixaAtual').textContent = (totalViagens + totalEntradas - totalDespesas).toFixed(2);
+  atualizarMeta();
+}
+
+function atualizarMeta() {
+  const meta = parseFloat(document.getElementById('metaDiaria').value) || 0;
+  const saldo = parseFloat(document.getElementById('caixaAtual').textContent) || 0;
+  const falta = meta - saldo;
+
+  const faltaEl = document.getElementById('faltaMeta');
+  if (falta >= 0) {
+    faltaEl.textContent = '-' + falta.toFixed(2);
+    faltaEl.style.color = 'red';
+  } else {
+    faltaEl.textContent = '+' + Math.abs(falta).toFixed(2);
+    faltaEl.style.color = 'green';
+  }
+}
+
+function obterTimestampRegistro(r) {
+  if (r && isFinite(r.timestamp)) return Number(r.timestamp);
+  if (r && r.dataHora) {
+    const d1 = new Date(r.dataHora);
+    if (!isNaN(d1)) return d1.getTime();
+    const m = String(r.dataHora).match(/^(\d{2})\/(\d{2})\/(\d{4})(?:,\s*(\d{2}):(\d{2})(?::(\d{2}))?)?/);
+    if (m) {
+      const dd = parseInt(m[1],10), mm = parseInt(m[2],10)-1, yy = parseInt(m[3],10);
+      const hh = parseInt(m[4]||'0',10), mi = parseInt(m[5]||'0',10), ss = parseInt(m[6]||'0',10);
+      return new Date(yy, mm, dd, hh, mi, ss).getTime();
+    }
+  }
+  return NaN;
+}
+
+function buscarData() {
+  const data = document.getElementById('filtroResumo').value;
+  if (!data) return alert('Escolha uma data');
+
+  const [yy, mm, dd] = data.split('-').map(Number);
+  const inicio = new Date(yy, (mm-1), dd, 0, 0, 0, 0).getTime();
+  const fim    = new Date(yy, (mm-1), dd, 23, 59, 59, 999).getTime();
+
+  let resumo = '', totalViagens = 0, totalEntradas = 0, totalDespesas = 0;
+
+  ['viagens', 'entradas', 'despesas'].forEach(tipo => {
+    registros[tipo].forEach(r => {
+      const ts = obterTimestampRegistro(r);
+      if (!isFinite(ts)) return;
+      if (ts >= inicio && ts <= fim) {
+        const v = parseFloat(r.valor) || 0;
+        if (tipo === 'viagens')  totalViagens  += v;
+        if (tipo === 'entradas') totalEntradas += v;
+        if (tipo === 'despesas') totalDespesas += v;
+
+        resumo += `<div class="summary-card">
+          <div class="card-title">
+            ${tipo === 'viagens' ? '🚗 Viagem' : tipo === 'entradas' ? '📥 Entrada' : '💸 Saída'}
+          </div>
+          Data: ${r.dataHora || ''}<br>
+          Valor: R$ ${v.toFixed(2)}<br>
+          ${tipo === 'despesas' ? `Tipo: ${r.tipo || '—'}<br>` : ''}
+          Descrição: ${r.descricao || '—'}
+        </div>`;
+      }
+    });
+  });
+
+  // --- CALCULAR RESERVA DE MANUTENÇÃO ---
+  const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
+  const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
+  const reservaManutencao = kmTotal * custoKm;
+
+  // --- VALOR LÍQUIDO COM RESERVA ---
+  const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
+
+  const resumoFinanceiro = `
+    <div class="summary-card"><strong>📊 Totais:</strong><br>
+    🚗 Total Viagens: R$ ${totalViagens.toFixed(2)}<br>
+    📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}<br>
+    💸 Total Saídas: R$ ${totalDespesas.toFixed(2)}<br>
+    🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}<br>
+    ✅ Valor Líquido: R$ ${liquido.toFixed(2)}
+    </div>
+  `;
+
+  document.getElementById('resumoContainer').innerHTML = resumoFinanceiro + resumo;
+
+  // --- LINK WHATSAPP FORMATADO ---
+  document.getElementById('whatsappLink').href =
+    `https://wa.me/?text=${encodeURIComponent(
+      `🚖 RF DRIVE CONTROL 🚖\nResumo do dia ${dd.toString().padStart(2,'0')}/${mm.toString().padStart(2,'0')}/${yy}\n\n` +
+      `🚕Total Viagens: R$ ${totalViagens.toFixed(2)}\n` +
+      `📥Total Entradas: R$ ${totalEntradas.toFixed(2)}\n` +
+      `📤Total Saídas: R$ ${totalDespesas.toFixed(2)}\n` +
+      `🔧Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}\n\n` +
+      `💸Valor Líquido: R$ ${liquido.toFixed(2)}`
+    )}`;
+}
+
+['viagens', 'entradas', 'despesas'].forEach(tipo => atualizarTabela(tipo));
+atualizarCaixaAtual();
+</script>
+
+</body>
+</html>
