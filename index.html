@@ -83,7 +83,15 @@
   <section>
     <h2>🚗 Viagens Realizadas</h2>
     <input type="number" id="valorViagem" placeholder="Valor R$">
-    <input type="text" id="descricaoViagem" placeholder="Descrição">
+    <!-- Substituição do campo de texto por seletor conforme solicitado -->
+    <select id="descricaoViagem">
+      <option value="UBER">UBER</option>
+      <option value="99">99</option>
+      <option value="INDRIVER">INDRIVER</option>
+      <option value="GRUPO">GRUPO</option>
+      <option value="VIAGENS PARTICULAR">VIAGENS PARTICULAR</option>
+      <option value="OUTROS APP">OUTROS APP</option>
+    </select>
     <button class="btn" onclick="registrar('viagens')">Registrar</button>
     <table id="tabelaViagens">
       <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
