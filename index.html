@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fluxo Driver Control - Livro Caixa</title>
+  <title>FLUXO Driver Control - Livro Caixa</title>
   <style>
     body { font-family: Arial, sans-serif; background-color: #f0fff0; margin:0; padding:0; }
     header { background-color: #006400; color: white; padding: 20px; text-align: center; }
@@ -28,12 +28,12 @@
 <body>
 
 <header>
-  <h1>Fluxo Driver - Organize seus ganhos e gastos no volante</h1>
+  <h1>FLUXO Driver Livro Caixa</h1>
 </header>
 
 <main>
 <section class="top-info">
-  <h2 style="text-align:center; margin-bottom:5px;">BUSCA DIÁRIA</h2>
+  <h2 style="text-align:center; margin-bottom:5px;">Busca Diária</h2>
 
  <!-- Campo da Meta Diária -->
 <div class="form-row">
@@ -57,9 +57,6 @@ function carregarMeta() {
   }
   atualizarMeta(); // já atualiza exibição
 }
-
-// Chama no início
-carregarMeta();
 </script>
 
   <!-- Caixa Atual -->
@@ -147,11 +144,26 @@ function atualizarDataHora() {
 }
 setInterval(atualizarDataHora, 1000);
 
+// Funções utilitárias de armazenamento
 function carregarDados(chave) {
   return JSON.parse(localStorage.getItem(chave) || "[]");
 }
 function salvarDados(chave, dados) {
   localStorage.setItem(chave, JSON.stringify(dados));
+}
+function salvarCampo(campo) {
+  const valor = document.getElementById(campo).value;
+  localStorage.setItem(campo, valor);
+}
+function carregarCampos() {
+  ['kmInicial','kmFinal','custoKm'].forEach(campo => {
+    const valor = localStorage.getItem(campo);
+    if (valor !== null) {
+      document.getElementById(campo).value = valor;
+    }
+  });
+  atualizarKmTotal();
+  atualizarCustos();
 }
 
 let registros = {
@@ -175,6 +187,8 @@ function atualizarKmTotal() {
   document.getElementById('kmTotal').textContent = total.toFixed(1);
   atualizarCustos();
 }
+
+// --- resto do seu código original abaixo --- (registrar, atualizarTabela, excluir, editar etc.)
 
 function registrar(tipo) {
   const now = new Date();
@@ -326,41 +340,11 @@ function buscarData() {
     });
   });
 
-  // --- CALCULAR RESERVA DE MANUTENÇÃO ---
   const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
   const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
   const reservaManutencao = kmTotal * custoKm;
-
-  // --- VALOR LÍQUIDO COM RESERVA ---
   const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
 
   const resumoFinanceiro = `
     <div class="summary-card"><strong>📊 Totais:</strong><br>
-    🚗 Total Viagens: R$ ${totalViagens.toFixed(2)}<br>
-    📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}<br>
-    💸 Total Saídas: R$ ${totalDespesas.toFixed(2)}<br>
-    🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}<br>
-    ✅ Valor Líquido: R$ ${liquido.toFixed(2)}
-    </div>
-  `;
-
-  document.getElementById('resumoContainer').innerHTML = resumoFinanceiro + resumo;
-
-  // --- LINK WHATSAPP FORMATADO ---
-  document.getElementById('whatsappLink').href =
-    `https://wa.me/?text=${encodeURIComponent(
-      `🚖 FLUXO DRIVER 🚖\nResumo do dia ${dd.toString().padStart(2,'0')}/${mm.toString().padStart(2,'0')}/${yy}\n\n` +
-      `🚕Total Viagens: R$ ${totalViagens.toFixed(2)}\n` +
-      `📥Total Entradas: R$ ${totalEntradas.toFixed(2)}\n` +
-      `📤Total Saídas: R$ ${totalDespesas.toFixed(2)}\n` +
-      `🔧Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}\n\n` +
-      `💸Valor Líquido: R$ ${liquido.toFixed(2)}`
-    )}`;
-}
-
-['viagens', 'entradas', 'despesas'].forEach(tipo => atualizarTabela(tipo));
-atualizarCaixaAtual();
-</script>
-
-</body>
-</html>
+   
