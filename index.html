@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FLUXO Driver Control - Livro Caixa</title>
   <style>
     body { font-family: Arial, sans-serif; background-color: #f0fff0; margin:0; padding:0; }
@@ -11,8 +11,10 @@
     main { padding: 20px; margin-bottom: 40px; }
     section { margin-bottom: 40px; }
     label { display: inline-block; width: 150px; font-weight: bold; margin-bottom: 5px; }
-    input[type="number"], input[type="text"], select { margin-bottom: 10px; padding:5px; border-radius:5px; border:1px solid #ccc; width: calc(100% - 160px); }
-    .form-row { display:flex; align-items:center; margin-bottom:5px; }
+    input[type="number"], input[type="text"], select {
+      margin-bottom: 10px; padding:5px; border-radius:5px; border:1px solid #ccc; width: calc(100% - 160px);
+    }
+    .form-row { display:flex; align-items:center; margin-bottom:5px; gap: 10px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { border: 1px solid #999; padding: 8px; text-align: center; }
     th { background-color: #c5e1a5; }
@@ -32,55 +34,51 @@
 </header>
 
 <main>
-<section class="top-info">
-  <h2 style="text-align:center; margin-bottom:5px;">Busca Diária</h2>
+  <section class="top-info">
+    <h2 style="text-align:center; margin-bottom:5px;">Busca Diária</h2>
 
- <!-- Campo da Meta Diária -->
-<div class="form-row">
-  <label>🎯 Meta Diária:</label>
-  <input type="number" id="metaDiaria" placeholder="Valor" 
-         oninput="salvarMeta(); atualizarMeta();">
-</div>
+    <!-- Meta Diária -->
+    <div class="form-row">
+      <label>🎯 Meta Diária:</label>
+      <input type="number" id="metaDiaria" placeholder="Valor" oninput="salvarMeta(); atualizarMeta();">
+    </div>
 
-<script>
-// --- Salvar Meta Diária ---
-function salvarMeta() {
-  const meta = document.getElementById('metaDiaria').value;
-  localStorage.setItem('metaDiaria', meta);
-}
+    <!-- Caixa Atual -->
+    <div class="form-row">
+      <label>💰 Caixa Atual:</label>
+      <span id="caixaAtual">0.00</span>
+    </div>
 
-// --- Carregar Meta Diária ao iniciar ---
-function carregarMeta() {
-  const metaSalva = localStorage.getItem('metaDiaria');
-  if (metaSalva !== null) {
-    document.getElementById('metaDiaria').value = metaSalva;
-  }
-  atualizarMeta(); // já atualiza exibição
-}
-</script>
-
-  <!-- Caixa Atual -->
-  <div class="form-row">
-    <label>💰 Caixa Atual:</label>
-    <span id="caixaAtual">0.00</span>
-  </div>
-
-  <!-- Falta para Meta -->
-  <div class="form-row">
-    <label>📈 Falta para Meta:</label>
-    <span id="faltaMeta" style="font-weight:bold;">0.00</span>
-  </div>
-</section>
+    <!-- Falta para Meta -->
+    <div class="form-row">
+      <label>📈 Falta para Meta:</label>
+      <span id="faltaMeta" style="font-weight:bold;">0.00</span>
+    </div>
+  </section>
 
   <section>
     <h3>🚘 Dados para Manutenção Preventiva</h3>
-    <div class="form-row"><label>Km Inicial:</label><input type="number" id="kmInicial" oninput="atualizarKmTotal(); salvarCampo('kmInicial')"></div>
-    <div class="form-row"><label>Km Final:</label><input type="number" id="kmFinal" oninput="atualizarKmTotal(); salvarCampo('kmFinal')"></div>
-    <div class="form-row"><label>Km Total Rodado:</label><span id="kmTotal">0</span></div>
-    <div class="form-row"><label>Custo fixo por Km:</label><input type="number" id="custoKm" placeholder="R$/km" oninput="atualizarCustos(); salvarCampo('custoKm')"></div>
-    <div class="form-row"><label>🔧 Reserva Manutenção:</label><span id="reservaManutencao">0.00</span></div>
+    <div class="form-row">
+      <label>Km Inicial:</label>
+      <input type="number" id="kmInicial" oninput="atualizarKmTotal(); salvarCampo('kmInicial')">
+    </div>
+    <div class="form-row">
+      <label>Km Final:</label>
+      <input type="number" id="kmFinal" oninput="atualizarKmTotal(); salvarCampo('kmFinal')">
+    </div>
+    <div class="form-row">
+      <label>Km Total Rodado:</label>
+      <span id="kmTotal">0</span>
+    </div>
+    <div class="form-row">
+      <label>Custo fixo por Km:</label>
+      <input type="number" id="custoKm" placeholder="R$/km" oninput="atualizarCustos(); salvarCampo('custoKm')">
+    </div>
+    <div class="form-row">
+      <label>🔧 Reserva Manutenção:</label>
+      <span id="reservaManutencao">0.00</span>
+    </div>
   </section>
-
 
   <section>
     <h2>🚗 Viagens Realizadas</h2>
@@ -139,212 +137,264 @@ function carregarMeta() {
 </footer>
 
 <script>
-function atualizarDataHora() {
-  document.getElementById('dataHora').textContent = new Date().toLocaleString('pt-BR');
-}
-setInterval(atualizarDataHora, 1000);
+  // ===== Utilitários de armazenamento =====
+  function carregarDados(chave) {
+    return JSON.parse(localStorage.getItem(chave) || "[]");
+  }
+  function salvarDados(chave, dados) {
+    localStorage.setItem(chave, JSON.stringify(dados));
+  }
+  function salvarCampo(campo) {
+    const valor = document.getElementById(campo).value;
+    localStorage.setItem(campo, valor);
+  }
 
-// Funções utilitárias de armazenamento
-function carregarDados(chave) {
-  return JSON.parse(localStorage.getItem(chave) || "[]");
-}
-function salvarDados(chave, dados) {
-  localStorage.setItem(chave, JSON.stringify(dados));
-}
-function salvarCampo(campo) {
-  const valor = document.getElementById(campo).value;
-  localStorage.setItem(campo, valor);
-}
-function carregarCampos() {
-  ['kmInicial','kmFinal','custoKm'].forEach(campo => {
-    const valor = localStorage.getItem(campo);
-    if (valor !== null) {
-      document.getElementById(campo).value = valor;
+  // ===== Meta Diária =====
+  function salvarMeta() {
+    const meta = document.getElementById('metaDiaria').value;
+    localStorage.setItem('metaDiaria', meta);
+  }
+  function carregarMeta() {
+    const metaSalva = localStorage.getItem('metaDiaria');
+    if (metaSalva !== null) {
+      document.getElementById('metaDiaria').value = metaSalva;
     }
-  });
-  atualizarKmTotal();
-  atualizarCustos();
-}
-
-let registros = {
-  viagens: carregarDados('viagens'),
-  entradas: carregarDados('entradas'),
-  despesas: carregarDados('despesas')
-};
-
-// --- ATUALIZA RESERVA ---
-function atualizarCustos() {
-  const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
-  const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
-  const reserva = kmTotal * custoKm;
-  document.getElementById('reservaManutencao').textContent = reserva.toFixed(2);
-}
-
-function atualizarKmTotal() {
-  const kmIni = parseFloat(document.getElementById('kmInicial').value) || 0;
-  const kmFin = parseFloat(document.getElementById('kmFinal').value) || 0;
-  const total = kmFin - kmIni;
-  document.getElementById('kmTotal').textContent = total.toFixed(1);
-  atualizarCustos();
-}
-
-// --- resto do seu código original abaixo --- (registrar, atualizarTabela, excluir, editar etc.)
-
-function registrar(tipo) {
-  const now = new Date();
-  const dataHoraVisivel = now.toLocaleString('pt-BR');
-  const timestamp = now.getTime();
-
-  let valor, desc, tipoDesp;
-  if (tipo === 'viagens') {
-    valor = parseFloat(document.getElementById('valorViagem').value);
-    desc = document.getElementById('descricaoViagem').value;
-  }
-  if (tipo === 'entradas') {
-    valor = parseFloat(document.getElementById('valorEntrada').value);
-    desc = document.getElementById('descricaoEntrada').value;
-  }
-  if (tipo === 'despesas') {
-    valor = parseFloat(document.getElementById('valorDespesa').value);
-    desc = document.getElementById('descricaoDespesa').value;
-    tipoDesp = document.getElementById('tipoDespesa').value;
-  }
-  if (!isFinite(valor)) {
-    alert('Preencha o valor');
-    return;
+    atualizarMeta();
   }
 
-  let registro = { dataHora: dataHoraVisivel, timestamp, valor, descricao: desc };
-  if (tipo === 'despesas') registro.tipo = tipoDesp;
+  // ===== Estado em memória =====
+  let registros = {
+    viagens: carregarDados('viagens'),
+    entradas: carregarDados('entradas'),
+    despesas: carregarDados('despesas')
+  };
 
-  registros[tipo].push(registro);
-  salvarDados(tipo, registros[tipo]);
-  atualizarTabela(tipo);
-  atualizarCaixaAtual();
-
-  if (tipo === 'viagens') { document.getElementById('valorViagem').value=''; document.getElementById('descricaoViagem').value=''; }
-  if (tipo === 'entradas') { document.getElementById('valorEntrada').value=''; document.getElementById('descricaoEntrada').value=''; }
-  if (tipo === 'despesas') { document.getElementById('valorDespesa').value=''; document.getElementById('descricaoDespesa').value=''; }
-}
-
-function atualizarTabela(tipo) {
-  const tabela = document.getElementById('tabela' + tipo.charAt(0).toUpperCase() + tipo.slice(1));
-  const cabecalho = (tipo === 'despesas')
-    ? '<tr><th>Data/Hora</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>'
-    : '<tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>';
-
-  tabela.innerHTML = cabecalho;
-
-  registros[tipo].forEach((r, i) => {
-    const valorFmt = (parseFloat(r.valor) || 0).toFixed(2);
-    tabela.innerHTML += `<tr>
-      <td>${r.dataHora || ''}</td>
-      ${tipo === 'despesas' ? `<td>${r.tipo || ''}</td>` : ''}
-      <td>${valorFmt}</td>
-      <td>${r.descricao || ''}</td>
-      <td>
-        <button onclick="editar('${tipo}',${i})">✏️</button>
-        <button onclick="excluir('${tipo}',${i})">❌</button>
-      </td>
-    </tr>`;
-  });
-}
-
-function excluir(tipo, index) {
-  registros[tipo].splice(index, 1);
-  salvarDados(tipo, registros[tipo]);
-  atualizarTabela(tipo);
-  atualizarCaixaAtual();
-}
-
-function editar(tipo, index) {
-  let r = registros[tipo][index];
-  let novoValor = prompt('Novo valor:', r.valor);
-  if (novoValor !== null) r.valor = parseFloat(novoValor) || r.valor;
-  let novaDesc = prompt('Nova descrição:', r.descricao);
-  if (novaDesc !== null) r.descricao = novaDesc;
-  salvarDados(tipo, registros[tipo]);
-  atualizarTabela(tipo);
-  atualizarCaixaAtual();
-}
-
-function atualizarCaixaAtual() {
-  const soma = arr => arr.reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
-  const totalViagens  = soma(registros.viagens);
-  const totalEntradas = soma(registros.entradas);
-  const totalDespesas = soma(registros.despesas);
-  document.getElementById('caixaAtual').textContent = (totalViagens + totalEntradas - totalDespesas).toFixed(2);
-  atualizarMeta();
-}
-
-function atualizarMeta() {
-  const meta = parseFloat(document.getElementById('metaDiaria').value) || 0;
-  const saldo = parseFloat(document.getElementById('caixaAtual').textContent) || 0;
-  const falta = meta - saldo;
-
-  const faltaEl = document.getElementById('faltaMeta');
-  if (falta >= 0) {
-    faltaEl.textContent = '-' + falta.toFixed(2);
-    faltaEl.style.color = 'red';
-  } else {
-    faltaEl.textContent = '+' + Math.abs(falta).toFixed(2);
-    faltaEl.style.color = 'green';
+  // ===== Atualizações visuais =====
+  function atualizarDataHora() {
+    document.getElementById('dataHora').textContent = new Date().toLocaleString('pt-BR');
   }
-}
+  setInterval(atualizarDataHora, 1000);
 
-function obterTimestampRegistro(r) {
-  if (r && isFinite(r.timestamp)) return Number(r.timestamp);
-  if (r && r.dataHora) {
-    const d1 = new Date(r.dataHora);
-    if (!isNaN(d1)) return d1.getTime();
-    const m = String(r.dataHora).match(/^(\d{2})\/(\d{2})\/(\d{4})(?:,\s*(\d{2}):(\d{2})(?::(\d{2}))?)?/);
-    if (m) {
-      const dd = parseInt(m[1],10), mm = parseInt(m[2],10)-1, yy = parseInt(m[3],10);
-      const hh = parseInt(m[4]||'0',10), mi = parseInt(m[5]||'0',10), ss = parseInt(m[6]||'0',10);
-      return new Date(yy, mm, dd, hh, mi, ss).getTime();
-    }
-  }
-  return NaN;
-}
-
-function buscarData() {
-  const data = document.getElementById('filtroResumo').value;
-  if (!data) return alert('Escolha uma data');
-
-  const [yy, mm, dd] = data.split('-').map(Number);
-  const inicio = new Date(yy, (mm-1), dd, 0, 0, 0, 0).getTime();
-  const fim    = new Date(yy, (mm-1), dd, 23, 59, 59, 999).getTime();
-
-  let resumo = '', totalViagens = 0, totalEntradas = 0, totalDespesas = 0;
-
-  ['viagens', 'entradas', 'despesas'].forEach(tipo => {
-    registros[tipo].forEach(r => {
-      const ts = obterTimestampRegistro(r);
-      if (!isFinite(ts)) return;
-      if (ts >= inicio && ts <= fim) {
-        const v = parseFloat(r.valor) || 0;
-        if (tipo === 'viagens')  totalViagens  += v;
-        if (tipo === 'entradas') totalEntradas += v;
-        if (tipo === 'despesas') totalDespesas += v;
-
-        resumo += `<div class="summary-card">
-          <div class="card-title">
-            ${tipo === 'viagens' ? '🚗 Viagem' : tipo === 'entradas' ? '📥 Entrada' : '💸 Saída'}
-          </div>
-          Data: ${r.dataHora || ''}<br>
-          Valor: R$ ${v.toFixed(2)}<br>
-          ${tipo === 'despesas' ? `Tipo: ${r.tipo || '—'}<br>` : ''}
-          Descrição: ${r.descricao || '—'}
-        </div>`;
-      }
+  function carregarCampos() {
+    ['kmInicial','kmFinal','custoKm'].forEach(campo => {
+      const valor = localStorage.getItem(campo);
+      if (valor !== null) document.getElementById(campo).value = valor;
     });
+    atualizarKmTotal();
+    atualizarCustos();
+  }
+
+  function atualizarCustos() {
+    const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
+    const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
+    const reserva = kmTotal * custoKm;
+    document.getElementById('reservaManutencao').textContent = reserva.toFixed(2);
+  }
+
+  function atualizarKmTotal() {
+    const kmIni = parseFloat(document.getElementById('kmInicial').value) || 0;
+    const kmFin = parseFloat(document.getElementById('kmFinal').value) || 0;
+    const total = kmFin - kmIni;
+    document.getElementById('kmTotal').textContent = (isFinite(total) ? total : 0).toFixed(1);
+    atualizarCustos();
+  }
+
+  function registrar(tipo) {
+    const now = new Date();
+    const dataHoraVisivel = now.toLocaleString('pt-BR');
+    const timestamp = now.getTime();
+
+    let valor, desc, tipoDesp;
+    if (tipo === 'viagens') {
+      valor = parseFloat(document.getElementById('valorViagem').value);
+      desc = document.getElementById('descricaoViagem').value;
+    } else if (tipo === 'entradas') {
+      valor = parseFloat(document.getElementById('valorEntrada').value);
+      desc = document.getElementById('descricaoEntrada').value;
+    } else if (tipo === 'despesas') {
+      valor = parseFloat(document.getElementById('valorDespesa').value);
+      desc = document.getElementById('descricaoDespesa').value;
+      tipoDesp = document.getElementById('tipoDespesa').value;
+    }
+
+    if (!isFinite(valor)) {
+      alert('Preencha o valor');
+      return;
+    }
+
+    const registro = { dataHora: dataHoraVisivel, timestamp, valor, descricao: desc };
+    if (tipo === 'despesas') registro.tipo = tipoDesp;
+
+    registros[tipo].push(registro);
+    salvarDados(tipo, registros[tipo]);
+    atualizarTabela(tipo);
+    atualizarCaixaAtual();
+
+    if (tipo === 'viagens') { document.getElementById('valorViagem').value=''; document.getElementById('descricaoViagem').value=''; }
+    if (tipo === 'entradas') { document.getElementById('valorEntrada').value=''; document.getElementById('descricaoEntrada').value=''; }
+    if (tipo === 'despesas') { document.getElementById('valorDespesa').value=''; document.getElementById('descricaoDespesa').value=''; }
+  }
+
+  function atualizarTabela(tipo) {
+    const tabela = document.getElementById('tabela' + tipo.charAt(0).toUpperCase() + tipo.slice(1));
+    const cabecalho = (tipo === 'despesas')
+      ? '<tr><th>Data/Hora</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>'
+      : '<tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>';
+
+    tabela.innerHTML = cabecalho;
+
+    registros[tipo].forEach((r, i) => {
+      const valorFmt = (parseFloat(r.valor) || 0).toFixed(2);
+      tabela.innerHTML += `
+        <tr>
+          <td>${r.dataHora || ''}</td>
+          ${tipo === 'despesas' ? `<td>${r.tipo || ''}</td>` : ''}
+          <td>${valorFmt}</td>
+          <td>${r.descricao || ''}</td>
+          <td>
+            <button onclick="editar('${tipo}',${i})">✏️</button>
+            <button onclick="excluir('${tipo}',${i})">❌</button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  function excluir(tipo, index) {
+    registros[tipo].splice(index, 1);
+    salvarDados(tipo, registros[tipo]);
+    atualizarTabela(tipo);
+    atualizarCaixaAtual();
+  }
+
+  function editar(tipo, index) {
+    let r = registros[tipo][index];
+    let novoValor = prompt('Novo valor:', r.valor);
+    if (novoValor !== null) r.valor = parseFloat(novoValor) || r.valor;
+    let novaDesc = prompt('Nova descrição:', r.descricao);
+    if (novaDesc !== null) r.descricao = novaDesc;
+    salvarDados(tipo, registros[tipo]);
+    atualizarTabela(tipo);
+    atualizarCaixaAtual();
+  }
+
+  function atualizarCaixaAtual() {
+    const soma = arr => arr.reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
+    const totalViagens  = soma(registros.viagens);
+    const totalEntradas = soma(registros.entradas);
+    const totalDespesas = soma(registros.despesas);
+    document.getElementById('caixaAtual').textContent = (totalViagens + totalEntradas - totalDespesas).toFixed(2);
+    atualizarMeta();
+  }
+
+  function atualizarMeta() {
+    const meta = parseFloat(document.getElementById('metaDiaria').value) || 0;
+    const saldo = parseFloat(document.getElementById('caixaAtual').textContent) || 0;
+    const falta = meta - saldo;
+
+    const faltaEl = document.getElementById('faltaMeta');
+    if (falta >= 0) {
+      faltaEl.textContent = '-' + falta.toFixed(2);
+      faltaEl.style.color = 'red';
+    } else {
+      faltaEl.textContent = '+' + Math.abs(falta).toFixed(2);
+      faltaEl.style.color = 'green';
+    }
+  }
+
+  function obterTimestampRegistro(r) {
+    if (r && isFinite(r.timestamp)) return Number(r.timestamp);
+    if (r && r.dataHora) {
+      const d1 = new Date(r.dataHora);
+      if (!isNaN(d1)) return d1.getTime();
+      const m = String(r.dataHora).match(/^(\d{2})\/(\d{2})\/(\d{4})(?:,\s*(\d{2}):(\d{2})(?::(\d{2}))?)?/);
+      if (m) {
+        const dd = parseInt(m[1],10), mm = parseInt(m[2],10)-1, yy = parseInt(m[3],10);
+        const hh = parseInt(m[4]||'0',10), mi = parseInt(m[5]||'0',10), ss = parseInt(m[6]||'0',10);
+        return new Date(yy, mm, dd, hh, mi, ss).getTime();
+      }
+    }
+    return NaN;
+  }
+
+  function buscarData() {
+    const data = document.getElementById('filtroResumo').value;
+    if (!data) return alert('Escolha uma data');
+
+    const [yy, mm, dd] = data.split('-').map(Number);
+    const inicio = new Date(yy, (mm-1), dd, 0, 0, 0, 0).getTime();
+    const fim    = new Date(yy, (mm-1), dd, 23, 59, 59, 999).getTime();
+
+    let resumoHtml = '', totalViagens = 0, totalEntradas = 0, totalDespesas = 0;
+
+    ['viagens', 'entradas', 'despesas'].forEach(tipo => {
+      registros[tipo].forEach(r => {
+        const ts = obterTimestampRegistro(r);
+        if (!isFinite(ts)) return;
+        if (ts >= inicio && ts <= fim) {
+          const v = parseFloat(r.valor) || 0;
+          if (tipo === 'viagens')  totalViagens  += v;
+          if (tipo === 'entradas') totalEntradas += v;
+          if (tipo === 'despesas') totalDespesas += v;
+
+          resumoHtml += `
+            <div class="summary-card">
+              <div class="card-title">
+                ${tipo === 'viagens' ? '🚗 Viagem' : tipo === 'entradas' ? '📥 Entrada' : '💸 Saída'}
+              </div>
+              Data: ${r.dataHora || ''}<br>
+              Valor: R$ ${v.toFixed(2)}<br>
+              ${tipo === 'despesas' ? `Tipo: ${r.tipo || '—'}<br>` : ''}
+              Descrição: ${r.descricao || '—'}
+            </div>
+          `;
+        }
+      });
+    });
+
+    // Reserva de manutenção e líquido
+    const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
+    const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
+    const reservaManutencao = kmTotal * custoKm;
+    const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
+
+    const resumoFinanceiro = `
+      <div class="summary-card"><strong>📊 Totais:</strong><br>
+      🚗 Total Viagens: R$ ${totalViagens.toFixed(2)}<br>
+      📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}<br>
+      💸 Total Saídas: R$ ${totalDespesas.toFixed(2)}<br>
+      🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}<br>
+      ✅ Valor Líquido: R$ ${liquido.toFixed(2)}
+      </div>
+    `;
+
+    document.getElementById('resumoContainer').innerHTML = resumoFinanceiro + resumoHtml;
+
+    // WhatsApp
+    const texto = [
+      '🚖 Relatório 🚖',
+      `Dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}`,
+      '',
+      `🚕 Total Viagens: R$ ${totalViagens.toFixed(2)}`,
+      `📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}`,
+      `📤 Total Saídas: R$ ${totalDespesas.toFixed(2)}`,
+      `🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}`,
+      '',
+      `💸 Valor Líquido: R$ ${liquido.toFixed(2)}`
+    ].join('\n');
+
+    document.getElementById('whatsappLink').href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+  }
+
+  // ===== Inicialização segura =====
+  document.addEventListener('DOMContentLoaded', () => {
+    carregarCampos();      // Km inicial/final e custoKm do localStorage
+    carregarMeta();        // Meta diária salva
+    ['viagens','entradas','despesas'].forEach(atualizarTabela);
+    atualizarCaixaAtual();
+    atualizarDataHora();
   });
+</script>
 
-  const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
-  const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
-  const reservaManutencao = kmTotal * custoKm;
-  const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
-
-  const resumoFinanceiro = `
-    <div class="summary-card"><strong>📊 Totais:</strong><br>
-   
+</body>
+</html>
