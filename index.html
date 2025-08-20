@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FLUXO Driver Control - Livro Caixa</title>
+  <title>Fluxo Driver</title>
   <style>
     body { font-family: Arial, sans-serif; background-color: #f0fff0; margin:0; padding:0; }
     header { background-color: #006400; color: white; padding: 20px; text-align: center; }
@@ -30,12 +30,12 @@
 <body>
 
 <header>
-  <h1>FLUXO Driver Livro Caixa</h1>
+  <h1>Fluxo Driver</h1>
 </header>
 
 <main>
   <section class="top-info">
-    <h2 style="text-align:center; margin-bottom:5px;">Busca Diária</h2>
+    <h2 style="text-align:center; margin-bottom:5px;">Livro Caixa</h2>
 
     <!-- Meta Diária -->
     <div class="form-row">
@@ -51,7 +51,7 @@
 
     <!-- Falta para Meta -->
     <div class="form-row">
-      <label>📈 Falta para Meta:</label>
+      <label>📈 Meta Atual:</label>
       <span id="faltaMeta" style="font-weight:bold;">0.00</span>
     </div>
   </section>
@@ -89,7 +89,8 @@
       <option value="99">99</option>
       <option value="INDRIVER">INDRIVER</option>
       <option value="GRUPO">GRUPO</option>
-      <option value="VIAGENS PARTICULAR">VIAGENS PARTICULAR</option>
+      <option value="VIAGEM PARTICULAR">VIAGEM PARTICULAR</option>
+      <option value="VIAGEM DE EMPRESA">VIAGEM DE EMPRESA</option>
       <option value="OUTROS APP">OUTROS APP</option>
     </select>
     <button class="btn" onclick="registrar('viagens')">Registrar</button>
@@ -99,23 +100,28 @@
   </section>
 
   <section>
-    <h2>📥 Entradas Adicionais</h2>
-    <input type="number" id="valorEntrada" placeholder="Valor R$">
-    <input type="text" id="descricaoEntrada" placeholder="Descrição">
-    <button class="btn" onclick="registrar('entradas')">Registrar</button>
-    <table id="tabelaEntradas">
-      <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
-    </table>
-  </section>
+  <h2>📥 Entradas Adicionais</h2>
+  <input type="number" id="valorEntrada" placeholder="Valor R$">
+  
+  <!-- Substituído input de texto por seletor -->
+  <select id="descricaoEntrada">
+    <option value="Recebimento de Fiado">Rcebimento de Fiado</option>
+    <option value="OUTROS">OUTROS</option>
+  </select>
+  
+  <button class="btn" onclick="registrar('entradas')">Registrar</button>
+  <table id="tabelaEntradas">
+    <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
+  </table>
+</section>
 
   <section>
     <h2>💸 Saídas</h2>
     <select id="tipoDespesa">
       <option value="Não se aplica">Não se aplica</option>
+      <option value="Pedágio">Pedágio</option>
       <option value="GNV">GNV</option>
       <option value="Gasolina/Etanol">Gasolina/Etanol</option>
-      <option value="Manutenção">Manutenção</option>
-      <option value="Pagamentos">Pagamentos</option>
       <option value="Café">Café</option>
       <option value="Almoço">Almoço</option>
       <option value="Janta">Janta</option>
@@ -325,74 +331,62 @@
     return NaN;
   }
 
-  function buscarData() {
-    const data = document.getElementById('filtroResumo').value;
-    if (!data) return alert('Escolha uma data');
+ function buscarData() {
+  const data = document.getElementById('filtroResumo').value;
+  if (!data) return alert('Escolha uma data');
 
-    const [yy, mm, dd] = data.split('-').map(Number);
-    const inicio = new Date(yy, (mm-1), dd, 0, 0, 0, 0).getTime();
-    const fim    = new Date(yy, (mm-1), dd, 23, 59, 59, 999).getTime();
+  const [yy, mm, dd] = data.split('-').map(Number);
+  const inicio = new Date(yy, (mm-1), dd, 0, 0, 0, 0).getTime();
+  const fim    = new Date(yy, (mm-1), dd, 23, 59, 59, 999).getTime();
 
-    let resumoHtml = '', totalViagens = 0, totalEntradas = 0, totalDespesas = 0;
+  let totalViagens = 0, totalEntradas = 0, totalDespesas = 0;
 
-    ['viagens', 'entradas', 'despesas'].forEach(tipo => {
-      registros[tipo].forEach(r => {
-        const ts = obterTimestampRegistro(r);
-        if (!isFinite(ts)) return;
-        if (ts >= inicio && ts <= fim) {
-          const v = parseFloat(r.valor) || 0;
-          if (tipo === 'viagens')  totalViagens  += v;
-          if (tipo === 'entradas') totalEntradas += v;
-          if (tipo === 'despesas') totalDespesas += v;
-
-          resumoHtml += `
-            <div class="summary-card">
-              <div class="card-title">
-                ${tipo === 'viagens' ? '🚗 Viagem' : tipo === 'entradas' ? '📥 Entrada' : '💸 Saída'}
-              </div>
-              Data: ${r.dataHora || ''}<br>
-              Valor: R$ ${v.toFixed(2)}<br>
-              ${tipo === 'despesas' ? `Tipo: ${r.tipo || '—'}<br>` : ''}
-              Descrição: ${r.descricao || '—'}
-            </div>
-          `;
-        }
-      });
+  ['viagens', 'entradas', 'despesas'].forEach(tipo => {
+    registros[tipo].forEach(r => {
+      const ts = obterTimestampRegistro(r);
+      if (!isFinite(ts)) return;
+      if (ts >= inicio && ts <= fim) {
+        const v = parseFloat(r.valor) || 0;
+        if (tipo === 'viagens')  totalViagens  += v;
+        if (tipo === 'entradas') totalEntradas += v;
+        if (tipo === 'despesas') totalDespesas += v;
+      }
     });
+  });
 
-    // Reserva de manutenção e líquido
-    const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
-    const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
-    const reservaManutencao = kmTotal * custoKm;
-    const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
+  // Reserva de manutenção e líquido
+  const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
+  const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
+  const reservaManutencao = kmTotal * custoKm;
+  const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
 
-    const resumoFinanceiro = `
-      <div class="summary-card"><strong>📊 Totais:</strong><br>
-      🚗 Total Viagens: R$ ${totalViagens.toFixed(2)}<br>
-      📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}<br>
-      💸 Total Saídas: R$ ${totalDespesas.toFixed(2)}<br>
-      🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}<br>
-      ✅ Valor Líquido: R$ ${liquido.toFixed(2)}
-      </div>
-    `;
+  const resumoFinanceiro = `
+    <div class="summary-card"><strong>📊 Totais do dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}:</strong><br>
+    🚗 Total Viagens: R$ ${totalViagens.toFixed(2)}<br>
+    📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}<br>
+    💸 Total Saídas: R$ ${totalDespesas.toFixed(2)}<br>
+    🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}<br>
+    ✅ Valor Líquido: R$ ${liquido.toFixed(2)}
+    </div>
+  `;
 
-    document.getElementById('resumoContainer').innerHTML = resumoFinanceiro + resumoHtml;
+  document.getElementById('resumoContainer').innerHTML = resumoFinanceiro;
 
-    // WhatsApp
-    const texto = [
-      '🚖 Relatório 🚖',
-      `Dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}`,
-      '',
-      `🚕 Total Viagens: R$ ${totalViagens.toFixed(2)}`,
-      `📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}`,
-      `📤 Total Saídas: R$ ${totalDespesas.toFixed(2)}`,
-      `🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}`,
-      '',
-      `💸 Valor Líquido: R$ ${liquido.toFixed(2)}`
-    ].join('\n');
+  // WhatsApp
+  const texto = [
+    '🚖 Relatório RV Rfviagens 🚖',
+    `Dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}`,
+    '',
+    `🚕 Total Viagens: R$ ${totalViagens.toFixed(2)}`,
+    `📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}`,
+    `📤 Total Saídas: R$ ${totalDespesas.toFixed(2)}`,
+    `🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}`,
+    '',
+    `💸 Valor Líquido: R$ ${liquido.toFixed(2)}`
+  ].join('\n');
 
-    document.getElementById('whatsappLink').href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-  }
+  document.getElementById('whatsappLink').href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+}
 
   // ===== Inicialização segura =====
   document.addEventListener('DOMContentLoaded', () => {
