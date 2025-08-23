@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fluxo Driver</title>
+  <title>FLUXO Driver Control - Livro Caixa</title>
   <style>
     body { font-family: Arial, sans-serif; background-color: #f0fff0; margin:0; padding:0; }
     header { background-color: #006400; color: white; padding: 20px; text-align: center; }
@@ -14,7 +14,7 @@
     input[type="number"], input[type="text"], select {
       margin-bottom: 10px; padding:5px; border-radius:5px; border:1px solid #ccc; width: calc(100% - 160px);
     }
-    .form-row { display:flex; align-items:center; margin-bottom:5px; gap: 10px; }
+    .form-row { display:flex; align-items:center; margin-bottom:5px; gap: 10px; flex-wrap: wrap; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { border: 1px solid #999; padding: 8px; text-align: center; }
     th { background-color: #c5e1a5; }
@@ -25,17 +25,18 @@
     .flex { display: flex; gap: 10px; flex-wrap: wrap; }
     .whatsapp-btn { background-color: #25d366; color: white; padding: 10px 20px; text-align: center; display: inline-block; border-radius: 5px; text-decoration: none; margin-top: 15px; }
     footer { position: fixed; bottom: 10px; right: 20px; font-size: 12px; font-weight: bold; color: #333; }
+    .pagamento-extra { display:none; margin-top:10px; background:#f9fff9; padding:10px; border-radius:5px; border:1px solid #ccc; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Fluxo Driver</h1>
+  <h1>FLUXO Driver Livro Caixa</h1>
 </header>
 
 <main>
   <section class="top-info">
-    <h2 style="text-align:center; margin-bottom:5px;">Livro Caixa</h2>
+    <h2 style="text-align:center; margin-bottom:5px;">Busca Diária</h2>
 
     <!-- Meta Diária -->
     <div class="form-row">
@@ -51,7 +52,7 @@
 
     <!-- Falta para Meta -->
     <div class="form-row">
-      <label>📈 Meta Atual:</label>
+      <label>📈 Falta para Meta:</label>
       <span id="faltaMeta" style="font-weight:bold;">0.00</span>
     </div>
   </section>
@@ -80,10 +81,10 @@
     </div>
   </section>
 
+  <!-- ===== SEÇÃO VIAGENS ===== -->
   <section>
     <h2>🚗 Viagens Realizadas</h2>
     <input type="number" id="valorViagem" placeholder="Valor R$">
-    <!-- Substituição do campo de texto por seletor conforme solicitado -->
     <select id="descricaoViagem">
       <option value="UBER">UBER</option>
       <option value="99">99</option>
@@ -93,32 +94,43 @@
       <option value="VIAGEM DE EMPRESA">VIAGEM DE EMPRESA</option>
       <option value="OUTROS APP">OUTROS APP</option>
     </select>
+    <select id="pagamentoViagem" onchange="mostrarPagamentoExtra(this,'extraViagem')">
+      <option value="dinheiro">Dinheiro</option>
+      <option value="pix">PIX</option>
+      <option value="cartao">Cartão</option>
+    </select>
+    <div id="extraViagem" class="pagamento-extra"></div>
     <button class="btn" onclick="registrar('viagens')">Registrar</button>
     <table id="tabelaViagens">
-      <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
+      <tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Pagamento</th><th>Ações</th></tr>
     </table>
   </section>
 
+  <!-- ===== SEÇÃO ENTRADAS ===== -->
   <section>
-  <h2>📥 Entradas Adicionais</h2>
-  <input type="number" id="valorEntrada" placeholder="Valor R$">
-  
-  <!-- Substituído input de texto por seletor -->
-  <select id="descricaoEntrada">
-    <option value="Recebimento de Fiado">Rcebimento de Fiado</option>
-    <option value="OUTROS">OUTROS</option>
-  </select>
-  
-  <button class="btn" onclick="registrar('entradas')">Registrar</button>
-  <table id="tabelaEntradas">
-    <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
-  </table>
-</section>
+    <h2>📥 Entradas Adicionais</h2>
+    <input type="number" id="valorEntrada" placeholder="Valor R$">
+    <select id="descricaoEntrada">
+      <option value="Recebimento de Fiado">Recebimento de Fiado</option>
+      <option value="OUTROS">OUTROS</option>
+    </select>
+    <select id="pagamentoEntrada" onchange="mostrarPagamentoExtra(this,'extraEntrada')">
+      <option value="dinheiro">Dinheiro</option>
+      <option value="pix">PIX</option>
+      <option value="cartao">Cartão</option>
+    </select>
+    <div id="extraEntrada" class="pagamento-extra"></div>
+    <button class="btn" onclick="registrar('entradas')">Registrar</button>
+    <table id="tabelaEntradas">
+      <tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Pagamento</th><th>Ações</th></tr>
+    </table>
+  </section>
 
+  <!-- ===== SEÇÃO DESPESAS (SAÍDAS) ===== -->
   <section>
     <h2>💸 Saídas</h2>
-    <select id="tipoDespesa">
-      <option value="Não se aplica">Não se aplica</option>
+    <!-- Tipo removido; ele agora vira a Descrição -->
+    <select id="descricaoDespesa">
       <option value="Pedágio">Pedágio</option>
       <option value="GNV">GNV</option>
       <option value="Gasolina/Etanol">Gasolina/Etanol</option>
@@ -129,13 +141,18 @@
       <option value="Outros">Outros</option>
     </select>
     <input type="number" id="valorDespesa" placeholder="Valor R$">
-    <input type="text" id="descricaoDespesa" placeholder="Descrição">
+    <select id="pagamentoDespesa">
+      <option value="dinheiro">Dinheiro</option>
+      <option value="pix">PIX</option>
+      <option value="cartao">Cartão</option>
+    </select>
     <button class="btn" onclick="registrar('despesas')">Registrar</button>
     <table id="tabelaDespesas">
-      <tr><th>Data/Hora</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
+      <tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Pagamento</th><th>Ações</th></tr>
     </table>
   </section>
 
+  <!-- ===== SEÇÃO RESUMO ===== -->
   <section>
     <h2>📊 Resumo Geral</h2>
     <label>Buscar por data:</label>
@@ -151,7 +168,65 @@
 </footer>
 
 <script>
-  // ===== Utilitários de armazenamento =====
+  /* ============================
+     Configuração da maquineta
+     (para Viagens e Entradas)
+     ============================ */
+  let maquinaConfig = JSON.parse(localStorage.getItem("maquinaConfig") || '{"nome":"TON","credito":3.58,"debito":1.68}');
+
+  function mostrarPagamentoExtra(select, containerId){
+    const cont = document.getElementById(containerId);
+    if(select.value === "cartao"){
+      cont.style.display = "block";
+      cont.innerHTML = `
+        <div class="form-row">
+          <label>Maquineta:</label>
+          <input type="text" id="maqNome" value="${maquinaConfig.nome}" oninput="maquinaConfig.nome=this.value;salvarMaquineta()">
+        </div>
+        <div class="form-row">
+          <label>Juros Crédito %:</label>
+          <input type="number" id="maqCredito" step="0.01" value="${maquinaConfig.credito}" oninput="maquinaConfig.credito=this.value;salvarMaquineta()">
+        </div>
+        <div class="form-row">
+          <label>Juros Débito %:</label>
+          <input type="number" id="maqDebito" step="0.01" value="${maquinaConfig.debito}" oninput="maquinaConfig.debito=this.value;salvarMaquineta()">
+        </div>
+        <div class="form-row">
+          <label>Repassar taxa?</label>
+          <select id="maqRepasse">
+            <option value="nao">Não (Absorvida)</option>
+            <option value="sim">Sim (Repassada)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Tipo:</label>
+          <select id="maqTipo">
+            <option value="credito">Crédito</option>
+            <option value="debito">Débito</option>
+          </select>
+        </div>
+      `;
+    } else {
+      cont.style.display="none";
+      cont.innerHTML="";
+    }
+  }
+  function salvarMaquineta(){
+    localStorage.setItem("maquinaConfig", JSON.stringify(maquinaConfig));
+  }
+  function aplicarTaxa(valor, tipo, repasse){
+    const taxa = (tipo==="credito" ? maquinaConfig.credito : maquinaConfig.debito)/100;
+    if(repasse==="nao"){
+      return { cobrado: valor, liquido: (valor*(1-taxa)).toFixed(2) }; // taxa absorvida
+    } else {
+      const cobrado = Math.ceil((valor/(1-taxa))*100)/100; // repassada (arredonda p/ cima 2 casas)
+      return { cobrado: cobrado.toFixed(2), liquido: valor.toFixed(2) };
+    }
+  }
+
+  /* ============================
+     Utilitários de armazenamento
+     ============================ */
   function carregarDados(chave) {
     return JSON.parse(localStorage.getItem(chave) || "[]");
   }
@@ -163,7 +238,7 @@
     localStorage.setItem(campo, valor);
   }
 
-  // ===== Meta Diária =====
+  /* ========== Meta Diária ========== */
   function salvarMeta() {
     const meta = document.getElementById('metaDiaria').value;
     localStorage.setItem('metaDiaria', meta);
@@ -176,14 +251,14 @@
     atualizarMeta();
   }
 
-  // ===== Estado em memória =====
+  /* ===== Estado em memória ===== */
   let registros = {
     viagens: carregarDados('viagens'),
     entradas: carregarDados('entradas'),
     despesas: carregarDados('despesas')
   };
 
-  // ===== Atualizações visuais =====
+  /* ===== Atualizações visuais ===== */
   function atualizarDataHora() {
     document.getElementById('dataHora').textContent = new Date().toLocaleString('pt-BR');
   }
@@ -213,22 +288,26 @@
     atualizarCustos();
   }
 
+  /* ============ Registrar ============ */
   function registrar(tipo) {
     const now = new Date();
     const dataHoraVisivel = now.toLocaleString('pt-BR');
     const timestamp = now.getTime();
 
-    let valor, desc, tipoDesp;
+    let valor, desc, pagamento;
+
     if (tipo === 'viagens') {
       valor = parseFloat(document.getElementById('valorViagem').value);
       desc = document.getElementById('descricaoViagem').value;
+      pagamento = document.getElementById('pagamentoViagem').value;
     } else if (tipo === 'entradas') {
       valor = parseFloat(document.getElementById('valorEntrada').value);
       desc = document.getElementById('descricaoEntrada').value;
+      pagamento = document.getElementById('pagamentoEntrada').value;
     } else if (tipo === 'despesas') {
       valor = parseFloat(document.getElementById('valorDespesa').value);
-      desc = document.getElementById('descricaoDespesa').value;
-      tipoDesp = document.getElementById('tipoDespesa').value;
+      desc = document.getElementById('descricaoDespesa').value; // tipo virou descrição
+      pagamento = document.getElementById('pagamentoDespesa').value;
     }
 
     if (!isFinite(valor)) {
@@ -236,35 +315,50 @@
       return;
     }
 
-    const registro = { dataHora: dataHoraVisivel, timestamp, valor, descricao: desc };
-    if (tipo === 'despesas') registro.tipo = tipoDesp;
+    let registro = { dataHora: dataHoraVisivel, timestamp, valor, descricao: desc, pagamento };
+
+    // Aplica taxa (apenas Viagens/Entradas com cartão)
+    if ((tipo === 'viagens' || tipo === 'entradas') && pagamento === 'cartao') {
+      const rep = document.getElementById('maqRepasse')?.value || 'nao';
+      const tp  = document.getElementById('maqTipo')?.value || 'credito';
+      const calc = aplicarTaxa(valor, tp, rep);
+      registro.valor   = parseFloat(calc.liquido);
+      registro.cobrado = parseFloat(calc.cobrado);
+      registro.info    = `${maquinaConfig.nome} ${tp} - taxa ${rep}`;
+    }
 
     registros[tipo].push(registro);
     salvarDados(tipo, registros[tipo]);
     atualizarTabela(tipo);
     atualizarCaixaAtual();
 
-    if (tipo === 'viagens') { document.getElementById('valorViagem').value=''; document.getElementById('descricaoViagem').value=''; }
-    if (tipo === 'entradas') { document.getElementById('valorEntrada').value=''; document.getElementById('descricaoEntrada').value=''; }
-    if (tipo === 'despesas') { document.getElementById('valorDespesa').value=''; document.getElementById('descricaoDespesa').value=''; }
+    // limpa campos principais
+    if (tipo === 'viagens')  { document.getElementById('valorViagem').value=''; }
+    if (tipo === 'entradas') { document.getElementById('valorEntrada').value=''; }
+    if (tipo === 'despesas') { document.getElementById('valorDespesa').value=''; }
   }
 
+  /* ============ Tabelas ============ */
   function atualizarTabela(tipo) {
     const tabela = document.getElementById('tabela' + tipo.charAt(0).toUpperCase() + tipo.slice(1));
     const cabecalho = (tipo === 'despesas')
-      ? '<tr><th>Data/Hora</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>'
-      : '<tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>';
+      ? '<tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Pagamento</th><th>Ações</th></tr>'
+      : '<tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Pagamento</th><th>Ações</th></tr>';
 
     tabela.innerHTML = cabecalho;
 
     registros[tipo].forEach((r, i) => {
       const valorFmt = (parseFloat(r.valor) || 0).toFixed(2);
+      const pagamentoTxt = (r.pagamento === 'cartao' && tipo !== 'despesas')
+        ? `${r.info || 'Cartão'} (Cobrado ${ (r.cobrado!=null? Number(r.cobrado).toFixed(2) : valorFmt) })`
+        : (r.pagamento || '');
+
       tabela.innerHTML += `
         <tr>
           <td>${r.dataHora || ''}</td>
-          ${tipo === 'despesas' ? `<td>${r.tipo || ''}</td>` : ''}
           <td>${valorFmt}</td>
           <td>${r.descricao || ''}</td>
+          <td>${pagamentoTxt}</td>
           <td>
             <button onclick="editar('${tipo}',${i})">✏️</button>
             <button onclick="excluir('${tipo}',${i})">❌</button>
@@ -292,6 +386,7 @@
     atualizarCaixaAtual();
   }
 
+  /* ========== Caixa / Meta ========== */
   function atualizarCaixaAtual() {
     const soma = arr => arr.reduce((s, r) => s + (parseFloat(r.valor) || 0), 0);
     const totalViagens  = soma(registros.viagens);
@@ -316,6 +411,7 @@
     }
   }
 
+  /* ====== Filtro por Data / Resumo ====== */
   function obterTimestampRegistro(r) {
     if (r && isFinite(r.timestamp)) return Number(r.timestamp);
     if (r && r.dataHora) {
@@ -331,64 +427,64 @@
     return NaN;
   }
 
- function buscarData() {
-  const data = document.getElementById('filtroResumo').value;
-  if (!data) return alert('Escolha uma data');
+  function buscarData() {
+    const data = document.getElementById('filtroResumo').value;
+    if (!data) return alert('Escolha uma data');
 
-  const [yy, mm, dd] = data.split('-').map(Number);
-  const inicio = new Date(yy, (mm-1), dd, 0, 0, 0, 0).getTime();
-  const fim    = new Date(yy, (mm-1), dd, 23, 59, 59, 999).getTime();
+    const [yy, mm, dd] = data.split('-').map(Number);
+    const inicio = new Date(yy, (mm-1), dd, 0, 0, 0, 0).getTime();
+    const fim    = new Date(yy, (mm-1), dd, 23, 59, 59, 999).getTime();
 
-  let totalViagens = 0, totalEntradas = 0, totalDespesas = 0;
+    let totalViagens = 0, totalEntradas = 0, totalDespesas = 0;
 
-  ['viagens', 'entradas', 'despesas'].forEach(tipo => {
-    registros[tipo].forEach(r => {
-      const ts = obterTimestampRegistro(r);
-      if (!isFinite(ts)) return;
-      if (ts >= inicio && ts <= fim) {
-        const v = parseFloat(r.valor) || 0;
-        if (tipo === 'viagens')  totalViagens  += v;
-        if (tipo === 'entradas') totalEntradas += v;
-        if (tipo === 'despesas') totalDespesas += v;
-      }
+    ['viagens', 'entradas', 'despesas'].forEach(tipo => {
+      registros[tipo].forEach(r => {
+        const ts = obterTimestampRegistro(r);
+        if (!isFinite(ts)) return;
+        if (ts >= inicio && ts <= fim) {
+          const v = parseFloat(r.valor) || 0;
+          if (tipo === 'viagens')  totalViagens  += v;
+          if (tipo === 'entradas') totalEntradas += v;
+          if (tipo === 'despesas') totalDespesas += v;
+        }
+      });
     });
-  });
 
-  // Reserva de manutenção e líquido
-  const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
-  const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
-  const reservaManutencao = kmTotal * custoKm;
-  const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
+    // Reserva de manutenção e líquido
+    const kmTotal = parseFloat(document.getElementById('kmTotal').textContent) || 0;
+    const custoKm = parseFloat(document.getElementById('custoKm').value) || 0;
+    const reservaManutencao = kmTotal * custoKm;
+    const liquido = (totalViagens + totalEntradas) - (totalDespesas + reservaManutencao);
 
-  const resumoFinanceiro = `
-    <div class="summary-card"><strong>📊 Totais do dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}:</strong><br>
-    🚗 Total Viagens: R$ ${totalViagens.toFixed(2)}<br>
-    📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}<br>
-    💸 Total Saídas: R$ ${totalDespesas.toFixed(2)}<br>
-    🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}<br>
-    ✅ Valor Líquido: R$ ${liquido.toFixed(2)}
-    </div>
-  `;
+    const resumoFinanceiro = `
+      <div class="summary-card"><strong>📊 Totais do dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}:</strong><br>
+      🚗 Total Viagens: R$ ${totalViagens.toFixed(2)}<br>
+      📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}<br>
+      💸 Total Saídas: R$ ${totalDespesas.toFixed(2)}<br>
+      🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}<br>
+      ✅ Valor Líquido: R$ ${liquido.toFixed(2)}
+      </div>
+    `;
 
-  document.getElementById('resumoContainer').innerHTML = resumoFinanceiro;
+    document.getElementById('resumoContainer').innerHTML = resumoFinanceiro;
 
-  // WhatsApp
-  const texto = [
-    '🚖 Relatório RV Rfviagens 🚖',
-    `Dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}`,
-    '',
-    `🚕 Total Viagens: R$ ${totalViagens.toFixed(2)}`,
-    `📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}`,
-    `📤 Total Saídas: R$ ${totalDespesas.toFixed(2)}`,
-    `🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}`,
-    '',
-    `💸 Valor Líquido: R$ ${liquido.toFixed(2)}`
-  ].join('\n');
+    // WhatsApp
+    const texto = [
+      '🚖 Relatório de Viagens 🚖',
+      `Dia ${String(dd).padStart(2,'0')}/${String(mm).padStart(2,'0')}/${yy}`,
+      '',
+      `🚕 Total Viagens: R$ ${totalViagens.toFixed(2)}`,
+      `📥 Total Entradas: R$ ${totalEntradas.toFixed(2)}`,
+      `📤 Total Saídas: R$ ${totalDespesas.toFixed(2)}`,
+      `🔧 Reserva Manutenção: R$ ${reservaManutencao.toFixed(2)}`,
+      '',
+      `💸 Valor Líquido: R$ ${liquido.toFixed(2)}`
+    ].join('\n');
 
-  document.getElementById('whatsappLink').href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-}
+    document.getElementById('whatsappLink').href = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+  }
 
-  // ===== Inicialização segura =====
+  /* ===== Inicialização ===== */
   document.addEventListener('DOMContentLoaded', () => {
     carregarCampos();      // Km inicial/final e custoKm do localStorage
     carregarMeta();        // Meta diária salva
