@@ -49,7 +49,7 @@
       <div id="caixaAtual">0.00</div>
     </div>
     <div class="card">
-      <h3>📈 Falta para Meta</h3>
+      <h3>📈 Alcançe de Meta</h3>
       <div id="faltaMeta">0.00</div>
     </div>
   </section>
@@ -66,7 +66,7 @@
     </div>
   </section>
 
-  <!-- ===== VIAGENS DE APLICATIVO ===== -->
+ <!-- ===== VIAGENS DE APLICATIVO ===== -->
   <section class="card">
     <h3>🚕 Viagens de App</h3>
     <div class="form-row">
@@ -294,12 +294,19 @@ function atualizarCaixa(){
   atualizarMeta();
 }
 
-function atualizarMeta(){
+function atualizarMeta() {
   const meta = parseFloat(document.getElementById('metaDiaria').value) || 0;
   const caixa = parseFloat(document.getElementById('caixaAtual').textContent) || 0;
   const falta = meta - caixa;
   const faltaEl = document.getElementById('faltaMeta');
-  faltaEl.textContent = `${falta>=0 ? 'Falta R$ ' + falta.toFixed(2) : 'Ultrapassou a meta em R$ ' + Math.abs(falta).toFixed(2)}`;
+
+  if (falta >= 0) {
+    faltaEl.textContent = `- R$ ${falta.toFixed(2)}`;
+    faltaEl.style.color = 'red';
+  } else {
+    faltaEl.textContent = `+ R$ ${Math.abs(falta).toFixed(2)}`;
+    faltaEl.style.color = 'green';
+  }
 }
 
 function montarResumo(){
@@ -392,7 +399,7 @@ function buscarData() {
 
   resumo.innerHTML = `
 🚖 Relatório de Viagens
-Dia ${dia}/${m}/${ano}<br><br>
+Dia ${dia}/${m}/${ano}<br>
 
 📥 ENTRADAS<br>
 • Viagens de App: R$ ${totalApp.toFixed(2)}<br>
@@ -400,7 +407,7 @@ Dia ${dia}/${m}/${ano}<br><br>
 • Viagem de Empresa: R$ ${totalEntrada.toFixed(2)}<br><br>
 
 📤 SAÍDAS<br>
-• Despesas: R$ ${totalDespesa.toFixed(2)}<br><br>
+• Despesas: R$ ${totalDespesa.toFixed(2)}<br>
 
 🔧 Reserva Manutenção: R$ ${reserva.toFixed(2)}<br>
 
