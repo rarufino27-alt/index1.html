@@ -3,38 +3,37 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FLUXO Driver - Dashboard</title>
+  <title>FLUXO Driver Dashboard</title>
   <style>
-  body { font-family: Arial, sans-serif; background-color: #f9f9f9; margin:0; padding:0; color:#333; }
-  header { background-color: #006400; color: white; padding: 20px; text-align: center; }
-  header h1 { margin: 0; font-size: 36px; }
-  main { padding: 20px; margin-bottom: 60px; }
-  section { margin-bottom: 40px; }
-  .flex { display: flex; flex-wrap: wrap; gap: 15px; }
-  .card { background: #ffffff; padding: 15px 20px; border-radius: 10px; flex: 1 1 250px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
-  .card h3, .card h4 { margin-top:0; font-weight: bold; }
-  .form-row { display:flex; align-items:center; margin-bottom:10px; gap:10px; flex-wrap: wrap; }
-  label { width: 140px; font-weight: bold; }
-  input[type="number"], input[type="text"], select { padding:5px; border-radius:5px; border:1px solid #ccc; flex:1; }
-  table { width: 60%; border-collapse: collapse; margin-top: 30px; }
-  th, td { border: 1px solid #ddd; padding: 4px; text-align: center; }
-  th { background-color: #c5e1a5; }
-  .btn { background-color: #388e3c; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px; }
-  .btn:hover { background-color: #2e7d32; }
-  .pagamento-extra { display:none; margin-top:10px; background:#f0fdf0; padding:10px; border-radius:5px; border:1px solid #ccc; }
-  footer { position: fixed; bottom: 10px; right: 20px; font-size: 12px; font-weight: bold; color: #333; }
-  .whatsapp-btn { background-color: #25d366; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 15px; display:inline-block; }
-  #resumoContainer { background:#eaf6ea; padding:20px; border-radius:10px; white-space: pre-line; font-size:16px; line-height:1.6; }
-  #resumoContainer .valor-liquido { font-size:20px; font-weight:bold; color:#006400; margin-top:10px; }
-  #resumoContainer .reserva { margin-top:20px; }
-</style>
+    body { font-family: Arial, sans-serif; background-color: #6776a3; margin:0; padding:0; color:#001a6a; }
+    header { background-color: #001a6a; color: white; padding: 20px; text-align: center; }
+    header h1 { margin: 0; font-size: 36px; }
+    main { padding: 20px; margin-bottom: 60px; }
+    section { margin-bottom: 40px; }
+    .flex { display: flex; flex-wrap: wrap; gap: 15px; }
+    .card { background: #ffffff; padding: 15px 20px; border-radius: 10px; flex: 1 1 250px; box-shadow: 0 3px 8px rgba(0,0,0,0.1); }
+    .card h3, .card h4 { margin-top:0; font-weight: bold; }
+    .form-row { display:flex; align-items:center; margin-bottom:10px; gap:10px; flex-wrap: wrap; }
+    label { width: 140px; font-weight: bold; }
+    input[type="number"], input[type="text"], select { padding:5px; border-radius:5px; border:1px solid #ccc; flex:1; }
+    table { width: 60%; border-collapse: collapse; margin-top: 20px; }
+    th, td { font-size: 16px; border: 1px solid #ddd; padding: 4px; text-align: center; }
+    th { background-color: #afe0e7; }
+    .btn { background-color: #28659e; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px; }
+    .btn:hover { background-color: #8ac4f9; }
+    .pagamento-extra { display:none; margin-top:10px; background:#f0fdf0; padding:10px; border-radius:5px; border:1px solid #ccc; }
+    footer { position: fixed; bottom: 10px; right: 20px; font-size: 12px; font-weight: bold; color: #333; }
+    .whatsapp-btn { background-color: #067000; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 15px; display:inline-block; }
+    #resumoContainer { background:#8ac4f9; padding:20px; border-radius:10px; white-space: pre-line; font-size:16px; line-height:1.6; }
+    #resumoContainer .valor-liquido { font-size:20px; font-weight:bold; color:#006400; margin-top:10px; }
+    #resumoContainer .reserva { margin-top:20px; }
+  </style>
 </head>
 <body>
-<header>
-  <h1>FLUXO Driver - Dashboard</h1>
-</header>
-
-<main>
+  <header>
+    <h1>FLUXO Driver Dashboard</h1>
+  </header>
+  <main>
 
   <!-- ===== META DIÁRIA / CAIXA ===== -->
   <section class="flex">
@@ -88,22 +87,22 @@
     <table id="tabelaViagemApp"><tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Ações</th></tr></table>
   </section>
 
-  <!-- ===== GRUPO 5 ESTRELAS ===== -->
-  <section class="card">
-    <h3>🚖 Viagem Particular</h3>
-    <div class="form-row">
-      <input type="number" id="valorGrupo" placeholder="Valor R$">
-      <select id="Viagem Particular"><option value="GRUPO">Viagem Particular</option></select>
-      <select id="pagamentoGrupo" onchange="mostrarPagamentoExtra(this,'extraGrupo')">
-        <option value="dinheiro">Dinheiro</option>
-        <option value="pix">PIX</option>
-        <option value="cartao">Cartão</option>
-      </select>
-      <button class="btn" onclick="registrar('grupo')">Registrar</button>
-    </div>
-    <div id="extraGrupo" class="pagamento-extra"></div>
-    <table id="tabelaGrupo"><tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Ações</th></tr></table>
-  </section>
+  <!-- ===== Viagem Particular ===== -->
+<section class="card">
+  <h3>🚖 Viagem Particular/Entradas Extras</h3>
+  <div class="form-row">
+    <input type="number" id="valorViagemParticular" placeholder="Valor R$">
+    <select id="descricaoViagemParticular"><option value="Viagem Particular">Viagem Particular</option></select>
+    <select id="pagamentoViagemParticular" onchange="mostrarPagamentoExtra(this,'extraViagemParticular')">
+      <option value="dinheiro">Dinheiro</option>
+      <option value="pix">PIX</option>
+      <option value="cartao">Cartão</option>
+    </select>
+    <button class="btn" onclick="registrar('ViagemParticular')">Registrar</button>
+  </div>
+  <div id="extraViagemParticular" class="pagamento-extra"></div>
+  <table id="tabelaViagemParticular"><tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Ações</th></tr></table>
+</section>
 
   <!-- ===== ENTRADAS DE EMPRESA ===== -->
   <section class="card">
@@ -149,21 +148,28 @@
   </section>
 
 <!-- RESUMO -->
-  <section class="card">
-    <h3>📊 Resumo Geral</h3>
-    <div class="form-row">
-      <label>Filtrar por data:</label>
-      <input type="date" id="filtroResumo">
-      <button class="btn" onclick="buscarData()">Buscar</button>
-    </div>
-    <div id="resumoContainer" style="white-space: pre-wrap; margin-top: 10px;"></div>
-    <a href="#" id="whatsappLink" class="whatsapp-btn" target="_blank">📤 Enviar via WhatsApp</a>
-  </section>
-</main>
+    <section class="card">
+      <h3>📊 Resumo Geral</h3>
+      <div class="form-row">
+        <label>Filtrar por data:</label>
+        <input type="date" id="filtroResumo">
+        <button class="btn" onclick="buscarData()">Buscar</button>
+      </div>
+      <div id="resumoContainer" style="white-space: pre-wrap; margin-top: 10px;"></div>
+      <a href="#" id="whatsappLink" class="whatsapp-btn" target="_blank">📤 Enviar via WhatsApp</a>
+      <button class="btn" style="margin-top:10px; background:#444;" onclick="exportarPDF()">📄 Exportar em PDF</button>
+    </section>
+  </main>
+  <footer><div id="dataHora"></div></footer>
 
-<footer><div id="dataHora"></div></footer>
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-unicode@0.1.0/dist/jspdf-unicode.min.js"></script>
 
 <script>
+/* ... todo o código anterior de registros, salvar, buscarData etc permanece igual ... */
+
 let maquinaConfig = { nome: "TON", credito: 3.58, debito: 1.68 };
 
 function mostrarPagamentoExtra(sel, containerId){
@@ -204,7 +210,7 @@ function carregarMeta(){
 
 let registros = {
   viagemApp: carregarDados('viagemApp'),
-  grupo: carregarDados('grupo'),
+  ViagemParticular: carregarDados('ViagemParticular'),
   entrada: carregarDados('entrada'),
   despesa: carregarDados('despesa')
 };
@@ -241,7 +247,7 @@ function registrar(tipo){
   let repasse = "nao", tipoCartao = "credito", containerId = "";
 
   if(tipo==="viagemApp"){ valor = parseFloat(document.getElementById('valorViagemApp').value)||0; desc = document.getElementById('descricaoViagemApp').value; pagamento = document.getElementById('pagamentoViagemApp').value; containerId = 'extraViagemApp'; }
-  else if(tipo==="grupo"){ valor = parseFloat(document.getElementById('valorGrupo').value)||0; desc = document.getElementById('descricaoGrupo').value; pagamento = document.getElementById('pagamentoGrupo').value; containerId = 'extraGrupo'; }
+  else if(tipo==="ViagemParticular"){ valor = parseFloat(document.getElementById('valorViagemParticular').value)||0; desc = document.getElementById('descricaoViagemParticular').value; pagamento = document.getElementById('pagamentoViagemParticular').value; containerId = 'extraViagemParticular'; }
   else if(tipo==="entrada"){ valor = parseFloat(document.getElementById('valorEntrada').value)||0; desc = document.getElementById('descricaoEntrada').value; pagamento = document.getElementById('pagamentoEntrada').value; containerId = 'extraEntrada'; }
   else if(tipo==="despesa"){ valor = parseFloat(document.getElementById('valorDespesa').value)||0; desc = document.getElementById('descricaoDespesa').value; }
 
@@ -286,7 +292,7 @@ function excluir(tipo,index){
 
 function atualizarCaixa(){
   let total = 0;
-  ['viagemApp','grupo','entrada'].forEach(t => registros[t].forEach(r => total += parseFloat(r.liquido)));
+  ['viagemApp','ViagemParticular','entrada'].forEach(t => registros[t].forEach(r => total += parseFloat(r.liquido)));
   let despesas = 0;
   registros['despesa'].forEach(r => despesas += parseFloat(r.valor));
   const reserva = parseFloat(document.getElementById('reservaManutencao').textContent) || 0;
@@ -309,69 +315,87 @@ function atualizarMeta() {
   }
 }
 
-function montarResumo(){
-  let resumo = "📊 *Resumo do Dia* 📊\n\n";
+function montarResumo(){ 
+  let resumo = "📊 *Resumo do Dia* 📊\n\n"; 
   let total = 0;
 
-  const tipos = [
-    { chave: 'viagemApp', titulo: 'Viagens por App' },
-    { chave: 'grupo', titulo: 'Grupo 5 Estrelas' },
-    { chave: 'entrada', titulo: 'Outras Entradas' }
+  const tipos = [ 
+    { chave: 'viagemApp', titulo: 'Viagens por App' }, 
+    { chave: 'ViagemParticular', titulo: 'Viagem Particular/Entradas Extras' }, 
+    { chave: 'entrada', titulo: 'Viagens de Empresa' } 
   ];
 
-  tipos.forEach(({chave, titulo}) => {
-    const registrosTipo = registros[chave];
-    if (registrosTipo.length > 0) {
-      resumo += `🟦 *${titulo}*\n`;
-      registrosTipo.forEach(r => {
-        resumo += `• ${r.desc} - R$ ${r.liquido} (${r.pagamento})\n`;
-        total += parseFloat(r.liquido);
-      });
-      resumo += '\n';
-    }
-  });
+  tipos.forEach(({chave, titulo}) => { 
+    const registrosTipo = registros[chave] || []; 
+    if (registrosTipo.length > 0) { 
+      resumo += `🟦 *${titulo}*\n`; 
+      registrosTipo.forEach(r => { 
+        resumo += `• ${r.desc} - R$ ${parseFloat(r.liquido).toFixed(2)} (${r.pagamento})\n`; 
+        total += parseFloat(r.liquido) || 0; 
+      }); 
+      resumo += '\n'; 
+    } 
+  }); 
 
-  resumo += `🧾 *Total Recebido*: R$ ${total.toFixed(2)}\n\n`;
+  resumo += `🧾 *Total Recebido*: R$ ${total.toFixed(2)}\n\n`; 
 
-  let despesas = 0;
-  if (registros.despesa.length > 0) {
-    resumo += `🔴 *Despesas*\n`;
-    registros.despesa.forEach(r => {
-      resumo += `• (-) ${r.desc} - R$ ${r.valor}\n`;
-      despesas += parseFloat(r.valor);
-    });
-    resumo += '\n';
-  }
+  let despesas = 0; 
+  if (registros.despesa && registros.despesa.length > 0) { 
+    resumo += `🔴 *Despesas Detalhadas*\n`; 
+    registros.despesa.forEach(r => { 
+      resumo += `• ${r.desc} - R$ ${parseFloat(r.valor).toFixed(2)}\n`; 
+      despesas += parseFloat(r.valor) || 0; 
+    }); 
+    resumo += '\n'; 
+  } 
 
-  resumo += `💸 *Total Despesas*: R$ ${despesas.toFixed(2)}\n`;
+  resumo += `💸 *Total Despesas*: R$ ${despesas.toFixed(2)}\n`; 
 
-  const reserva = parseFloat(document.getElementById('reservaManutencao').textContent) || 0;
-  resumo += `🔧 *Reserva Manutenção*: R$ ${reserva.toFixed(2)}\n`;
+  const reserva = parseFloat(document.getElementById('reservaManutencao')?.textContent || 0); 
+  resumo += `🔧 *Reserva Manutenção*: R$ ${reserva.toFixed(2)}\n`; 
 
-  const caixa = (total - despesas).toFixed(2);
-  resumo += `\n🟢 *Caixa Final*: R$ ${caixa}\n`;
+  const caixa = (total - despesas).toFixed(2); 
+  resumo += `\n🟢 *Caixa Final*: R$ ${caixa}\n`; 
 
-  const meta = parseFloat(document.getElementById('metaDiaria').value) || 0;
-  const dif = meta - caixa;
-
-  if (meta > 0) {
+  const meta = parseFloat(document.getElementById('metaDiaria')?.value || 0); 
+  const dif = meta - caixa; 
+  if (meta > 0) { 
     resumo += dif > 0 
-      ? `📉 Faltam R$ ${dif.toFixed(2)} para bater a meta.\n` 
-      : `📈 Ultrapassou a meta em R$ ${Math.abs(dif).toFixed(2)}.\n`;
+      ? `📉 Faltam R$ ${dif.toFixed(2)} para bater a meta.\n`
+      : `📈 Ultrapassou a meta em R$ ${Math.abs(dif).toFixed(2)}.\n`; 
+  } 
+
+  // Atualiza visualmente no HTML
+  const divResumo = document.getElementById('resumoContainer'); 
+  if (divResumo) { 
+    divResumo.innerText = resumo; 
   }
 
-  // Mostra na tela
-  const divResumo = document.getElementById('resumoContainer');
-  if (divResumo) divResumo.textContent = resumo;
-
-  return resumo;
+  return resumo; 
 }
 
-function enviarWhatsApp(){
-  const texto = montarResumo();
-  const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-  window.open(url, '_blank');
+    function enviarWhatsApp(){ 
+      const texto = montarResumo(); 
+      const url = `https://wa.me/?text=${encodeURIComponent(texto)}`; 
+      window.open(url, '_blank'); 
+    }
+
+     /* ======== FUNÇÃO DE EXPORTAR PDF CORRIGIDA ======== */
+function exportarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const texto = ultimoResumoFiltrado || "Nenhum resumo gerado. Use o botão 'Buscar' para gerar um resumo primeiro.";
+
+  doc.setFont("Helvetica");
+  doc.setFontSize(12);
+
+  const linhas = doc.splitTextToSize(texto, 180);
+  doc.text(linhas, 10, 20);
+
+  doc.save("Relatorio_Viagens.pdf");
 }
+
 
 function buscarData() {
   const filtro = document.getElementById("filtroResumo").value;
@@ -380,6 +404,7 @@ function buscarData() {
 
   if (!filtro) {
     resumo.textContent = '⚠️ Selecione uma data para gerar o resumo.';
+    ultimoResumoFiltrado = '';
     return;
   }
 
@@ -387,40 +412,81 @@ function buscarData() {
   const m = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][parseInt(mes) - 1];
   const dataFormatada = `${dia}/${m}`;
 
-  let totalApp = 0, totalGrupo = 0, totalEntrada = 0, totalDespesa = 0;
   const reserva = parseFloat(document.getElementById("reservaManutencao").textContent) || 0;
 
-  registros["viagemApp"].filter(r => r.data.startsWith(dataFormatada)).forEach(r => totalApp += parseFloat(r.liquido));
-  registros["grupo"].filter(r => r.data.startsWith(dataFormatada)).forEach(r => totalGrupo += parseFloat(r.liquido));
-  registros["entrada"].filter(r => r.data.startsWith(dataFormatada)).forEach(r => totalEntrada += parseFloat(r.liquido));
-  registros["despesa"].filter(r => r.data.startsWith(dataFormatada)).forEach(r => totalDespesa += parseFloat(r.valor));
+  let totalApp = 0, totalViagemParticular = 0, totalEntrada = 0, totalDespesa = 0;
 
-  const valorLiquido = (totalApp + totalGrupo + totalEntrada - totalDespesa - reserva).toFixed(2);
+  const viagensApp = registros["viagemApp"].filter(r => r.data.startsWith(dataFormatada));
+  const viagensParticulares = registros["ViagemParticular"].filter(r => r.data.startsWith(dataFormatada));
+  const entradas = registros["entrada"].filter(r => r.data.startsWith(dataFormatada));
+  const despesas = registros["despesa"].filter(r => r.data.startsWith(dataFormatada));
 
-  resumo.innerHTML = `
-🚖 Relatório de Viagens
-Dia ${dia}/${m}/${ano}<br>
+  // Construir texto detalhado
+  let texto = `Relatório de Viagens\nDia ${dia}/${m}/${ano}\n\n`;
 
-📥 ENTRADAS<br>
-• Viagens de App: R$ ${totalApp.toFixed(2)}<br>
-• Viagem Particular: R$ ${totalGrupo.toFixed(2)}<br>
-• Viagem de Empresa: R$ ${totalEntrada.toFixed(2)}<br><br>
+  texto += `ENTRADAS\n`;
 
-📤 SAÍDAS<br>
-• Despesas: R$ ${totalDespesa.toFixed(2)}<br>
+  texto += `\n- Viagens de App:\n`;
+  viagensApp.forEach((v, i) => {
+    texto += `  ${i + 1}. ${v.desc} - R$ ${parseFloat(v.liquido).toFixed(2)}\n`;
+    totalApp += parseFloat(v.liquido);
+  });
+  texto += `  Total: R$ ${totalApp.toFixed(2)}\n`;
 
-🔧 Reserva Manutenção: R$ ${reserva.toFixed(2)}<br>
+  texto += `\n- Viagens Particulares:\n`;
+  viagensParticulares.forEach((v, i) => {
+    texto += `  ${i + 1}. ${v.desc} - R$ ${parseFloat(v.liquido).toFixed(2)}\n`;
+    totalViagemParticular += parseFloat(v.liquido);
+  });
+  texto += `  Total: R$ ${totalViagemParticular.toFixed(2)}\n`;
 
-<div class="valor-liquido">💰 Valor Líquido: R$ ${valorLiquido}</div>
-`;
+  texto += `\n- Viagens de Empresa:\n`;
+  entradas.forEach((e, i) => {
+    texto += `  ${i + 1}. ${e.desc} - R$ ${parseFloat(e.liquido).toFixed(2)}\n`;
+    totalEntrada += parseFloat(e.liquido);
+  });
+  texto += `  Total: R$ ${totalEntrada.toFixed(2)}\n`;
 
-  document.getElementById("whatsappLink").href = `https://wa.me/?text=${encodeURIComponent(resumo.textContent)}`;
+  texto += `\nSAÍDAS\n`;
+
+  texto += `\n- Despesas:\n`;
+  despesas.forEach((d, i) => {
+    texto += `  ${i + 1}. ${d.desc} - R$ ${parseFloat(d.valor).toFixed(2)}\n`;
+    totalDespesa += parseFloat(d.valor);
+  });
+  texto += `  Total: R$ ${totalDespesa.toFixed(2)}\n`;
+
+  texto += `\n- Reserva Manutenção: R$ ${reserva.toFixed(2)}\n`;
+
+  const valorLiquido = (totalApp + totalViagemParticular + totalEntrada - totalDespesa - reserva).toFixed(2);
+  texto += `\n Valor Líquido: R$ ${valorLiquido}`;
+
+  ultimoResumoFiltrado = texto;
+
+  // Atualiza o HTML
+  resumo.innerHTML = `<pre>${texto}</pre>`;
+
+  // Atualiza link do WhatsApp
+  document.getElementById("whatsappLink").href = `https://wa.me/?text=${encodeURIComponent(ultimoResumoFiltrado)}`;
 }
 
 // Carregamento inicial
 document.addEventListener('DOMContentLoaded', () => {
-  carregarMeta(); atualizarCustos(); atualizarKmTotal();
-  ['viagemApp','grupo','entrada','despesa'].forEach(t=> atualizarTabela(t));
+  // Carrega meta diária e custos iniciais
+  carregarMeta();
+  atualizarCustos();
+  atualizarKmTotal();
+
+  // Carregar campos persistentes
+  ['kmInicial', 'kmFinal', 'custoKm'].forEach(id => {
+    const el = document.getElementById(id);
+    const val = localStorage.getItem(id);
+    if (el && val !== null) el.value = val;
+  });
+
+  // Atualizar todas as tabelas
+  ['viagemApp', 'ViagemParticular', 'entrada', 'despesa'].forEach(t => atualizarTabela(t));
+
   atualizarCaixa();
 });
 </script>
