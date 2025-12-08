@@ -1,665 +1,669 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FLUXO Driver Dashboard</title>
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin:0; padding:0; color:#001a6a; }
-    header { background-color: #001a6a; color: white; padding: 20px; text-align: center; }
-    header h1 { margin: 0; font-size: 36px; }
-    main { padding: 20px; margin-bottom: 60px; }
-    section { margin-bottom: 40px; }
-    .flex { display: flex; flex-wrap: wrap; gap: 15px; }
-    .card { background: #ffffff; padding: 15px 20px; border-radius: 12px; flex: 1 1 250px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    .card h3 { margin-top:0; font-weight: bold; color:#001a6a; }
-    .form-row { display:flex; align-items:center; margin-bottom:10px; gap:10px; flex-wrap: wrap; }
-    label { width: 140px; font-weight: bold; }
-    input[type="number"], input[type="text"], input[type="date"], select { padding:5px; border-radius:5px; border:1px solid #ccc; flex:1; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { font-size: 15px; border: 1px solid #ddd; padding: 6px; text-align: center; }
-    th { background-color: #e6f2ff; }
-    .btn { background-color: #28659e; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 5px; }
-    .btn:hover { background-color: #4a90e2; }
-    .pagamento-extra { display:none; margin-top:10px; background:#f0fdf0; padding:10px; border-radius:5px; border:1px solid #ccc; }
-    footer { position: fixed; bottom: 10px; right: 20px; font-size: 12px; font-weight: bold; color: #333; }
-    .whatsapp-btn { background-color: #067000; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-top: 15px; display:inline-block; }
-    
-    /* ===== NOVO ESTILO RESUMO ===== */
-    .resumo-card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 15px; margin-top: 15px; line-height:1.5; }
-    .resumo-card h4 { margin:10px 0 5px; font-size:16px; }
-    .resumo-section { padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-    .recebimentos { background-color: #e6f2ff; }
-    .despesas { background-color: #ffe6e6; }
-    .liquido { background-color: #e6ffe6; font-weight:bold; font-size:16px; }
-    .resumo-item { display:flex; justify-content:space-between; }
-    .resumo-total { font-weight:bold; margin-top:5px; }
-    .resumo-final { font-size:18px; color: #006400; font-weight:bold; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dashboard - RF Driver</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:.3s;
+}
+
+/* ===========================================
+   PALETA (compatível com planos)
+=========================================== */
+:root{
+  /* dourado escuro para light */
+  --gold-light:#90731b;
+  --gold-light2:#b08c2e;
+
+  /* dourado para dark */
+  --gold-dark:#d6b25f;
+  --gold-dark2:#e8d08a;
+
+  /* dark */
+  --bg-dark:#0d0d0d;
+  --text-dark:#f4f4f4;
+  --card-dark:#161616;
+  --panel-dark:#131313;
+  --border-dark:#242424;
+
+  /* light */
+  --bg-light:#f7f7f7;
+  --text-light:#222;
+  --card-light:#ffffff;
+  --panel-light:#ffffff;
+  --border-light:#d6d6d6;
+}
+
+/* THEME */
+body.dark{
+  --bg:var(--bg-dark);
+  --text:var(--text-dark);
+  --card:var(--card-dark);
+  --panel:var(--panel-dark);
+  --border:var(--border-dark);
+  --gold-main:var(--gold-dark);
+  --gold-main2:var(--gold-dark2);
+}
+body.light{
+  --bg:var(--bg-light);
+  --text:var(--text-light);
+  --card:var(--card-light);
+  --panel:var(--panel-light);
+  --border:var(--border-light);
+  --gold-main:var(--gold-light);
+  --gold-main2:var(--gold-light2);
+}
+
+/* gold */
+.gold{ color:var(--gold-main); }
+.gold2{ color:var(--gold-main2); }
+
+/* ===========================================
+   MENU LATERAL
+=========================================== */
+.drawer{
+  position:fixed;
+  top:0; left:-260px;
+  width:260px; height:100%;
+  background:var(--card);
+  padding-top:70px;
+  transition:left .3s;
+  z-index:9999;
+}
+.drawer.open{ left:0; }
+.drawer a{
+  display:block;
+  padding:15px 22px;
+  border-bottom:1px solid var(--border);
+  text-decoration:none;
+  color:var(--text);
+}
+
+/* toggles */
+.drawer-toggle{
+  position:fixed; left:15px; top:15px;
+  font-size:28px; cursor:pointer; z-index:10000;
+}
+.theme-toggle{
+  position:fixed; right:15px; top:15px;
+  font-size:24px; cursor:pointer; z-index:10000;
+}
+
+/* ===========================================
+   MENU INFERIOR
+=========================================== */
+.tabbar{
+  position:fixed; bottom:0; left:0; right:0;
+  height:70px; z-index:9990;
+  background:var(--panel);
+  border-top:1px solid var(--border);
+  display:flex; justify-content:space-around; align-items:center;
+}
+.tabbar a{
+  text-decoration:none;
+  color:var(--text);
+  text-align:center;
+  font-size:20px;
+  flex:1;
+}
+.tabbar small{ font-size:12px; display:block; }
+.tabbar a.active{ color:var(--gold-main); }
+
+/* botão central */
+.action-btn{
+  background:linear-gradient(90deg,var(--gold-main),var(--gold-main2));
+  width:58px; height:58px;
+  border:none; border-radius:30px;
+  color:#000; font-size:26px;
+  display:flex; align-items:center; justify-content:center;
+  margin-top:-35px;
+  box-shadow:0 0 12px rgba(0,0,0,.5);
+}
+
+/* ===========================================
+   CONTEÚDO
+=========================================== */
+.container{
+  padding:20px;
+  padding-top:80px;
+  padding-bottom:110px;
+}
+h1{
+  font-size:26px;
+  margin-bottom:8px;
+}
+
+/* filtros */
+.filters{
+  display:flex;
+  gap:8px;
+  margin:12px 0;
+  flex-wrap:wrap;
+}
+.filter{
+  padding:8px 12px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:999px;
+  font-size:12px;
+  opacity:.7;
+  cursor:pointer;
+}
+.filter.active{
+  opacity:1;
+  background:linear-gradient(90deg,var(--gold-main),var(--gold-main2));
+  color:#000;
+  border:none;
+}
+
+/* período custom */
+.period{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-bottom:10px;
+}
+.period input{
+  padding:6px 8px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+}
+
+.note{
+  font-size:13px;
+  opacity:.7;
+  margin-bottom:10px;
+}
+
+/* KPI cards */
+.kpi{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px 18px 16px;
+  margin-bottom:14px;
+}
+.kpi .label{
+  font-size:14px;
+  opacity:.8;
+}
+.kpi .value{
+  font-size:28px;
+  font-weight:700;
+  margin-top:4px;
+}
+.kpi.positivo{ border-left:4px solid #1DB954; }
+.kpi.negativo{ border-left:4px solid #ff3b30; }
+
+/* row cards */
+.row{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.small{
+  flex:1;
+  min-width:200px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
+.small .title{
+  font-size:13px;
+  opacity:.75;
+}
+.small .value{
+  font-size:22px;
+  font-weight:700;
+  margin-top:6px;
+}
+.small .gastos{ color:#ff3b30; }
+
+/* ===========================================
+   GRÁFICOS
+=========================================== */
+.chart-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px 14px 12px;
+  margin-top:16px;
+}
+.chart-title{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+.chart-legend{
+  font-size:11px;
+  opacity:.65;
+  margin-top:6px;
+}
+
+/* gráfico de barras vertical */
+.chart-bars{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  height:160px;
+  margin-top:10px;
+}
+.bar{
+  flex:1;
+  min-width:20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+}
+.bar-value{
+  font-size:10px;
+  opacity:.8;
+  margin-bottom:4px;
+}
+.bar-inner{
+  width:100%;
+  border-radius:8px 8px 4px 4px;
+  background:linear-gradient(180deg,var(--gold-main2),var(--gold-main));
+  height:10%;
+  transition:height .4s ease;
+}
+.bar-label{
+  font-size:10px;
+  opacity:.7;
+  margin-top:4px;
+}
+
+/* gráfico horizontal gastos x lucro */
+.chart-bars-h{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.h-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.h-label{
+  font-size:11px;
+  width:80px;
+  opacity:.8;
+}
+.h-bar-wrap{
+  flex:1;
+  height:14px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.10);
+  overflow:hidden;
+}
+body.light .h-bar-wrap{
+  background:rgba(0,0,0,0.06);
+}
+.h-bar-inner{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--gold-main),var(--gold-main2));
+  transition:width .4s ease;
+}
+.h-bar-inner.gastos{
+  background:linear-gradient(90deg,#ff7b7b,#ff3b30);
+}
+.h-bar-inner.lucroNeg{
+  background:linear-gradient(90deg,#666,#999);
+}
+.h-value{
+  font-size:11px;
+  min-width:70px;
+  text-align:right;
+}
+
+/* estado vazio de gráfico */
+.chart-empty{
+  font-size:12px;
+  opacity:.7;
+  margin-top:12px;
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>FLUXO Driver Dashboard</h1>
-  </header>
-  <main>
 
-  <!-- ===== META DIÁRIA / CAIXA ===== -->
-  <section class="flex">
-    <div class="card">
-      <h3>🎯 Meta Diária</h3>
-      <div class="form-row">
-        <input type="number" id="metaDiaria" placeholder="Valor" oninput="salvarMeta(); atualizarMeta();">
-      </div>
-    </div>
-    <div class="card">
-      <h3>💰 Caixa Atual</h3>
-      <div id="caixaAtual">0.00</div>
-    </div>
-    <div class="card">
-      <h3>📈 Alcançe de Meta</h3>
-      <div id="faltaMeta">0.00</div>
-    </div>
-  </section>
+<!-- BOTÕES SUPERIORES -->
+<div class="drawer-toggle gold" onclick="toggleDrawer()">☰</div>
+<div class="theme-toggle gold" onclick="toggleTheme()">🌓</div>
 
-  <!-- ===== DADOS PARA MANUTENÇÃO ===== -->
-  <section class="flex">
-    <div class="card">
-      <h3>⚙ Manutenção</h3>
-      <div class="form-row"><label>Km Inicial:</label><input type="number" id="kmInicial" oninput="atualizarKmTotal(); salvarCampo('kmInicial')"></div>
-      <div class="form-row"><label>Km Final:</label><input type="number" id="kmFinal" oninput="atualizarKmTotal(); salvarCampo('kmFinal')"></div>
-      <div class="form-row"><label>Km Total Rodado:</label><span id="kmTotal">0</span></div>
-      <div class="form-row"><label>Custo por Km:</label><input type="number" id="custoKm" placeholder="R$/km" oninput="atualizarCustos(); salvarCampo('custoKm')"></div>
-      <div class="form-row reserva"><label>Reserva:</label><span id="reservaManutencao">0.00</span></div>
-    </div>
-  </section>
+<!-- MENU LATERAL -->
+<nav class="drawer" id="drawer">
+  <a href="index.html">🏠 Dashboard</a>
+  <a href="entradas.html">💵 Caixa</a>
+  <a href="resumo.html">📊 Resumo</a>
+  <a href="calculadora.html">📟 Calculadora</a>
+  <a href="planos.html">💎 Planos</a>
+  <a href="perfil.html">👤 Perfil</a>
+  <a href="recibo_empresa.html">🏭 Empresa</a>
+  <a href="recibo_particular.html">🚘 Particular</a>
+  <a href="manutencao.html">🛠 Manutenção</a>
+</nav>
 
-  <!-- ===== VIAGENS ===== -->
-<section class="card">
-  <h3>🚕 Viagens</h3>
-  <div class="form-row">
-    <input type="number" id="valorViagemApp" placeholder="Valor R$">
-    <select id="descricaoViagemApp">
-      <option value="App Uber">App Uber</option>
-      <option value="App 99">App 99</option>
-      <option value="App Indriver">App Indriver</option>
-      <option value="App de entrega">App de entrega</option>
-      <option value="Grupo whatsapp">Grupo whatsapp</option>
-    </select>
-    <select id="pagamentoViagemApp" onchange="mostrarPagamentoExtra(this,'extraViagemApp')">
-      <option value="dinheiro">Dinheiro</option>
-      <option value="pix">PIX</option>
-      <option value="cartao">Cartão</option>
-    </select>
-    <button class="btn" onclick="registrar('viagemApp')">Registrar</button>
+<div class="container">
+  <h1 class="gold">Dashboard</h1>
+  <div class="note">Resumo financeiro rápido do seu desempenho.</div>
+
+  <!-- FILTROS DE PERÍODO -->
+  <div class="filters">
+    <button class="filter active" id="btnHoje">Hoje</button>
+    <button class="filter" id="btnSemana">Semana</button>
+    <button class="filter" id="btnMes">Mês</button>
+    <button class="filter" id="btnPers">Período</button>
   </div>
-  <div id="extraViagemApp" class="pagamento-extra"></div>
-  <table id="tabelaViagemApp"><tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Ações</th></tr></table>
-</section>
 
-<!-- ===== VIAGEM PARTICULAR / ENTRADAS EXTRA ===== -->
-<section class="card">
-  <h3>🚖 Viagem Particular/Entradas Extras</h3>
-  <div class="form-row">
-    <input type="number" id="valorViagemParticular" placeholder="Valor R$">
-    <select id="descricaoViagemParticular">
-      <option value="Viagem particular">Viagem particular</option>
-      <option value="Empréstimo cartão">Empréstimo cartão</option>
-      <option value="Recebimentos de Fiado">Recebimentos de Fiado</option>
-      <option value="Outros recebimentos">Outros recebimentos</option>
-    </select>
-    <select id="pagamentoViagemParticular" onchange="mostrarPagamentoExtra(this,'extraViagemParticular')">
-      <option value="dinheiro">Dinheiro</option>
-      <option value="pix">PIX</option>
-      <option value="cartao">Cartão</option>
-    </select>
-    <button class="btn" onclick="registrar('ViagemParticular')">Registrar</button>
+  <div class="period" id="rangePers" style="display:none">
+    <input type="date" id="ini">
+    <input type="date" id="fim">
+    <button class="filter" id="applyPers">Aplicar</button>
   </div>
-  <div id="extraViagemParticular" class="pagamento-extra"></div>
-  <table id="tabelaViagemParticular"><tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Ações</th></tr></table>
-</section>
 
-<!-- ===== ENTRADAS DE EMPRESA ===== -->
-<section class="card">
-  <h3>🏢 Viagem de Empresa</h3>
-  <div class="form-row">
-    <input type="number" id="valorEntrada" placeholder="Valor R$">
-    <select id="descricaoEntrada">
-      <option value="Viagem extra Sr Antônio">Viagem extra Sr Antônio</option>
-      <option value="Viagem de rota Sr Antônio">Viagem de rota Sr Antônio</option>
-      <option value="Viagem de empresa">Viagem de empresa</option>
-    </select>
-    <select id="pagamentoEntrada" onchange="mostrarPagamentoExtra(this,'extraEntrada')">
-      <option value="dinheiro">Dinheiro</option>
-      <option value="pix">PIX</option>
-      <option value="cartao">Cartão</option>
-    </select>
-    <button class="btn" onclick="registrar('entrada')">Registrar</button>
+  <div class="note" id="periodNote">Mostrando dados de hoje</div>
+
+  <!-- LUCRO -->
+  <div id="cardLucro" class="kpi">
+    <div class="label">Lucro Estimado</div>
+    <div id="lucroValor" class="value">R$ 0,00</div>
   </div>
-  <div id="extraEntrada" class="pagamento-extra"></div>
-  <table id="tabelaEntrada"><tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Ações</th></tr></table>
-</section>
 
-<!-- ===== DESPESAS / SAÍDAS ===== -->
-<section class="card">
-  <h3>💸 Despesas / Saídas</h3>
-  <div class="form-row">
-    <input type="number" id="valorDespesa" placeholder="Valor R$">
-    <select id="descricaoDespesa">
-      <option value="Abastecimento GNV">Abastecimento GNV</option>
-      <option value="Abastecimento Gasolina">Abastecimento Gasolina</option>
-      <option value="Abastecimento Etanol">Abastecimento Etanol</option>
-      <option value="Pedágio">Pedágio</option>
-      <option value="Lava-jato">Lava-jato</option>
-      <option value="Lanche">Lanche</option>
-      <option value="Almoço">Almoço</option>
-      <option value="Janta">Janta</option>
-      <option value="Café">Café</option>
-      <option value="Pagamentos de cartão">Pagamentos de cartão</option>
-      <option value="Pagamentos do carro">Pagamentos do carro</option>
-      <option value="Manutenção preventiva">Manutenção preventiva</option>
-      <option value="Manutenção corretiva">Manutenção corretiva</option>
-      <option value="Troca de óleo e filtro">Troca de óleo e filtro</option>
-      <option value="Outros">Outros</option>
-    </select>
-    <button class="btn" onclick="registrar('despesa')">Registrar</button>
-  </div>
-  <table id="tabelaDespesa"><tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr></table>
-</section>
-
-  <!-- ===== RESUMO DO DIA ===== -->
-  <section class="card">
-    <h3>📊 Resumo do Dia</h3>
-    <div id="resumoContainer" class="resumo-card"></div>
-    <a href="#" id="whatsappLink" class="whatsapp-btn" target="_blank">📤 Enviar via WhatsApp</a>
-    <button class="btn" style="margin-top:10px; background:#444;" onclick="exportarPDF()">📄 Exportar em PDF</button>
-  </section>
-
-  <!-- ===== RESUMO POR PERÍODO ===== -->
-  <section class="card">
-    <h3>📊 Resumo por Período</h3>
-    <!-- Botões de período -->
-    <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-      <button class="btn" onclick="filtrarResumo(7)">Últimos 7 dias</button>
-      <button class="btn" onclick="filtrarResumo(15)">Últimos 15 dias</button>
-      <button class="btn" onclick="filtrarResumo(30)">Últimos 30 dias</button>
-      <button class="btn" onclick="mostrarPersonalizado()">Personalizado</button>
+  <!-- CARDS GERAIS -->
+  <div class="row">
+    <div class="small">
+      <div class="title">Gastos</div>
+      <div id="gastos" class="value gastos">R$ 0,00</div>
     </div>
-
-    <!-- Container para resumo filtrado -->
-    <div id="resumoPeriodo" class="resumo-card"></div>
-
-    <!-- Container para filtros personalizados -->
-    <div id="personalizadoContainer" style="margin-top:15px; display:none;">
-      <label>Data Inicial:</label>
-      <input type="date" id="dataInicio">
-      <label>Data Final:</label>
-      <input type="date" id="dataFim">
-      <button class="btn" onclick="filtrarResumoPersonalizado()">Gerar Resumo</button>
+    <div class="small">
+      <div class="title">Faturado</div>
+      <div id="fat" class="value">R$ 0,00</div>
     </div>
-  </section>
+  </div>
+
+  <!-- GRÁFICO DE BARRAS: FATURAMENTO POR DIA -->
+  <div class="chart-card">
+    <div class="chart-title">Faturamento por dia</div>
+    <div id="chartFaturamento" class="chart-bars"></div>
+    <div class="chart-legend">Baseado nas entradas do período selecionado.</div>
+  </div>
+
+  <!-- GRÁFICO HORIZONTAL: GASTOS x FATURAMENTO x LUCRO -->
+  <div class="chart-card">
+    <div class="chart-title">Gastos x Faturamento x Lucro</div>
+    <div id="chartGastosLucro" class="chart-bars-h"></div>
+    <div class="chart-legend">Comparativo simples para enxergar o equilíbrio financeiro.</div>
+  </div>
+
+</div>
+
+<!-- MENU INFERIOR -->
+<div class="tabbar">
+  <a class="active gold" href="index.html">🏠<small>Home</small></a>
+  <a href="entradas.html">💵<small>Caixa</small></a>
+  <button class="action-btn" onclick="location.href='calculadora.html'">+</button>
+  <a href="resumo.html">📊<small>Resumo</small></a>
+  <a href="planos.html">💎<small>Planos</small></a>
+</div>
 
 <script>
-// Funções de filtragem e resumo detalhado
-function filtrarResumo(dias){
-  const hoje = new Date();
-  const inicio = new Date();
-  inicio.setDate(hoje.getDate() - dias + 1);
-  gerarResumoPorPeriodo(inicio, hoje);
+/* ============ MENU LATERAL ============ */
+function toggleDrawer(){
+  document.getElementById('drawer').classList.toggle('open');
 }
 
-function mostrarPersonalizado(){
-  document.getElementById("personalizadoContainer").style.display = "block";
-  document.getElementById("resumoPeriodo").innerHTML = "";
+/* ============ TEMA ============ */
+function toggleTheme(){
+  const b=document.body;
+  const newTheme=b.classList.contains('dark')?'light':'dark';
+  b.classList.remove('dark','light');
+  b.classList.add(newTheme);
+  localStorage.setItem('theme',newTheme);
+}
+(function(){
+  const th=localStorage.getItem('theme')||'dark';
+  document.body.classList.add(th);
+})();
+
+/* ============ PLANO E BLOQUEIO ============ */
+function plano(){
+  try{ return localStorage.getItem('planoAtivo') || 'FREE'; }catch(e){}
+  return 'FREE';
+}
+if(plano()==='FREE'){
+  alert("O Dashboard é liberado apenas no plano Básico ou superior.");
+  location.href="planos.html";
 }
 
-function filtrarResumoPersonalizado(){
-  const inicioStr = document.getElementById("dataInicio").value;
-  const fimStr = document.getElementById("dataFim").value;
-  if(!inicioStr || !fimStr){ alert("Selecione as duas datas!"); return; }
+/* ============ STATE ============ */
+let periodo='hoje';
+let ini=null,fim=null;
 
-  const inicio = new Date(inicioStr);
-  const fim = new Date(fimStr);
-  const diff = (fim - inicio)/(1000*60*60*24);
-  if(diff<0 || diff>90){ alert("O período deve ter até 90 dias corridos."); return; }
+function load(){
+  return JSON.parse(localStorage.getItem('entradasSaidas')||'[]');
+}
+function norm(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
 
-  gerarResumoPorPeriodo(inicio, fim);
+/* regra de bloqueio por plano nos filtros */
+function block(p){
+  const pl = plano();
+  if(p==='semana' && pl==='FREE'){
+    alert('Semana disponível a partir do Básico.');
+    location.href='planos.html'; return true;
+  }
+  if((p==='mes' || p==='pers') && (pl==='FREE' || pl==='BASICO')){
+    alert('Mês e Período disponíveis a partir do Premium.');
+    location.href='planos.html'; return true;
+  }
+  return false;
 }
 
-function gerarResumoPorPeriodo(inicio,fim){
-  const resumoDiv = document.getElementById("resumoPeriodo");
-  resumoDiv.innerHTML = "";
+/* filtro por período */
+function ok(r){
+  const d = new Date(r.criadoEm);
+  if(isNaN(d)) return true;
+  const h = norm(new Date());
+  const dn = norm(d);
 
-  const formas = ["dinheiro","pix","cartao"];
-  let totalRecebimentos = {dinheiro:0, pix:0, cartao:0}, totalDespesas = {dinheiro:0, pix:0, cartao:0};
+  if(periodo==='hoje') return dn.getTime()===h.getTime();
 
-  // Recebimentos
-  const tipos = ["viagemApp","ViagemParticular","entrada"];
-  const secReceb = document.createElement("div");
-  secReceb.className = "resumo-section recebimentos";
-  secReceb.innerHTML = `<h4>Recebimentos</h4>`;
+  if(periodo==='semana'){
+    const lim=new Date(h);
+    lim.setDate(lim.getDate()-6);
+    return dn>=lim && dn<=h;
+  }
 
-  tipos.forEach(tipo=>{
-    registros[tipo].forEach(r=>{
-      const [dia, mesTxt] = r.data.split(" ")[0].split("/");
-      const mesNum = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"].indexOf(mesTxt);
-      const dataRegistro = new Date(new Date().getFullYear(), mesNum, parseInt(dia));
-      if(dataRegistro>=inicio && dataRegistro<=fim){
-        totalRecebimentos[r.pagamento] += parseFloat(r.liquido);
-      }
-    });
+  if(periodo==='mes'){
+    return d.getMonth()===h.getMonth() && d.getFullYear()===h.getFullYear();
+  }
+
+  if(periodo==='pers'){
+    if(!ini || !fim) return true;
+    const d0=norm(ini), d1=norm(fim);
+    return dn>=d0 && dn<=d1;
+  }
+  return true;
+}
+
+/* ============ RENDER PRINCIPAL ============ */
+function render(){
+  const regs = load().filter(ok);
+  let entr=0, said=0;
+
+  regs.forEach(r=>{
+    if(r.tipo==='entrada') entr += Number(r.valor || r.valorBruto || 0);
+    else said += Number(r.valor || 0);
   });
 
-  formas.forEach(f=>{
-    const item = document.createElement("div");
-    item.className = "resumo-item";
-    item.innerHTML = `<span>${f.charAt(0).toUpperCase()+f.slice(1)}:</span><span>R$ ${totalRecebimentos[f].toFixed(2)}</span>`;
-    secReceb.appendChild(item);
-  });
-  const totalRec = formas.reduce((a,f)=>a+totalRecebimentos[f],0);
-  const totalEl = document.createElement("div"); totalEl.className="resumo-total"; totalEl.innerHTML=`Total Recebido: R$ ${totalRec.toFixed(2)}`;
-  secReceb.appendChild(totalEl);
-  resumoDiv.appendChild(secReceb);
+  document.getElementById('fat').innerText = fmt(entr);
+  document.getElementById('gastos').innerText = fmt(said);
 
-// Despesas detalhadas
-const secDesp = document.createElement("div");
-secDesp.className = "resumo-section despesas";
-secDesp.innerHTML = `<h4>Despesas</h4>`;
+  const lucro = entr - said;
+  document.getElementById('lucroValor').innerText = fmt(lucro);
 
-let totalDes = 0;
+  const card = document.getElementById('cardLucro');
+  card.classList.remove('positivo','negativo');
+  card.classList.add(lucro>=0 ? 'positivo' : 'negativo');
 
-registros["despesa"].forEach(r => {
-  const [dia, mesTxt] = r.data.split(" ")[0].split("/");
-  const mesNum = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"].indexOf(mesTxt);
-  const dataRegistro = new Date(new Date().getFullYear(), mesNum, parseInt(dia));
-  if (dataRegistro >= inicio && dataRegistro <= fim) {
-    const item = document.createElement("div");
-    item.className = "resumo-item";
-    item.innerHTML = `<span>${r.desc}</span><span>R$ ${parseFloat(r.valor).toFixed(2)}</span>`;
-    secDesp.appendChild(item);
-    totalDes += parseFloat(r.valor);
-  }
-});
-
-const totalDesEl = document.createElement("div");
-totalDesEl.className = "resumo-total";
-totalDesEl.innerHTML = `Total Despesas: R$ ${totalDes.toFixed(2)}`;
-secDesp.appendChild(totalDesEl);
-resumoDiv.appendChild(secDesp);
-
-  // Caixa final
-  const secFinal = document.createElement("div");
-  secFinal.className="resumo-section liquido resumo-final";
-  secFinal.innerHTML=`💰 Caixa Final: R$ ${(totalRec-totalDes).toFixed(2)}`;
-  resumoDiv.appendChild(secFinal);
-}
-</script>
-
-</main>
-<footer><div id="dataHora"></div></footer>
-<script>
-function atualizarDataHora(){
-  const now = new Date();
-  const dia = now.getDate().toString().padStart(2,'0');
-  const mes = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][now.getMonth()];
-  const hora = now.getHours().toString().padStart(2,'0');
-  const min = now.getMinutes().toString().padStart(2,'0');
-  document.getElementById('dataHora').textContent = `${dia}/${mes} ${hora}:${min}h`;
-}
-setInterval(atualizarDataHora,60000);
-atualizarDataHora();
-</script>
-
-  </main>
-  <footer><div id="dataHora"></div></footer>
-
-  <!-- jsPDF CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-unicode@0.1.0/dist/jspdf-unicode.min.js"></script>
-
-<script>
-/* ... todo o código anterior de registros, salvar, buscarData etc permanece igual ... */
-
-let maquinaConfig = { nome: "TON", credito: 3.58, debito: 1.68 };
-
-function mostrarPagamentoExtra(sel, containerId){
-  const cont = document.getElementById(containerId);
-  if(sel.value === "cartao"){
-    cont.style.display = "block";
-    cont.innerHTML = `
-      <div class="form-row"><label>Maquineta:</label><input type="text" value="${maquinaConfig.nome}" oninput="maquinaConfig.nome=this.value"></div>
-      <div class="form-row"><label>Juros Crédito %:</label><input type="number" step="0.01" value="${maquinaConfig.credito}" oninput="maquinaConfig.credito=this.value"></div>
-      <div class="form-row"><label>Juros Débito %:</label><input type="number" step="0.01" value="${maquinaConfig.debito}" oninput="maquinaConfig.debito=this.value"></div>
-      <div class="form-row"><label>Repassar taxa?</label><select id="${containerId}_repasse"><option value="nao">Não (Absorvida)</option><option value="sim">Sim (Repassada)</option></select></div>
-      <div class="form-row"><label>Tipo:</label><select id="${containerId}_tipo"><option value="credito">Crédito</option><option value="debito">Débito</option></select></div>
-    `;
-  } else {
-    cont.style.display = "none";
-    cont.innerHTML = "";
-  }
+  // ATUALIZA OS DOIS GRÁFICOS
+  updateCharts(regs, entr, said, lucro);
 }
 
-function aplicarTaxa(valor, tipo, repasse){
-  const taxa = (tipo === "credito" ? maquinaConfig.credito : maquinaConfig.debito) / 100;
-  if(repasse === "nao") return { cobrado: valor, liquido: (valor * (1 - taxa)).toFixed(2) };
-  else {
-    const cobrado = Math.ceil((valor / (1 - taxa)) * 100) / 100;
-    return { cobrado: cobrado.toFixed(2), liquido: valor.toFixed(2) };
-  }
+function fmt(v){
+  return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 }
 
-function carregarDados(chave){ return JSON.parse(localStorage.getItem(chave) || "[]"); }
-function salvarDados(chave,dados){ localStorage.setItem(chave, JSON.stringify(dados)); }
-function salvarCampo(campo){ localStorage.setItem(campo, document.getElementById(campo).value); }
-function salvarMeta(){ localStorage.setItem('metaDiaria', document.getElementById('metaDiaria').value); }
-function carregarMeta(){
-  const m = localStorage.getItem('metaDiaria');
-  if(m !== null) document.getElementById('metaDiaria').value = m;
-  atualizarMeta();
+/* ============ GRÁFICOS ============ */
+
+// coordena os dois gráficos
+function updateCharts(regs, entr, said, lucro){
+  renderChartFaturamento(regs);
+  renderChartGastosLucro(entr, said, lucro);
 }
 
-let registros = {
-  viagemApp: carregarDados('viagemApp'),
-  ViagemParticular: carregarDados('ViagemParticular'),
-  entrada: carregarDados('entrada'),
-  despesa: carregarDados('despesa')
-};
+/* gráfico de barras verticais: faturamento por dia */
+function renderChartFaturamento(regs){
+  const box = document.getElementById('chartFaturamento');
+  if(!box) return;
 
-function atualizarDataHora(){
-  const now = new Date();
-  const dia = now.getDate().toString().padStart(2, '0');
-  const mes = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][now.getMonth()];
-  const hora = now.getHours().toString().padStart(2, '0');
-  const min = now.getMinutes().toString().padStart(2, '0');
-  document.getElementById('dataHora').textContent = `${dia}/${mes} ${hora}:${min}h`;
-}
-setInterval(atualizarDataHora, 60000);
+  const map = {};
 
-function atualizarKmTotal(){
-  const ini = parseFloat(document.getElementById('kmInicial').value) || 0;
-  const fin = parseFloat(document.getElementById('kmFinal').value) || 0;
-  const total = fin - ini;
-  document.getElementById('kmTotal').textContent = total.toFixed(1);
-  atualizarCustos();
-  salvarCampo('kmInicial'); salvarCampo('kmFinal');
-}
-function atualizarCustos(){
-  const km = parseFloat(document.getElementById('kmTotal').textContent) || 0;
-  const custo = parseFloat(document.getElementById('custoKm').value) || 0;
-  const reserva = (km * custo).toFixed(2);
-  document.getElementById('reservaManutencao').textContent = reserva;
-}
+  regs.forEach(r=>{
+    // detectar tipo de movimentação
+    const tipo = (r.tipo || r.movimento || r.categoria || '').toLowerCase();
+    if(tipo.indexOf('entrada')===-1) return;
 
-function registrar(tipo){
-  const now = new Date();
-  const dataHora = `${now.getDate().toString().padStart(2,'0')}/${["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][now.getMonth()]} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}h`;
-  let valor = 0, desc = "", pagamento = "dinheiro", liquido = 0;
-  let repasse = "nao", tipoCartao = "credito", containerId = "";
+    // detectar campo de data
+    const rawDate = r.criadoEm || r.data || r.dataHora || r.dataMov || r.registro || null;
+    const d = new Date(rawDate);
+    if(isNaN(d)) return;
 
-  if(tipo==="viagemApp"){ valor = parseFloat(document.getElementById('valorViagemApp').value)||0; desc = document.getElementById('descricaoViagemApp').value; pagamento = document.getElementById('pagamentoViagemApp').value; containerId = 'extraViagemApp'; }
-  else if(tipo==="ViagemParticular"){ valor = parseFloat(document.getElementById('valorViagemParticular').value)||0; desc = document.getElementById('descricaoViagemParticular').value; pagamento = document.getElementById('pagamentoViagemParticular').value; containerId = 'extraViagemParticular'; }
-  else if(tipo==="entrada"){ valor = parseFloat(document.getElementById('valorEntrada').value)||0; desc = document.getElementById('descricaoEntrada').value; pagamento = document.getElementById('pagamentoEntrada').value; containerId = 'extraEntrada'; }
-  else if(tipo==="despesa"){ valor = parseFloat(document.getElementById('valorDespesa').value)||0; desc = document.getElementById('descricaoDespesa').value; }
-
-  if(pagamento === "cartao"){
-    const repEl = document.getElementById(`${containerId}_repasse`);
-    const tipoEl = document.getElementById(`${containerId}_tipo`);
-    if(repEl) repasse = repEl.value;
-    if(tipoEl) tipoCartao = tipoEl.value;
-    const taxas = aplicarTaxa(valor, tipoCartao, repasse);
-    valor = parseFloat(taxas.cobrado);
-    liquido = parseFloat(taxas.liquido);
-  } else {
-    liquido = valor;
-  }
-
-  registros[tipo].push({ data: dataHora, valor: valor.toFixed(2), desc, pagamento, liquido: liquido.toFixed(2) });
-  salvarDados(tipo, registros[tipo]);
-  atualizarTabela(tipo);
-  atualizarCaixa();
-  montarResumo(); // ✅ Atualiza automaticamente o resumo do dia
-}
-
-function atualizarTabela(tipo){
-  const tabela = document.getElementById('tabela'+tipo.charAt(0).toUpperCase()+tipo.slice(1));
-  tabela.innerHTML = '<tr><th>Data/Hora</th><th>Valor Líquido</th><th>Descrição</th><th>Ações</th></tr>';
-  registros[tipo].forEach((r,i)=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${r.data}</td>
-      <td>R$ ${r.liquido}<br><small>(${r.pagamento})</small></td>
-      <td>${r.desc}</td>
-      <td><button class="btn" onclick="excluir('${tipo}',${i})">Excluir</button></td>`;
-    tabela.appendChild(tr);
-  });
-}
-
-function excluir(tipo,index){
-  registros[tipo].splice(index,1);
-  salvarDados(tipo,registros[tipo]);
-  atualizarTabela(tipo);
-  atualizarCaixa();
-}
-
-function atualizarCaixa(){
-  let total = 0;
-  ['viagemApp','ViagemParticular','entrada'].forEach(t => registros[t].forEach(r => total += parseFloat(r.liquido)));
-  let despesas = 0;
-  registros['despesa'].forEach(r => despesas += parseFloat(r.valor));
-  const reserva = parseFloat(document.getElementById('reservaManutencao').textContent) || 0;
-  document.getElementById('caixaAtual').textContent = (total - despesas).toFixed(2);
-  atualizarMeta();
-}
-
-function atualizarMeta() {
-  const meta = parseFloat(document.getElementById('metaDiaria').value) || 0;
-  const caixa = parseFloat(document.getElementById('caixaAtual').textContent) || 0;
-  const falta = meta - caixa;
-  const faltaEl = document.getElementById('faltaMeta');
-
-  if (falta >= 0) {
-    faltaEl.textContent = `- R$ ${falta.toFixed(2)}`;
-    faltaEl.style.color = 'red';
-  } else {
-    faltaEl.textContent = `+ R$ ${Math.abs(falta).toFixed(2)}`;
-    faltaEl.style.color = 'green';
-  }
-}
-
-function montarResumo(){ 
-  const agora = new Date();
-  const diaHoje = agora.getDate().toString().padStart(2,'0');
-  const mesHoje = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][agora.getMonth()];
-  const anoHoje = agora.getFullYear();
-
-  const inicioDia = new Date(anoHoje, agora.getMonth(), agora.getDate(), 0, 0, 0);
-  const fimDia = new Date(anoHoje, agora.getMonth(), agora.getDate(), 23, 59, 59);
-
-  let resumo = "📊 *Resumo do Dia* 📊\n\n"; 
-
-  const tipos = [ 
-    { chave: 'viagemApp', titulo: 'Viagens por App' }, 
-    { chave: 'ViagemParticular', titulo: 'Viagem Particular/Entradas Extras' }, 
-    { chave: 'entrada', titulo: 'Viagens de Empresa' } 
-  ];
-
-  let totalRecebido = 0;
-
-  tipos.forEach(({chave, titulo}) => { 
-    const registrosTipo = registros[chave] || []; 
-    const registrosDoDia = registrosTipo.filter(r => {
-      const [dia, mesTxt] = r.data.split(" ")[0].split("/");
-      const hora = r.data.split(" ")[1]; // hh:mmh
-      const [hh, mm] = hora.replace("h","").split(":").map(n => parseInt(n));
-      const mesNum = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"].indexOf(mesTxt);
-      const dataRegistro = new Date(anoHoje, mesNum, parseInt(dia), hh, mm);
-      return dataRegistro >= inicioDia && dataRegistro <= fimDia;
-    });
-
-    if(registrosDoDia.length > 0){ 
-      resumo += `🟦 *${titulo}*\n`; 
-      registrosDoDia.forEach(r => { 
-        resumo += `• ${r.desc} - R$ ${parseFloat(r.liquido).toFixed(2)}\n`; 
-        totalRecebido += parseFloat(r.liquido) || 0; 
-      }); 
-      resumo += '\n'; 
-    } 
-  }); 
-
-  resumo += `🧾 *Total Recebido*: R$ ${totalRecebido.toFixed(2)}\n\n`; 
-
-  // Despesas do dia
-  let totalDespesas = 0;
-  const despesasDoDia = registros["despesa"].filter(r => {
-    const [dia, mesTxt] = r.data.split(" ")[0].split("/");
-    const hora = r.data.split(" ")[1];
-    const [hh, mm] = hora.replace("h","").split(":").map(n => parseInt(n));
-    const mesNum = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"].indexOf(mesTxt);
-    const dataRegistro = new Date(anoHoje, mesNum, parseInt(dia), hh, mm);
-    return dataRegistro >= inicioDia && dataRegistro <= fimDia;
+    const key = d.toISOString().slice(0,10); // yyyy-mm-dd
+    map[key] = (map[key]||0) + Number(r.valor||r.valorBruto||0);
   });
 
-  if(despesasDoDia.length > 0){
-    resumo += `🔴 *Despesas Detalhadas*\n`;
-    despesasDoDia.forEach(r => {
-      resumo += `• ${r.desc} - R$ ${parseFloat(r.valor).toFixed(2)}\n`;
-      totalDespesas += parseFloat(r.valor);
-    });
-    resumo += `\n💸 *Total Despesas*: R$ ${totalDespesas.toFixed(2)}\n`;
-  }
-
-  const reserva = parseFloat(document.getElementById('reservaManutencao')?.textContent || 0);
-  resumo += `🔧 *Reserva Manutenção*: R$ ${reserva.toFixed(2)}\n`;
-
-  const caixa = (totalRecebido - totalDespesas - reserva).toFixed(2);
-  resumo += `\n🟢 *Valor Líquido do Dia*: R$ ${caixa}\n`;
-
-  // Atualiza visualmente no HTML
-  const divResumo = document.getElementById('resumoContainer'); 
-  if (divResumo) { 
-    divResumo.innerText = resumo; 
-  }
-
-  return resumo; 
-}
-
-    function enviarWhatsApp(){ 
-      const texto = montarResumo(); 
-      const url = `https://wa.me/?text=${encodeURIComponent(texto)}`; 
-      window.open(url, '_blank'); 
-    }
-
-     /* ======== FUNÇÃO DE EXPORTAR PDF CORRIGIDA ======== */
-function exportarPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  const texto = ultimoResumoFiltrado || "Nenhum resumo gerado. Use o botão 'Buscar' para gerar um resumo primeiro.";
-
-  doc.setFont("Helvetica");
-  doc.setFontSize(12);
-
-  const linhas = doc.splitTextToSize(texto, 180);
-  doc.text(linhas, 10, 20);
-
-  doc.save("Relatorio_Viagens.pdf");
-}
-
-
-function buscarData() {
-  const filtro = document.getElementById("filtroResumo").value;
-  const resumo = document.getElementById("resumoContainer");
-  resumo.innerHTML = '';
-
-  if (!filtro) {
-    resumo.textContent = '⚠️ Selecione uma data para gerar o resumo.';
-    ultimoResumoFiltrado = '';
+  const entries = Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0]));
+  if(entries.length===0){
+    box.innerHTML = '<div class="chart-empty">Sem dados de faturamento neste período.</div>';
     return;
   }
 
-  const [ano, mes, dia] = filtro.split("-");
-  const m = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][parseInt(mes) - 1];
-  const dataFormatada = `${dia}/${m}`;
+  const max = Math.max(...entries.map(e=>e[1])) || 1;
+  let html = '';
 
-  const reserva = parseFloat(document.getElementById("reservaManutencao").textContent) || 0;
+  entries.forEach(([dStr,val])=>{
+    const d = new Date(dStr);
+    const dia = String(d.getDate()).padStart(2,'0');
+    const pct = Math.max(8,(val/max)*100);
 
-  let totalApp = 0, totalViagemParticular = 0, totalEntrada = 0, totalDespesa = 0;
-
-  const viagensApp = registros["viagemApp"].filter(r => r.data.startsWith(dataFormatada));
-  const viagensParticulares = registros["ViagemParticular"].filter(r => r.data.startsWith(dataFormatada));
-  const entradas = registros["entrada"].filter(r => r.data.startsWith(dataFormatada));
-  const despesas = registros["despesa"].filter(r => r.data.startsWith(dataFormatada));
-
-  // Construir texto detalhado
-  let texto = `Relatório de Viagens\nDia ${dia}/${m}/${ano}\n\n`;
-
-  texto += `ENTRADAS\n`;
-
-  texto += `\n- Viagens de App:\n`;
-  viagensApp.forEach((v, i) => {
-    texto += `  ${i + 1}. ${v.desc} - R$ ${parseFloat(v.liquido).toFixed(2)}\n`;
-    totalApp += parseFloat(v.liquido);
+    html += `
+    <div class="bar">
+      <div class="bar-value">${fmt(val)}</div>
+      <div class="bar-inner" style="height:${pct}%"></div>
+      <div class="bar-label">${dia}</div>
+    </div>
+    `;
   });
-  texto += `  Total: R$ ${totalApp.toFixed(2)}\n`;
 
-  texto += `\n- Viagens Particulares:\n`;
-  viagensParticulares.forEach((v, i) => {
-    texto += `  ${i + 1}. ${v.desc} - R$ ${parseFloat(v.liquido).toFixed(2)}\n`;
-    totalViagemParticular += parseFloat(v.liquido);
-  });
-  texto += `  Total: R$ ${totalViagemParticular.toFixed(2)}\n`;
-
-  texto += `\n- Viagens de Empresa:\n`;
-  entradas.forEach((e, i) => {
-    texto += `  ${i + 1}. ${e.desc} - R$ ${parseFloat(e.liquido).toFixed(2)}\n`;
-    totalEntrada += parseFloat(e.liquido);
-  });
-  texto += `  Total: R$ ${totalEntrada.toFixed(2)}\n`;
-
-  texto += `\nSAÍDAS\n`;
-
-  texto += `\n- Despesas:\n`;
-  despesas.forEach((d, i) => {
-    texto += `  ${i + 1}. ${d.desc} - R$ ${parseFloat(d.valor).toFixed(2)}\n`;
-    totalDespesa += parseFloat(d.valor);
-  });
-  texto += `  Total: R$ ${totalDespesa.toFixed(2)}\n`;
-
-  texto += `\n- Reserva Manutenção: R$ ${reserva.toFixed(2)}\n`;
-
-  const valorLiquido = (totalApp + totalViagemParticular + totalEntrada - totalDespesa - reserva).toFixed(2);
-  texto += `\n Valor Líquido: R$ ${valorLiquido}`;
-
-  ultimoResumoFiltrado = texto;
-
-  // Atualiza o HTML
-  resumo.innerHTML = `<pre>${texto}</pre>`;
-
-  // Atualiza link do WhatsApp
-  document.getElementById("whatsappLink").href = `https://wa.me/?text=${encodeURIComponent(ultimoResumoFiltrado)}`;
+  box.innerHTML = html;
 }
 
-// Carregamento inicial
-document.addEventListener('DOMContentLoaded', () => {
-  // Carrega meta diária e custos iniciais
-  carregarMeta();
-  atualizarCustos();
-  atualizarKmTotal();
+/* gráfico horizontal: gastos x faturamento x lucro */
+function renderChartGastosLucro(entr, said, lucro){
+  const box = document.getElementById('chartGastosLucro');
+  if(!box) return;
 
-  // Carregar campos persistentes
-  ['kmInicial', 'kmFinal', 'custoKm'].forEach(id => {
-    const el = document.getElementById(id);
-    const val = localStorage.getItem(id);
-    if (el && val !== null) el.value = val;
+  if(entr===0 && said===0){
+    box.innerHTML = '<div class="chart-empty">Sem dados suficientes para comparação.</div>';
+    return;
+  }
+
+  const base = Math.max(entr, said, Math.abs(lucro)) || 1;
+
+  function row(label, valor, extraClass){
+    const pct = Math.max(6,(Math.abs(valor)/base)*100);
+    const cls = extraClass ? ' '+extraClass : '';
+    return `
+      <div class="h-row">
+        <div class="h-label">${label}</div>
+        <div class="h-bar-wrap">
+          <div class="h-bar-inner${cls}" style="width:${pct}%"></div>
+        </div>
+        <div class="h-value">${fmt(valor)}</div>
+      </div>
+    `;
+  }
+
+  const lucroClass = lucro<0 ? 'lucroNeg' : '';
+  box.innerHTML =
+    row('Faturado', entr, '') +
+    row('Gastos', said, 'gastos') +
+    row('Lucro', lucro, lucroClass);
+}
+
+/* ============ UI DOS FILTROS ============ */
+document.getElementById('btnHoje').onclick = ()=>{
+  periodo='hoje'; updateUI(); render();
+};
+document.getElementById('btnSemana').onclick = ()=>{
+  if(block('semana')) return;
+  periodo='semana'; updateUI(); render();
+};
+document.getElementById('btnMes').onclick = ()=>{
+  if(block('mes')) return;
+  periodo='mes'; updateUI(); render();
+};
+document.getElementById('btnPers').onclick = ()=>{
+  if(block('pers')) return;
+  periodo='pers'; updateUI(); render();
+};
+
+document.getElementById('applyPers').onclick = ()=>{
+  const iniV = document.getElementById('ini').value;
+  const fimV = document.getElementById('fim').value;
+  ini = iniV ? new Date(iniV) : null;
+  fim = fimV ? new Date(fimV) : null;
+  if(!ini || !fim){ alert('Selecione as duas datas.'); return; }
+  if(ini > fim){ alert('Data inicial maior que a final.'); return; }
+  periodo='pers'; updateUI(); render();
+};
+
+function updateUI(){
+  ['btnHoje','btnSemana','btnMes','btnPers'].forEach(id=>{
+    document.getElementById(id).classList.remove('active');
   });
+  if(periodo==='hoje') document.getElementById('btnHoje').classList.add('active');
+  if(periodo==='semana') document.getElementById('btnSemana').classList.add('active');
+  if(periodo==='mes') document.getElementById('btnMes').classList.add('active');
+  if(periodo==='pers') document.getElementById('btnPers').classList.add('active');
 
-  // Atualizar todas as tabelas
-  ['viagemApp', 'ViagemParticular', 'entrada', 'despesa'].forEach(t => atualizarTabela(t));
+  document.getElementById('rangePers').style.display = (periodo==='pers') ? 'flex':'none';
 
-  atualizarCaixa();
+  const note = document.getElementById('periodNote');
+  if(periodo==='hoje') note.innerText='Mostrando dados de hoje';
+  if(periodo==='semana') note.innerText='Últimos 7 dias';
+  if(periodo==='mes') note.innerText='Mês atual';
+  if(periodo==='pers') note.innerText='Período selecionado';
+}
 
-  montarResumo(); // ✅ Gera resumo inicial ao carregar a página
-});
+/* inicialização */
+updateUI();
+render();
 </script>
 
 </body>
