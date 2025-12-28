@@ -37,7 +37,12 @@
 
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" id="buscaDestino" placeholder="Digite para buscar destino">
+      <input
+        type="text"
+        id="buscaDestino"
+        placeholder="Digite para buscar o destino"
+        autocomplete="off"
+      >
     </div>
 
     <select id="destinoSelect" disabled>
@@ -70,28 +75,31 @@ async function carregar(){
 }
 
 function renderizar(lista){
-  select.innerHTML = "";
+  select.innerHTML = `<option value="">Selecione...</option>`;
   lista.forEach(d => {
     const opt = document.createElement("option");
     opt.value = d;
     opt.textContent = d;
     select.appendChild(opt);
   });
-
-  select.size = Math.min(lista.length, 6);
 }
 
 busca.addEventListener("input", () => {
-  const termo = busca.value.trim().toLowerCase();
+  const termo = busca.value.toLowerCase();
 
-  const filtrados = termo
-    ? todosDestinos.filter(d =>
-        d.toLowerCase().startsWith(termo)
-      )
-    : todosDestinos;
+  const filtrados = todosDestinos.filter(d =>
+    d.toLowerCase().includes(termo)
+  );
 
   renderizar(filtrados);
-  select.focus();
+
+  if (filtrados.length > 0) {
+    select.size = Math.min(filtrados.length + 1, 6);
+  }
+});
+
+busca.addEventListener("blur", () => {
+  select.size = 1;
 });
 
 select.addEventListener("change", async () => {
