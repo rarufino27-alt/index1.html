@@ -11,22 +11,32 @@
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
-.top-actions{
-  display:flex;
-  gap:10px;
-  margin-bottom:12px;
-}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:12px;
+}
+.highlight{
+  border:2px solid var(--success);
+  background:var(--success-soft);
 }
 .total{
   font-size:22px;
   font-weight:800;
   text-align:right;
 }
-.muted{color:var(--muted)}
+.muted{
+  color:var(--muted);
+  font-size:13px;
+}
+.whatsapp{
+  background:#25d366;
+}
+.top-actions{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
 </style>
 </head>
 
@@ -34,29 +44,104 @@
 
 <div class="app">
 
-  <!-- AÇÕES TOPO -->
+  <!-- AÇÕES DE NAVEGAÇÃO (NOVO) -->
   <div class="top-actions">
-    <button class="btn btn-secondary" onclick="App.go('origem.html')">🔄 Nova cotação</button>
-    <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
+    <button class="btn btn-secondary" onclick="App.go('origem.html')">
+      🔄 Nova cotação
+    </button>
+    <button class="btn btn-secondary" onclick="App.go('index.html')">
+      🏠 Início
+    </button>
   </div>
 
   <h1>TABELA DE PREÇOS<br>RF DRIVER</h1>
 
+  <!-- ROTA -->
   <div class="card">
     <p id="rota"></p>
     <p id="horaAtual" class="muted"></p>
   </div>
 
+  <!-- BASE -->
   <div class="card">
     <p id="valorBaseOriginal"></p>
     <p id="valorBaseCalculado"></p>
   </div>
 
+  <!-- IDA E VOLTA -->
+  <div class="card">
+    <label>
+      <input type="checkbox" id="idaVolta">
+      Corrida ida e volta
+    </label>
+  </div>
+
+  <!-- TAXAS -->
+  <h3>Taxas adicionais</h3>
+  <div class="grid">
+
+    <div class="card">
+      <label><input type="checkbox" id="saidaPraia"> 🏖️ Saída de praias (+ R$ 10)</label>
+      <p class="muted">Domingos e feriados</p>
+    </div>
+
+    <div class="card">
+      <label><input type="checkbox" id="taxaFeira"> 🛒 Saída de feira (+ R$ 5)</label>
+    </div>
+
+    <div class="card">
+      <label><input type="checkbox" id="taxaExcesso"> 👥 Excesso de pessoas</label>
+    </div>
+
+    <div class="card">
+      <strong>🐾 Animal</strong>
+      <label><input type="radio" name="animal" value=""> Nenhum</label>
+      <label><input type="radio" name="animal" value="pequeno"> Pequeno</label>
+      <label><input type="radio" name="animal" value="medio"> Médio</label>
+      <label><input type="radio" name="animal" value="grande"> Grande</label>
+    </div>
+
+    <div class="card">
+      <label><input type="checkbox" id="buscaLonge"> 📍 Buscar passageiro longe</label>
+    </div>
+
+  </div>
+
+  <!-- DESVIOS -->
+  <h3>Desvio de rota</h3>
+  <div class="grid">
+
+    <div class="card">
+      <label><input type="checkbox" id="desvioSimples"> 🔀 Desvio simples</label>
+    </div>
+
+    <div class="card">
+      <label><input type="checkbox" id="desvioEspera"> ⏱️ Desvio com espera</label>
+      <input type="number" id="tempoEspera" placeholder="Minutos">
+    </div>
+
+    <div class="card">
+      <strong>➕ Múltiplos trechos</strong>
+      <input type="text" id="trechos" placeholder="Ex: 10,10">
+    </div>
+
+  </div>
+
+  <!-- DETALHAMENTO -->
+  <h3>Detalhamento da cobrança</h3>
+  <div class="card">
+    <ul id="listaDetalhes"></ul>
+    <p id="nenhumaTaxa" class="muted"></p>
+  </div>
+
+  <!-- RESULTADO -->
   <h3>Resultado</h3>
   <div class="card">
     <p class="total" id="total"></p>
     <p id="restante"></p>
-    <button class="btn btn-primary" onclick="enviarWhatsApp()">📲 Enviar no WhatsApp</button>
+    <button class="btn btn-primary whatsapp" onclick="enviarWhatsApp()">
+      📲 Enviar no WhatsApp
+    </button>
   </div>
 
 </div>
@@ -71,26 +156,94 @@ if (!origem || !destino) App.go("index.html");
 rota.textContent = `🚗 ${origem} → ${destino}`;
 horaAtual.textContent = new Date().toLocaleString();
 
-const r = Calculo.calcularTotal({ valorBase, taxas: {} });
+document.querySelectorAll("input").forEach(i => i.onchange = atualizar);
 
-valorBaseOriginal.textContent = `Valor base: R$ ${r.valorBaseOriginal.toFixed(2)}`;
-total.textContent = `Total: R$ ${r.totalFinal.toFixed(2)}`;
-restante.textContent = `A receber: R$ ${r.valorRestante.toFixed(2)}`;
+/* UX VISUAL */
+document.querySelectorAll(".card input").forEach(input => {
+  const card = input.closest(".card");
+  function marcar(){
+    if (input.type === "checkbox") card.classList.toggle("highlight", input.checked);
+    if (input.type === "radio") {
+      document.querySelectorAll(\`input[name="\${input.name}"]\`)
+        .forEach(r => r.closest(".card")?.classList.remove("highlight"));
+      if (input.checked) card.classList.add("highlight");
+    }
+  }
+  marcar();
+  input.addEventListener("change", marcar);
+});
 
-window.__mensagemWhats = `
-🚗 *RF Driver*
-📍 Origem: ${origem}
-📍 Destino: ${destino}
+function atualizar(){
 
-💵 Total: R$ ${r.totalFinal.toFixed(2)}
-`;
+  const taxas = {
+    idaVolta: idaVolta.checked,
+    feira: taxaFeira.checked,
+    excessoPessoas: taxaExcesso.checked,
+    animal: document.querySelector("input[name='animal']:checked")?.value || null,
+    buscaLonge: buscaLonge.checked,
+    saidaPraia: saidaPraia.checked,
+    desvioSimples: desvioSimples.checked,
+    desvioComEspera: desvioEspera.checked,
+    tempoEspera: Number(tempoEspera.value || 0),
+    desvioTrechos: trechos.value
+      ? trechos.value.split(",").map(v => Number(v.trim()))
+      : []
+  };
+
+  const r = Calculo.calcularTotal({ valorBase, taxas });
+
+  valorBaseOriginal.textContent = \`Valor base: R$ \${r.valorBaseOriginal.toFixed(2)}\`;
+  valorBaseCalculado.textContent =
+    r.valorBaseCalculado !== r.valorBaseOriginal
+      ? \`Base ajustada: R$ \${r.valorBaseCalculado.toFixed(2)}\`
+      : "";
+
+  listaDetalhes.innerHTML = "";
+  let tem = false;
+
+  function add(nome, valor){
+    const li = document.createElement("li");
+    li.textContent = \`\${nome}: R$ \${valor.toFixed(2)}\`;
+    listaDetalhes.appendChild(li);
+    tem = true;
+  }
+
+  if (taxas.feira) add("🛒 Saída de feira", 5);
+  if (taxas.saidaPraia) add("🏖️ Saída de praias", 10);
+  if (taxas.excessoPessoas)
+    add("👥 Excesso de pessoas", valorBase <= 30 ? 5 : valorBase * 0.5);
+  if (taxas.animal){
+    const map = {pequeno:5, medio:7, grande:10};
+    add(\`🐾 Animal (\${taxas.animal})\`, map[taxas.animal]);
+  }
+  if (taxas.desvioSimples) add("🔀 Desvio simples", 5);
+  if (taxas.desvioComEspera && taxas.tempoEspera >= 5) add("⏱️ Desvio com espera", 10);
+  if (taxas.desvioTrechos.length)
+    add("➕ Múltiplos trechos", taxas.desvioTrechos.reduce((a,b)=>a+b,0));
+
+  nenhumaTaxa.textContent = tem ? "" : "Nenhuma taxa adicional aplicada";
+
+  total.textContent = \`Total: R$ \${r.totalFinal.toFixed(2)}\`;
+  restante.textContent = \`A receber: R$ \${r.valorRestante.toFixed(2)}\`;
+
+  window.__mensagemWhats = \`
+🚗 *Corrida RF Driver*
+📍 Origem: \${origem}
+📍 Destino: \${destino}
+
+💰 *Detalhamento*
+\${listaDetalhes.innerText || "Sem taxas adicionais"}
+
+💵 *Total*: R$ \${r.totalFinal.toFixed(2)}
+\`;
+}
 
 function enviarWhatsApp(){
-  window.open(
-    `https://wa.me/?text=${encodeURIComponent(window.__mensagemWhats)}`,
-    "_blank"
-  );
+  const txt = encodeURIComponent(window.__mensagemWhats);
+  window.open(\`https://wa.me/?text=\${txt}\`, "_blank");
 }
+
+atualizar();
 </script>
 
 </body>
