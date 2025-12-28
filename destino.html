@@ -9,6 +9,22 @@
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
+
+<style>
+.search-box{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+}
+.search-box input{
+  flex:1;
+}
+.search-icon{
+  font-size:18px;
+  opacity:.6;
+}
+</style>
 </head>
 
 <body>
@@ -18,6 +34,12 @@
 
   <div class="card">
     <label>Selecione o destino</label>
+
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="buscaDestino" placeholder="Buscar destino...">
+    </div>
+
     <select id="destinoSelect" disabled>
       <option>Carregando...</option>
     </select>
@@ -37,18 +59,33 @@ if (!origem) App.go("origem.html");
 
 const select = document.getElementById("destinoSelect");
 const btn = document.getElementById("btnContinuar");
+const busca = document.getElementById("buscaDestino");
+
+let todosDestinos = [];
 
 async function carregar() {
-  const destinos = await DataManager.listarDestinos(origem);
+  todosDestinos = await DataManager.listarDestinos(origem);
+  renderizar(todosDestinos);
+  select.disabled = false;
+}
+
+function renderizar(lista){
   select.innerHTML = `<option value="">Selecione...</option>`;
-  destinos.forEach(d => {
+  lista.forEach(d => {
     const opt = document.createElement("option");
     opt.value = d;
     opt.textContent = d;
     select.appendChild(opt);
   });
-  select.disabled = false;
 }
+
+busca.addEventListener("input", () => {
+  const termo = busca.value.toLowerCase();
+  const filtrados = todosDestinos.filter(d =>
+    d.toLowerCase().includes(termo)
+  );
+  renderizar(filtrados);
+});
 
 select.addEventListener("change", async () => {
   if (!select.value) {
