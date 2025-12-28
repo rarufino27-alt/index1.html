@@ -37,7 +37,12 @@
 
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" id="buscaOrigem" placeholder="Digite para buscar origem">
+      <input
+        type="text"
+        id="buscaOrigem"
+        placeholder="Digite para buscar a origem"
+        autocomplete="off"
+      >
     </div>
 
     <select id="origemSelect" disabled>
@@ -67,29 +72,33 @@ async function carregar(){
 }
 
 function renderizar(lista){
-  select.innerHTML = "";
+  select.innerHTML = `<option value="">Selecione...</option>`;
   lista.forEach(o => {
     const opt = document.createElement("option");
     opt.value = o;
     opt.textContent = o;
     select.appendChild(opt);
   });
-
-  // abre automaticamente mostrando até 6 opções
-  select.size = Math.min(lista.length, 6);
 }
 
 busca.addEventListener("input", () => {
-  const termo = busca.value.trim().toLowerCase();
+  const termo = busca.value.toLowerCase();
 
-  const filtradas = termo
-    ? todasOrigens.filter(o =>
-        o.toLowerCase().startsWith(termo)
-      )
-    : todasOrigens;
+  const filtradas = todasOrigens.filter(o =>
+    o.toLowerCase().includes(termo)
+  );
 
   renderizar(filtradas);
-  select.focus();
+
+  // abre o select automaticamente, sem travar digitação
+  if (filtradas.length > 0) {
+    select.size = Math.min(filtradas.length + 1, 6);
+  }
+});
+
+busca.addEventListener("blur", () => {
+  // volta ao comportamento normal
+  select.size = 1;
 });
 
 select.addEventListener("change", () => {
