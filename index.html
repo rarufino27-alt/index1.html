@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="../theme/theme.css">
-<link rel="stylesheet" href="../theme/layout.css">
-<link rel="stylesheet" href="../theme/components.css">
+<link rel="stylesheet" href="theme/theme.css">
+<link rel="stylesheet" href="theme/layout.css">
+<link rel="stylesheet" href="theme/components.css">
 </head>
 
 <body>
@@ -22,12 +22,12 @@
   </button>
 </div>
 
-<script src="../core/global.js"></script>
+<script src="core/global.js"></script>
 <script>
-document.getElementById("btnIniciar").onclick = () => {
+document.getElementById("btnIniciar").addEventListener("click", () => {
   App.reset();
   App.go("origem.html");
-};
+});
 </script>
 
 </body>
