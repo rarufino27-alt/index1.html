@@ -50,15 +50,20 @@ async function carregar() {
   select.disabled = false;
 }
 
-select.onchange = async () => {
-  if (!select.value) return btn.disabled = true;
+select.addEventListener("change", async () => {
+  if (!select.value) {
+    btn.disabled = true;
+    return;
+  }
   const valor = await DataManager.obterValor(origem, select.value);
   App.set("destino", select.value);
   App.set("valorBase", valor);
   btn.disabled = false;
-};
+});
 
-btn.onclick = () => App.go("resumo.html");
+btn.addEventListener("click", () => {
+  App.go("resumo.html");
+});
 
 carregar();
 </script>
