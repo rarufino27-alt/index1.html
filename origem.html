@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Origem - Tabela RF Driver</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="theme/theme.css">
+<link rel="stylesheet" href="theme/layout.css">
+<link rel="stylesheet" href="theme/components.css">
+</head>
+
+<body>
+
+<div class="app">
+
+  <h1>TABELA DE PREÇOS<br>RF DRIVER</h1>
+
+  <div class="card">
+    <label for="origemSelect">Selecione a origem</label>
+    <select id="origemSelect" disabled>
+      <option value="">Carregando origens...</option>
+    </select>
+  </div>
+
+  <button id="btnContinuar" class="btn btn-primary" disabled>
+    Continuar
+  </button>
+
+</div>
+
+<!-- CORE -->
+<script src="core/global.js"></script>
+<script src="core/datamanager.js"></script>
+
+<script>
+/* ===============================
+   ORIGEM — RF DRIVER
+================================ */
+
+const select = document.getElementById("origemSelect");
+const btn = document.getElementById("btnContinuar");
+
+async function carregarOrigens() {
+  const origens = await DataManager.listarOrigens();
+
+  select.innerHTML = `<option value="">Selecione...</option>`;
+
+  origens.forEach(origem => {
+    const opt = document.createElement("option");
+    opt.value = origem;
+    opt.textContent = origem;
+    select.appendChild(opt);
+  });
+
+  select.disabled = false;
+}
+
+select.addEventListener("change", () => {
+  const origem = select.value;
+
+  if (!origem) {
+    btn.disabled = true;
+    return;
+  }
+
+  // registra origem e limpa dependências
+  App.set("origem", origem);
+  App.set("destino", null);
+  App.set("valorBase", 0);
+
+  btn.disabled = false;
+});
+
+btn.addEventListener("click", () => {
+  App.go("destino.html");
+});
+
+// init
+carregarOrigens();
+</script>
+
+</body>
+</html>
