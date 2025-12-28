@@ -4,32 +4,60 @@
 <meta charset="UTF-8">
 <title>Origem - RF Driver</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
+/* FUNDO PADRÃO APP */
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+}
+
+/* CONTAINER CENTRAL */
+.container{
+  width:100%;
+  max-width:520px;
+  padding:30px 25px;
+  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(255,215,120,.18);
+}
+
+/* BUSCA */
 .search-box{
   display:flex;
   align-items:center;
   gap:8px;
   margin-bottom:10px;
 }
-.search-box input{
-  flex:1;
-}
-.search-icon{
-  font-size:18px;
-  opacity:.6;
+.search-box input{flex:1}
+.search-icon{opacity:.6}
+
+/* AÇÕES */
+.actions{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
+
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
+  </div>
+
   <h1>TABELA DE PREÇOS<br>RF DRIVER</h1>
 
   <div class="card">
@@ -53,6 +81,7 @@
   <button id="btnContinuar" class="btn btn-primary" disabled>
     Continuar
   </button>
+
 </div>
 
 <script src="core/global.js"></script>
@@ -73,49 +102,34 @@ async function carregar(){
 
 function renderizar(lista){
   select.innerHTML = `<option value="">Selecione...</option>`;
-  lista.forEach(o => {
-    const opt = document.createElement("option");
-    opt.value = o;
-    opt.textContent = o;
+  lista.forEach(o=>{
+    const opt=document.createElement("option");
+    opt.value=o;
+    opt.textContent=o;
     select.appendChild(opt);
   });
 }
 
-busca.addEventListener("input", () => {
+busca.addEventListener("input",()=>{
   const termo = busca.value.toLowerCase();
-
   const filtradas = todasOrigens.filter(o =>
     o.toLowerCase().includes(termo)
   );
-
   renderizar(filtradas);
-
-  // abre o select automaticamente, sem travar digitação
-  if (filtradas.length > 0) {
-    select.size = Math.min(filtradas.length + 1, 6);
-  }
+  if(filtradas.length) select.size=Math.min(filtradas.length+1,6);
 });
 
-busca.addEventListener("blur", () => {
-  // volta ao comportamento normal
-  select.size = 1;
+busca.addEventListener("blur",()=>select.size=1);
+
+select.addEventListener("change",()=>{
+  if(!select.value){btn.disabled=true;return;}
+  App.set("origem",select.value);
+  App.set("destino",null);
+  App.set("valorBase",0);
+  btn.disabled=false;
 });
 
-select.addEventListener("change", () => {
-  if (!select.value){
-    btn.disabled = true;
-    return;
-  }
-
-  App.set("origem", select.value);
-  App.set("destino", null);
-  App.set("valorBase", 0);
-  btn.disabled = false;
-});
-
-btn.addEventListener("click", () => {
-  App.go("destino.html");
-});
+btn.onclick=()=>App.go("destino.html");
 
 carregar();
 </script>
