@@ -5,7 +5,7 @@
 
 window.DataManager = (function () {
 
-  const DATA_URL = "/data/precos.json";
+  const DATA_URL = "../data/precos.json"; // ✅ FUNCIONA NO GITHUB PAGES
   let cache = null;
 
   async function carregar() {
@@ -19,7 +19,7 @@ window.DataManager = (function () {
       return cache;
 
     } catch (err) {
-      console.error("❌ Erro ao carregar /data/precos.json", err);
+      console.error("❌ Erro ao carregar precos.json", err);
       cache = {};
       return cache;
     }
@@ -33,23 +33,16 @@ window.DataManager = (function () {
   async function listarDestinos(origem) {
     const data = await carregar();
     const lista = data[origem];
-
     if (!Array.isArray(lista)) return [];
-
-    return lista
-      .map(item => item.destino)
-      .filter(Boolean)
-      .sort();
+    return lista.map(i => i.destino).filter(Boolean).sort();
   }
 
   async function obterValor(origem, destino) {
     const data = await carregar();
     const lista = data[origem];
-
     if (!Array.isArray(lista)) return 0;
-
-    const encontrado = lista.find(item => item.destino === destino);
-    return encontrado ? Number(encontrado.valor) : 0;
+    const item = lista.find(i => i.destino === destino);
+    return item ? Number(item.valor) : 0;
   }
 
   return {
