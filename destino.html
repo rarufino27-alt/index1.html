@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Destino - RF Driver</title>
+<title>Origem - RF Driver</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -33,14 +33,14 @@
   <h1>TABELA DE PREÇOS<br>RF DRIVER</h1>
 
   <div class="card">
-    <label>Selecione o destino</label>
+    <label>Selecione a origem</label>
 
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" id="buscaDestino" placeholder="Buscar destino...">
+      <input type="text" id="buscaOrigem" placeholder="Buscar origem...">
     </div>
 
-    <select id="destinoSelect" disabled>
+    <select id="origemSelect" disabled>
       <option>Carregando...</option>
     </select>
   </div>
@@ -54,52 +54,49 @@
 <script src="core/datamanager.js"></script>
 
 <script>
-const origem = App.get("origem");
-if (!origem) App.go("origem.html");
-
-const select = document.getElementById("destinoSelect");
+const select = document.getElementById("origemSelect");
 const btn = document.getElementById("btnContinuar");
-const busca = document.getElementById("buscaDestino");
+const busca = document.getElementById("buscaOrigem");
 
-let todosDestinos = [];
+let todasOrigens = [];
 
 async function carregar() {
-  todosDestinos = await DataManager.listarDestinos(origem);
-  renderizar(todosDestinos);
+  todasOrigens = await DataManager.listarOrigens();
+  renderizar(todasOrigens);
   select.disabled = false;
 }
 
 function renderizar(lista){
   select.innerHTML = `<option value="">Selecione...</option>`;
-  lista.forEach(d => {
+  lista.forEach(o => {
     const opt = document.createElement("option");
-    opt.value = d;
-    opt.textContent = d;
+    opt.value = o;
+    opt.textContent = o;
     select.appendChild(opt);
   });
 }
 
 busca.addEventListener("input", () => {
   const termo = busca.value.toLowerCase();
-  const filtrados = todosDestinos.filter(d =>
-    d.toLowerCase().includes(termo)
+  const filtradas = todasOrigens.filter(o =>
+    o.toLowerCase().includes(termo)
   );
-  renderizar(filtrados);
+  renderizar(filtradas);
 });
 
-select.addEventListener("change", async () => {
+select.addEventListener("change", () => {
   if (!select.value) {
     btn.disabled = true;
     return;
   }
-  const valor = await DataManager.obterValor(origem, select.value);
-  App.set("destino", select.value);
-  App.set("valorBase", valor);
+  App.set("origem", select.value);
+  App.set("destino", null);
+  App.set("valorBase", 0);
   btn.disabled = false;
 });
 
 btn.addEventListener("click", () => {
-  App.go("resumo.html");
+  App.go("destino.html");
 });
 
 carregar();
