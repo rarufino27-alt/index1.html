@@ -11,25 +11,32 @@
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
+.top-actions{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
 .search-box{
   display:flex;
   align-items:center;
   gap:8px;
   margin-bottom:10px;
 }
-.search-box input{
-  flex:1;
-}
-.search-icon{
-  font-size:18px;
-  opacity:.6;
-}
+.search-box input{flex:1}
+.search-icon{opacity:.6}
 </style>
 </head>
 
 <body>
 
 <div class="app">
+
+  <!-- AÇÕES TOPO -->
+  <div class="top-actions">
+    <button class="btn btn-secondary" onclick="App.go('origem.html')">◀ Voltar</button>
+    <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
+  </div>
+
   <h1>TABELA DE PREÇOS<br>RF DRIVER</h1>
 
   <div class="card">
@@ -37,12 +44,7 @@
 
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input
-        type="text"
-        id="buscaDestino"
-        placeholder="Digite para buscar o destino"
-        autocomplete="off"
-      >
+      <input type="text" id="buscaDestino" placeholder="Digite para buscar o destino" autocomplete="off">
     </div>
 
     <select id="destinoSelect" disabled>
@@ -53,6 +55,7 @@
   <button id="btnContinuar" class="btn btn-primary" disabled>
     Continuar
   </button>
+
 </div>
 
 <script src="core/global.js"></script>
@@ -86,37 +89,24 @@ function renderizar(lista){
 
 busca.addEventListener("input", () => {
   const termo = busca.value.toLowerCase();
-
   const filtrados = todosDestinos.filter(d =>
     d.toLowerCase().includes(termo)
   );
-
   renderizar(filtrados);
-
-  if (filtrados.length > 0) {
-    select.size = Math.min(filtrados.length + 1, 6);
-  }
+  if (filtrados.length) select.size = Math.min(filtrados.length + 1, 6);
 });
 
-busca.addEventListener("blur", () => {
-  select.size = 1;
-});
+busca.addEventListener("blur", () => select.size = 1);
 
 select.addEventListener("change", async () => {
-  if (!select.value){
-    btn.disabled = true;
-    return;
-  }
-
+  if (!select.value) return btn.disabled = true;
   const valor = await DataManager.obterValor(origem, select.value);
   App.set("destino", select.value);
   App.set("valorBase", valor);
   btn.disabled = false;
 });
 
-btn.addEventListener("click", () => {
-  App.go("resumo.html");
-});
+btn.onclick = () => App.go("resumo.html");
 
 carregar();
 </script>
