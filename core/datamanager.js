@@ -5,7 +5,7 @@
 
 window.DataManager = (function () {
 
-  const DATA_URL = "../data/precos.json"; // ✅ FUNCIONA NO GITHUB PAGES
+  const DATA_URL = "data/precos.json"; // ✅ CORRETO PARA GITHUB PAGES
   let cache = null;
 
   async function carregar() {
@@ -13,7 +13,9 @@ window.DataManager = (function () {
 
     try {
       const res = await fetch(DATA_URL, { cache: "no-store" });
-      if (!res.ok) throw new Error("Falha ao carregar precos.json");
+      if (!res.ok) {
+        throw new Error("Falha ao carregar precos.json");
+      }
 
       cache = await res.json();
       return cache;
