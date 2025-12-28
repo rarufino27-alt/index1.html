@@ -1,0 +1,26 @@
+:root{
+  --bg:#0f1115;
+  --card:#1c1f26;
+  --border:#2a2e38;
+  --text:#eaeaf0;
+  --muted:#9aa0ac;
+
+  --primary:#f5c542;      /* amarelo RF */
+  --success:#2ecc71;
+  --danger:#e74c3c;
+  --whatsapp:#25d366;
+
+  --radius:10px;
+}
+
+*{
+  box-sizing:border-box;
+  font-family:Inter, Arial, sans-serif;
+}
+
+body{
+  margin:0;
+  padding:16px;
+  background:var(--bg);
+  color:var(--text);
+}

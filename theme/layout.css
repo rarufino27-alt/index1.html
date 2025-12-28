@@ -1,0 +1,35 @@
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px;
+}
+
+.highlight{
+  border:2px solid var(--primary);
+  background:#22261f;
+}
+
+h2,h3{
+  margin:8px 0;
+  color:var(--primary);
+}
+
+.muted{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.total{
+  font-size:26px;
+  font-weight:bold;
+  text-align:center;
+  color:var(--primary);
+}

@@ -1,0 +1,31 @@
+label{
+  display:block;
+  margin:6px 0;
+}
+
+input[type="checkbox"],
+input[type="radio"]{
+  accent-color:var(--primary);
+}
+
+button, .btn{
+  width:100%;
+  padding:14px;
+  border-radius:var(--radius);
+  border:none;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:#000;
+}
+
+.btn-whatsapp{
+  background:var(--whatsapp);
+  color:#fff;
+  text-align:center;
+  text-decoration:none;
+  display:block;
+}
