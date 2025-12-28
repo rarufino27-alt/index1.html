@@ -2,24 +2,137 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Tabela de Preços RF Driver</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RF Driver – Mobilidade com excelência</title>
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
+
+<style>
+/* FUNDO PREMIUM */
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  color:#fff;
+}
+
+/* PARTÍCULAS DOURADAS */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(rgba(255,215,120,0.25) 1px, transparent 1px),
+    radial-gradient(rgba(255,215,120,0.15) 1px, transparent 1px);
+  background-size:3px 3px, 6px 6px;
+  background-position:0 0, 20px 20px;
+  animation:sparkle 20s linear infinite;
+  z-index:0;
+}
+
+@keyframes sparkle{
+  from{transform:translateY(0)}
+  to{transform:translateY(-200px)}
+}
+
+/* CONTAINER */
+.container{
+  position:relative;
+  z-index:1;
+  text-align:center;
+  padding:40px 30px;
+  max-width:700px;
+  width:90%;
+  background:linear-gradient(
+    145deg,
+    rgba(20,20,20,0.95),
+    rgba(0,0,0,0.85)
+  );
+  border-radius:20px;
+  box-shadow:
+    0 0 40px rgba(255,215,120,0.25),
+    inset 0 0 20px rgba(255,255,255,0.05);
+}
+
+/* LOGO */
+.logo{
+  max-width:320px;
+  width:100%;
+  margin:0 auto 25px auto;
+  display:block;
+  filter:drop-shadow(0 10px 25px rgba(255,215,120,0.6));
+}
+
+/* TÍTULO */
+h1{
+  font-size:2.2rem;
+  letter-spacing:2px;
+  background:linear-gradient(90deg, #d4af37, #f5e28c, #c9a227);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:10px;
+}
+
+/* TEXTO */
+p{
+  font-size:1.1rem;
+  color:#dcdcdc;
+  letter-spacing:.5px;
+}
+
+/* DIVISOR */
+.divider{
+  width:80px;
+  height:3px;
+  margin:18px auto;
+  background:linear-gradient(90deg, transparent, #d4af37, transparent);
+  border-radius:5px;
+}
+
+/* BOTÃO */
+.start-btn{
+  margin-top:30px;
+}
+
+/* FOOTER */
+footer{
+  margin-top:18px;
+  font-size:.9rem;
+  color:#bfbfbf;
+  opacity:.85;
+}
+</style>
 </head>
 
 <body>
 
-<div class="card hero">
-  <h1>TABELA DE PREÇOS<br>RF DRIVER</h1>
-  <p>Consulte valores oficiais de corridas de forma rápida.</p>
+<div class="container">
 
-  <button class="btn btn-primary" id="btnIniciar">
-    ▶ Iniciar Cálculo
-  </button>
+  <!-- LOGO -->
+  <!-- Garanta que o arquivo exista na raiz: logo-rf-driver.png -->
+  <img src="logo-rf-driver.png" alt="RF Driver" class="logo">
+
+  <h1>RF DRIVER</h1>
+
+  <div class="divider"></div>
+
+  <p>Mobilidade com excelência</p>
+
+  <div class="start-btn">
+    <button class="btn btn-primary" id="btnIniciar">
+      ▶ Iniciar Cálculo
+    </button>
+  </div>
+
+  <footer>
+    Experiência premium em cada viagem
+  </footer>
+
 </div>
 
 <script src="core/global.js"></script>
