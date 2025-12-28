@@ -47,15 +47,20 @@ async function carregar() {
   select.disabled = false;
 }
 
-select.onchange = () => {
-  if (!select.value) return btn.disabled = true;
+select.addEventListener("change", () => {
+  if (!select.value) {
+    btn.disabled = true;
+    return;
+  }
   App.set("origem", select.value);
   App.set("destino", null);
   App.set("valorBase", 0);
   btn.disabled = false;
-};
+});
 
-btn.onclick = () => App.go("destino.html");
+btn.addEventListener("click", () => {
+  App.go("destino.html");
+});
 
 carregar();
 </script>
