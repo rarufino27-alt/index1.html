@@ -44,7 +44,7 @@
 
 <div class="app">
 
-  <!-- AÇÕES DE NAVEGAÇÃO (NOVO) -->
+  <!-- AÇÕES DE NAVEGAÇÃO -->
   <div class="top-actions">
     <button class="btn btn-secondary" onclick="App.go('origem.html')">
       🔄 Nova cotação
@@ -150,13 +150,42 @@
 <script src="js/calculo.js"></script>
 
 <script>
+/* ===============================
+   RESUMO — RF DRIVER (CORRIGIDO)
+================================ */
+
 const { origem, destino, valorBase } = App.state;
 if (!origem || !destino) App.go("index.html");
 
+// ELEMENTOS DOM (OBRIGATÓRIO)
+const rota = document.getElementById("rota");
+const horaAtual = document.getElementById("horaAtual");
+
+const idaVolta = document.getElementById("idaVolta");
+const taxaFeira = document.getElementById("taxaFeira");
+const taxaExcesso = document.getElementById("taxaExcesso");
+const buscaLonge = document.getElementById("buscaLonge");
+const saidaPraia = document.getElementById("saidaPraia");
+
+const desvioSimples = document.getElementById("desvioSimples");
+const desvioEspera = document.getElementById("desvioEspera");
+const tempoEspera = document.getElementById("tempoEspera");
+const trechos = document.getElementById("trechos");
+
+const valorBaseOriginal = document.getElementById("valorBaseOriginal");
+const valorBaseCalculado = document.getElementById("valorBaseCalculado");
+const listaDetalhes = document.getElementById("listaDetalhes");
+const nenhumaTaxa = document.getElementById("nenhumaTaxa");
+const total = document.getElementById("total");
+const restante = document.getElementById("restante");
+
+// INIT
 rota.textContent = `🚗 ${origem} → ${destino}`;
 horaAtual.textContent = new Date().toLocaleString();
 
-document.querySelectorAll("input").forEach(i => i.onchange = atualizar);
+document.querySelectorAll("input").forEach(i => {
+  i.addEventListener("change", atualizar);
+});
 
 /* UX VISUAL */
 document.querySelectorAll(".card input").forEach(input => {
@@ -164,7 +193,7 @@ document.querySelectorAll(".card input").forEach(input => {
   function marcar(){
     if (input.type === "checkbox") card.classList.toggle("highlight", input.checked);
     if (input.type === "radio") {
-      document.querySelectorAll(\`input[name="\${input.name}"]\`)
+      document.querySelectorAll(`input[name="${input.name}"]`)
         .forEach(r => r.closest(".card")?.classList.remove("highlight"));
       if (input.checked) card.classList.add("highlight");
     }
@@ -192,10 +221,10 @@ function atualizar(){
 
   const r = Calculo.calcularTotal({ valorBase, taxas });
 
-  valorBaseOriginal.textContent = \`Valor base: R$ \${r.valorBaseOriginal.toFixed(2)}\`;
+  valorBaseOriginal.textContent = `Valor base: R$ ${r.valorBaseOriginal.toFixed(2)}`;
   valorBaseCalculado.textContent =
     r.valorBaseCalculado !== r.valorBaseOriginal
-      ? \`Base ajustada: R$ \${r.valorBaseCalculado.toFixed(2)}\`
+      ? `Base ajustada: R$ ${r.valorBaseCalculado.toFixed(2)}`
       : "";
 
   listaDetalhes.innerHTML = "";
@@ -203,7 +232,7 @@ function atualizar(){
 
   function add(nome, valor){
     const li = document.createElement("li");
-    li.textContent = \`\${nome}: R$ \${valor.toFixed(2)}\`;
+    li.textContent = `${nome}: R$ ${valor.toFixed(2)}`;
     listaDetalhes.appendChild(li);
     tem = true;
   }
@@ -214,7 +243,7 @@ function atualizar(){
     add("👥 Excesso de pessoas", valorBase <= 30 ? 5 : valorBase * 0.5);
   if (taxas.animal){
     const map = {pequeno:5, medio:7, grande:10};
-    add(\`🐾 Animal (\${taxas.animal})\`, map[taxas.animal]);
+    add(`🐾 Animal (${taxas.animal})`, map[taxas.animal]);
   }
   if (taxas.desvioSimples) add("🔀 Desvio simples", 5);
   if (taxas.desvioComEspera && taxas.tempoEspera >= 5) add("⏱️ Desvio com espera", 10);
@@ -223,24 +252,24 @@ function atualizar(){
 
   nenhumaTaxa.textContent = tem ? "" : "Nenhuma taxa adicional aplicada";
 
-  total.textContent = \`Total: R$ \${r.totalFinal.toFixed(2)}\`;
-  restante.textContent = \`A receber: R$ \${r.valorRestante.toFixed(2)}\`;
+  total.textContent = `Total: R$ ${r.totalFinal.toFixed(2)}`;
+  restante.textContent = `A receber: R$ ${r.valorRestante.toFixed(2)}`;
 
-  window.__mensagemWhats = \`
+  window.__mensagemWhats = `
 🚗 *Corrida RF Driver*
-📍 Origem: \${origem}
-📍 Destino: \${destino}
+📍 Origem: ${origem}
+📍 Destino: ${destino}
 
 💰 *Detalhamento*
-\${listaDetalhes.innerText || "Sem taxas adicionais"}
+${listaDetalhes.innerText || "Sem taxas adicionais"}
 
-💵 *Total*: R$ \${r.totalFinal.toFixed(2)}
-\`;
+💵 *Total*: R$ ${r.totalFinal.toFixed(2)}
+`;
 }
 
 function enviarWhatsApp(){
   const txt = encodeURIComponent(window.__mensagemWhats);
-  window.open(\`https://wa.me/?text=\${txt}\`, "_blank");
+  window.open(`https://wa.me/?text=${txt}`, "_blank");
 }
 
 atualizar();
