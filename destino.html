@@ -4,18 +4,31 @@
 <meta charset="UTF-8">
 <title>Destino - RF Driver</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
-.top-actions{
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
   display:flex;
-  gap:10px;
-  margin-bottom:12px;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
 }
+
+.container{
+  width:100%;
+  max-width:520px;
+  padding:30px 25px;
+  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(255,215,120,.18);
+}
+
 .search-box{
   display:flex;
   align-items:center;
@@ -24,15 +37,20 @@
 }
 .search-box input{flex:1}
 .search-icon{opacity:.6}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
 
-  <!-- AÇÕES TOPO -->
-  <div class="top-actions">
+  <div class="actions">
     <button class="btn btn-secondary" onclick="App.go('origem.html')">◀ Voltar</button>
     <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
   </div>
@@ -44,7 +62,12 @@
 
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" id="buscaDestino" placeholder="Digite para buscar o destino" autocomplete="off">
+      <input
+        type="text"
+        id="buscaDestino"
+        placeholder="Digite para buscar o destino"
+        autocomplete="off"
+      >
     </div>
 
     <select id="destinoSelect" disabled>
@@ -63,50 +86,50 @@
 
 <script>
 const origem = App.get("origem");
-if (!origem) App.go("origem.html");
+if(!origem) App.go("origem.html");
 
 const select = document.getElementById("destinoSelect");
 const btn = document.getElementById("btnContinuar");
 const busca = document.getElementById("buscaDestino");
 
-let todosDestinos = [];
+let todosDestinos=[];
 
 async function carregar(){
   todosDestinos = await DataManager.listarDestinos(origem);
   renderizar(todosDestinos);
-  select.disabled = false;
+  select.disabled=false;
 }
 
 function renderizar(lista){
-  select.innerHTML = `<option value="">Selecione...</option>`;
-  lista.forEach(d => {
-    const opt = document.createElement("option");
-    opt.value = d;
-    opt.textContent = d;
+  select.innerHTML=`<option value="">Selecione...</option>`;
+  lista.forEach(d=>{
+    const opt=document.createElement("option");
+    opt.value=d;
+    opt.textContent=d;
     select.appendChild(opt);
   });
 }
 
-busca.addEventListener("input", () => {
-  const termo = busca.value.toLowerCase();
-  const filtrados = todosDestinos.filter(d =>
+busca.addEventListener("input",()=>{
+  const termo=busca.value.toLowerCase();
+  const filtrados=todosDestinos.filter(d =>
     d.toLowerCase().includes(termo)
   );
   renderizar(filtrados);
-  if (filtrados.length) select.size = Math.min(filtrados.length + 1, 6);
+  if(filtrados.length) select.size=Math.min(filtrados.length+1,6);
 });
 
-busca.addEventListener("blur", () => select.size = 1);
+busca.addEventListener("blur",()=>select.size=1);
 
-select.addEventListener("change", async () => {
-  if (!select.value) return btn.disabled = true;
-  const valor = await DataManager.obterValor(origem, select.value);
-  App.set("destino", select.value);
-  App.set("valorBase", valor);
-  btn.disabled = false;
+select.addEventListener("change",async()=>{
+  if(!select.value){btn.disabled=true;return;}
+  const valor=await DataManager.obterValor(origem,select.value);
+  App.set("destino",select.value);
+  App.set("valorBase",valor);
+  btn.disabled=false;
 });
 
-btn.onclick = () => App.go("resumo.html");
+btn.onclick=()=>App.go("resumo.html");
 
 carregar();
 </script>
