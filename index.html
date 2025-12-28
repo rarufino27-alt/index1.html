@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Tabela de Preços RF Driver</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="../theme/theme.css">
+<link rel="stylesheet" href="../theme/layout.css">
+<link rel="stylesheet" href="../theme/components.css">
+
+<style>
+/* Ajustes específicos permitidos apenas para layout do INDEX */
+.hero{
+  text-align:center;
+  padding:40px 20px;
+}
+
+.hero h1{
+  font-size:50px;
+  font-weight:800;
+  color:var(--primary);
+  margin-bottom:12px;
+}
+
+.hero p{
+  font-size:15px;
+  color:var(--muted);
+  max-width:420px;
+  margin:0 auto;
+}
+
+.start-btn{
+  margin-top:30px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="card hero">
+  <h1>TABELA DE PREÇOS<br>RF DRIVER</h1>
+  <p>
+    Consulte valores oficiais de corridas, adicionais e taxas
+    do grupo RF Driver de forma rápida e transparente.
+  </p>
+
+  <div class="start-btn">
+    <button class="btn btn-primary" id="btnIniciar">
+      ▶ Iniciar Cálculo
+    </button>
+  </div>
+</div>
+
+<!-- CORE -->
+<script src="../core/global.js"></script>
+
+<script>
+/* INDEX – RF DRIVER */
+document.getElementById("btnIniciar").addEventListener("click", () => {
+  App.reset();
+  App.go("origem.html");
+});
+</script>
+
+</body>
+</html>
