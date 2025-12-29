@@ -2,48 +2,25 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<title>Origem - RF Driver</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Origem – RF Driver</title>
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
-/* FUNDO PREMIUM */
 body{
   min-height:100vh;
   background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
   color:#fff;
 }
 
-/* PARTÍCULAS */
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:
-    radial-gradient(rgba(255,215,120,0.25) 1px, transparent 1px),
-    radial-gradient(rgba(255,215,120,0.15) 1px, transparent 1px);
-  background-size:3px 3px, 6px 6px;
-  background-position:0 0, 20px 20px;
-  animation:sparkle 20s linear infinite;
-  z-index:0;
-}
-
-@keyframes sparkle{
-  from{transform:translateY(0)}
-  to{transform:translateY(-200px)}
-}
-
-/* CONTAINER CENTRAL */
 .container{
-  position:relative;
-  z-index:1;
   width:100%;
   max-width:560px;
   padding:35px 30px;
@@ -53,65 +30,60 @@ body::before{
 }
 
 /* HEADER */
-.app-header{
-  text-align:center;
-  margin-bottom:25px;
-}
-
+.app-header{text-align:center;margin-bottom:22px}
 .app-header h1{
   font-size:2rem;
   letter-spacing:2px;
   background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:12px;
-}
-
-/* ETAPAS */
-.steps{
-  display:flex;
-  justify-content:center;
-  gap:14px;
-  font-size:.9rem;
-}
-
-.step{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  opacity:.4;
-}
-
-.step.active{opacity:1;font-weight:600}
-
-.step span{
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  background:#555;
-  font-size:.75rem;
-  line-height:18px;
-  text-align:center;
-}
-
-.step.active span{background:#f5c542}
-
-/* BUSCA */
-.search-box{
-  display:flex;
-  align-items:center;
-  gap:8px;
   margin-bottom:10px;
 }
-.search-box input{flex:1}
-.search-icon{opacity:.6}
-
-/* AÇÕES */
-.actions{
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
+.steps{
+  display:flex;justify-content:center;gap:14px;font-size:.9rem
 }
+.step{display:flex;align-items:center;gap:6px;opacity:.4}
+.step.active{opacity:1;font-weight:600}
+.step span{
+  width:18px;height:18px;border-radius:50%;
+  background:#f5c542;color:#000;
+  font-size:.75rem;line-height:18px;text-align:center
+}
+
+/* SEARCH PREMIUM */
+.search-wrapper{position:relative}
+.search-input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid rgba(255,215,120,.25);
+  background:rgba(0,0,0,.4);
+  color:#fff;
+  font-size:1rem;
+}
+.search-input::placeholder{color:#aaa}
+.search-results{
+  position:absolute;
+  top:105%;
+  left:0;
+  right:0;
+  background:#0f0f0f;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,.6);
+  max-height:240px;
+  overflow:auto;
+  display:none;
+  z-index:5;
+}
+.search-results div{
+  padding:12px 16px;
+  cursor:pointer;
+}
+.search-results div:hover{
+  background:rgba(245,197,66,.15);
+}
+
+.actions{margin-bottom:15px;display:flex;gap:10px}
 </style>
 </head>
 
@@ -119,7 +91,6 @@ body::before{
 
 <div class="container">
 
-  <!-- HEADER COM ETAPAS -->
   <div class="app-header">
     <h1>RF DRIVER</h1>
     <div class="steps">
@@ -133,25 +104,19 @@ body::before{
     <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
   </div>
 
-  <div class="card">
-    <label>Selecione a origem</label>
-
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input
-        type="text"
-        id="buscaOrigem"
-        placeholder="Digite para buscar a origem"
-        autocomplete="off"
-      >
-    </div>
-
-    <select id="origemSelect" disabled>
-      <option>Carregando...</option>
-    </select>
+  <label>Digite a origem</label>
+  <div class="search-wrapper">
+    <input
+      type="text"
+      id="buscaOrigem"
+      class="search-input"
+      placeholder="Ex: Centro, Aeroporto..."
+      autocomplete="off"
+    >
+    <div id="listaOrigens" class="search-results"></div>
   </div>
 
-  <button id="btnContinuar" class="btn btn-primary" disabled>
+  <button id="btnContinuar" class="btn btn-primary" disabled style="margin-top:20px">
     Continuar
   </button>
 
@@ -161,50 +126,41 @@ body::before{
 <script src="core/datamanager.js"></script>
 
 <script>
-const select = document.getElementById("origemSelect");
+const input = document.getElementById("buscaOrigem");
+const lista = document.getElementById("listaOrigens");
 const btn = document.getElementById("btnContinuar");
-const busca = document.getElementById("buscaOrigem");
 
-let todasOrigens = [];
+let origens = [];
 
 async function carregar(){
-  todasOrigens = await DataManager.listarOrigens();
-  renderizar(todasOrigens);
-  select.disabled = false;
+  origens = await DataManager.listarOrigens();
 }
+carregar();
 
-function renderizar(lista){
-  select.innerHTML = `<option value="">Selecione...</option>`;
-  lista.forEach(o=>{
-    const opt=document.createElement("option");
-    opt.value=o;
-    opt.textContent=o;
-    select.appendChild(opt);
-  });
-}
+input.addEventListener("input",()=>{
+  const termo = input.value.toLowerCase();
+  lista.innerHTML="";
+  if(!termo){lista.style.display="none";return}
 
-busca.addEventListener("input",()=>{
-  const termo = busca.value.toLowerCase();
-  const filtradas = todasOrigens.filter(o =>
-    o.toLowerCase().includes(termo)
-  );
-  renderizar(filtradas);
-  if(filtradas.length) select.size=Math.min(filtradas.length+1,6);
-});
+  origens.filter(o=>o.toLowerCase().includes(termo))
+    .forEach(o=>{
+      const div=document.createElement("div");
+      div.textContent=o;
+      div.onclick=()=>{
+        input.value=o;
+        App.set("origem",o);
+        App.set("destino",null);
+        App.set("valorBase",0);
+        lista.style.display="none";
+        btn.disabled=false;
+      };
+      lista.appendChild(div);
+    });
 
-busca.addEventListener("blur",()=>select.size=1);
-
-select.addEventListener("change",()=>{
-  if(!select.value){btn.disabled=true;return;}
-  App.set("origem",select.value);
-  App.set("destino",null);
-  App.set("valorBase",0);
-  btn.disabled=false;
+  lista.style.display="block";
 });
 
 btn.onclick=()=>App.go("destino.html");
-
-carregar();
 </script>
 
 </body>
