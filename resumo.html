@@ -2,9 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Resumo da Corrida - RF Driver</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RF Driver – Mobilidade com excelência</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- PWA / IPHONE -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f5c542">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="RF Driver">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
@@ -14,103 +21,121 @@
 /* FUNDO PREMIUM */
 body{
   min-height:100vh;
-  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
+  background:radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
   display:flex;
   justify-content:center;
   align-items:center;
+  overflow:hidden;
   color:#fff;
 }
 
-/* CONTAINER CENTRAL */
+/* PARTÍCULAS DOURADAS */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(rgba(255,215,120,0.18) 1px, transparent 1px),
+    radial-gradient(rgba(255,215,120,0.10) 1px, transparent 1px);
+  background-size:3px 3px, 6px 6px;
+  background-position:0 0, 22px 22px;
+  animation:sparkle 22s linear infinite;
+  z-index:0;
+}
+
+@keyframes sparkle{
+  from{transform:translateY(0)}
+  to{transform:translateY(-220px)}
+}
+
+/* CONTAINER – GLASS PREMIUM */
 .container{
   position:relative;
-  width:100%;
-  max-width:720px;
-  padding:35px 30px;
-  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
-  border-radius:22px;
-  box-shadow:0 0 40px rgba(255,215,120,.25);
-}
-
-/* HEADER */
-.app-header{
+  z-index:1;
   text-align:center;
-  margin-bottom:25px;
+  padding:48px 36px;
+  max-width:720px;
+  width:90%;
+  background:linear-gradient(
+    145deg,
+    rgba(25,25,25,0.75),
+    rgba(0,0,0,0.65)
+  );
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-radius:26px;
+  border:1px solid rgba(255,215,120,0.18);
+  box-shadow:
+    0 0 60px rgba(255,215,120,0.18),
+    inset 0 0 25px rgba(255,255,255,0.04);
+
+  animation:fadeUp .45s ease-out;
 }
 
-.app-header h1{
-  font-size:2rem;
-  letter-spacing:2px;
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* MARCA */
+.brand{
+  font-size:2.6rem;
+  font-weight:800;
+  letter-spacing:3px;
   background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:12px;
+  margin-bottom:8px;
 }
 
-/* ETAPAS */
-.steps{
-  display:flex;
-  justify-content:center;
-  gap:14px;
-  font-size:.9rem;
+/* SUBTÍTULO */
+.tagline{
+  font-size:1.05rem;
+  color:#d0d0d0;
+  letter-spacing:.6px;
 }
 
-.step{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  opacity:.4;
+/* DIVISOR */
+.divider{
+  width:90px;
+  height:3px;
+  margin:22px auto 18px;
+  background:linear-gradient(90deg, transparent, #d4af37, transparent);
+  border-radius:6px;
 }
 
-.step.done{opacity:.8}
-.step.active{opacity:1;font-weight:600}
-
-.step span{
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  background:#555;
-  font-size:.75rem;
-  line-height:18px;
-  text-align:center;
+/* FRASE DE AUTORIDADE */
+.authority{
+  font-size:.95rem;
+  color:#bfbfbf;
+  margin-bottom:28px;
 }
 
-.step.done span{background:#1db954}
-.step.active span{background:#f5c542}
-
-/* AÇÕES */
-.top-actions{
-  display:flex;
-  gap:10px;
-  margin-bottom:18px;
-  justify-content:center;
+/* BOTÃO PREMIUM */
+.start-btn .btn{
+  padding:14px 26px;
+  font-size:1.05rem;
+  border-radius:14px;
+  transition:all .25s ease;
+  box-shadow:0 0 0 rgba(245,197,66,0);
 }
 
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:12px;
+.start-btn .btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 0 18px rgba(245,197,66,.45);
 }
 
-.highlight{
-  border:2px solid var(--success);
-  background:var(--success-soft);
+.start-btn .btn:active{
+  transform:translateY(1px);
+  box-shadow:0 0 8px rgba(245,197,66,.25);
 }
 
-.total{
-  font-size:24px;
-  font-weight:800;
-  text-align:right;
-}
-
-.muted{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.whatsapp{
-  background:#25d366;
+/* FOOTER */
+footer{
+  margin-top:26px;
+  font-size:.85rem;
+  color:#a8a8a8;
+  opacity:.8;
 }
 </style>
 </head>
@@ -119,239 +144,39 @@ body{
 
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="app-header">
-    <h1>RF DRIVER</h1>
-    <div class="steps">
-      <div class="step done"><span>✓</span> Origem</div>
-      <div class="step done"><span>✓</span> Destino</div>
-      <div class="step active"><span>3</span> Resumo</div>
-    </div>
+  <div class="brand">RF DRIVER</div>
+  <div class="tagline">Mobilidade com excelência</div>
+
+  <div class="divider"></div>
+
+  <div class="authority">
+    Tabela oficial de valores • Cálculo rápido e transparente
   </div>
 
-  <!-- AÇÕES -->
-  <div class="top-actions">
-    <button class="btn btn-secondary" onclick="App.go('origem.html')">🔄 Nova cotação</button>
-    <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
-  </div>
-
-  <!-- ROTA -->
-  <div class="card">
-    <p id="rota"></p>
-    <p id="horaAtual" class="muted"></p>
-  </div>
-
-  <!-- BASE -->
-  <div class="card">
-    <p id="valorBaseOriginal"></p>
-    <p id="valorBaseCalculado"></p>
-  </div>
-
-  <!-- IDA E VOLTA -->
-  <div class="card">
-    <label>
-      <input type="checkbox" id="idaVolta">
-      Corrida ida e volta
-    </label>
-  </div>
-
-  <!-- TAXAS -->
-  <h3>Taxas adicionais</h3>
-  <div class="grid">
-
-    <div class="card">
-      <label><input type="checkbox" id="saidaPraia"> 🏖️ Saída de praias (+ R$ 10)</label>
-      <p class="muted">Domingos e feriados</p>
-    </div>
-
-    <div class="card">
-      <label><input type="checkbox" id="taxaFeira"> 🛒 Saída de feira (+ R$ 5)</label>
-    </div>
-
-    <div class="card">
-      <label><input type="checkbox" id="taxaExcesso"> 👥 Excesso de pessoas</label>
-    </div>
-
-    <div class="card">
-      <strong>🐾 Animal</strong>
-      <label><input type="radio" name="animal" value=""> Nenhum</label>
-      <label><input type="radio" name="animal" value="pequeno"> Pequeno</label>
-      <label><input type="radio" name="animal" value="medio"> Médio</label>
-      <label><input type="radio" name="animal" value="grande"> Grande</label>
-    </div>
-
-    <div class="card">
-      <label><input type="checkbox" id="buscaLonge"> 📍 Buscar passageiro longe</label>
-    </div>
-
-  </div>
-
-  <!-- DESVIOS -->
-  <h3>Desvio de rota</h3>
-  <div class="grid">
-
-    <div class="card">
-      <label><input type="checkbox" id="desvioSimples"> 🔀 Desvio simples</label>
-    </div>
-
-    <div class="card">
-      <label><input type="checkbox" id="desvioEspera"> ⏱️ Desvio com espera</label>
-      <input type="number" id="tempoEspera" placeholder="Minutos">
-    </div>
-
-    <div class="card">
-      <strong>➕ Múltiplos trechos</strong>
-      <input type="text" id="trechos" placeholder="Ex: 10,10">
-    </div>
-
-  </div>
-
-  <!-- DETALHAMENTO -->
-  <h3>Detalhamento da cobrança</h3>
-  <div class="card">
-    <ul id="listaDetalhes"></ul>
-    <p id="nenhumaTaxa" class="muted"></p>
-  </div>
-
-  <!-- RESULTADO -->
-  <h3>Resultado</h3>
-  <div class="card">
-    <p class="total" id="total"></p>
-    <p id="restante"></p>
-    <button class="btn btn-primary whatsapp" onclick="enviarWhatsApp()">
-      📲 Enviar no WhatsApp
+  <div class="start-btn">
+    <button class="btn btn-primary" id="btnIniciar">
+      ▶ Iniciar Cálculo
     </button>
   </div>
+
+  <footer>
+    Experiência premium em cada viagem
+  </footer>
 
 </div>
 
 <script src="core/global.js"></script>
-<script src="js/calculo.js"></script>
 
+<!-- SERVICE WORKER -->
 <script>
-/* ===============================
-   RESUMO — RF DRIVER
-================================ */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}
 
-const { origem, destino, valorBase } = App.state;
-if (!origem || !destino) App.go("index.html");
-
-const rota = document.getElementById("rota");
-const horaAtual = document.getElementById("horaAtual");
-
-const idaVolta = document.getElementById("idaVolta");
-const taxaFeira = document.getElementById("taxaFeira");
-const taxaExcesso = document.getElementById("taxaExcesso");
-const buscaLonge = document.getElementById("buscaLonge");
-const saidaPraia = document.getElementById("saidaPraia");
-
-const desvioSimples = document.getElementById("desvioSimples");
-const desvioEspera = document.getElementById("desvioEspera");
-const tempoEspera = document.getElementById("tempoEspera");
-const trechos = document.getElementById("trechos");
-
-const valorBaseOriginal = document.getElementById("valorBaseOriginal");
-const valorBaseCalculado = document.getElementById("valorBaseCalculado");
-const listaDetalhes = document.getElementById("listaDetalhes");
-const nenhumaTaxa = document.getElementById("nenhumaTaxa");
-const total = document.getElementById("total");
-const restante = document.getElementById("restante");
-
-rota.textContent = `🚗 ${origem} → ${destino}`;
-horaAtual.textContent = new Date().toLocaleString();
-
-document.querySelectorAll("input").forEach(i =>
-  i.addEventListener("change", atualizar)
-);
-
-/* UX VISUAL */
-document.querySelectorAll(".card input").forEach(input => {
-  const card = input.closest(".card");
-  function marcar(){
-    if (input.type === "checkbox") card.classList.toggle("highlight", input.checked);
-    if (input.type === "radio") {
-      document.querySelectorAll(`input[name="${input.name}"]`)
-        .forEach(r => r.closest(".card")?.classList.remove("highlight"));
-      if (input.checked) card.classList.add("highlight");
-    }
-  }
-  marcar();
-  input.addEventListener("change", marcar);
+document.getElementById("btnIniciar").addEventListener("click", () => {
+  App.reset();
+  App.go("origem.html");
 });
-
-function atualizar(){
-
-  const taxas = {
-    idaVolta: idaVolta.checked,
-    feira: taxaFeira.checked,
-    excessoPessoas: taxaExcesso.checked,
-    animal: document.querySelector("input[name='animal']:checked")?.value || null,
-    buscaLonge: buscaLonge.checked,
-    saidaPraia: saidaPraia.checked,
-    desvioSimples: desvioSimples.checked,
-    desvioComEspera: desvioEspera.checked,
-    tempoEspera: Number(tempoEspera.value || 0),
-    desvioTrechos: trechos.value
-      ? trechos.value.split(",").map(v => Number(v.trim()))
-      : []
-  };
-
-  const r = Calculo.calcularTotal({ valorBase, taxas });
-
-  valorBaseOriginal.textContent = `Valor base: R$ ${r.valorBaseOriginal.toFixed(2)}`;
-  valorBaseCalculado.textContent =
-    r.valorBaseCalculado !== r.valorBaseOriginal
-      ? `Base ajustada: R$ ${r.valorBaseCalculado.toFixed(2)}`
-      : "";
-
-  listaDetalhes.innerHTML = "";
-  let tem = false;
-
-  function add(nome, valor){
-    const li = document.createElement("li");
-    li.textContent = `${nome}: R$ ${valor.toFixed(2)}`;
-    listaDetalhes.appendChild(li);
-    tem = true;
-  }
-
-  if (taxas.feira) add("🛒 Saída de feira", 5);
-  if (taxas.saidaPraia) add("🏖️ Saída de praias", 10);
-  if (taxas.excessoPessoas)
-    add("👥 Excesso de pessoas", valorBase <= 30 ? 5 : valorBase * 0.5);
-  if (taxas.animal){
-    const map = {pequeno:5, medio:7, grande:10};
-    add(`🐾 Animal (${taxas.animal})`, map[taxas.animal]);
-  }
-  if (taxas.desvioSimples) add("🔀 Desvio simples", 5);
-  if (taxas.desvioComEspera && taxas.tempoEspera >= 5) add("⏱️ Desvio com espera", 10);
-  if (taxas.desvioTrechos.length)
-    add("➕ Múltiplos trechos", taxas.desvioTrechos.reduce((a,b)=>a+b,0));
-
-  nenhumaTaxa.textContent = tem ? "" : "Nenhuma taxa adicional aplicada";
-
-  total.textContent = `Total: R$ ${r.totalFinal.toFixed(2)}`;
-  restante.textContent = `A receber: R$ ${r.valorRestante.toFixed(2)}`;
-
-  window.__mensagemWhats = `
-🚖 *Corrida RF Driver* 🚖
-
-📌 Origem: ${origem}
-
-🛫 Destino: ${destino}
-
-📊 *Taxas adicionais*
-${listaDetalhes.innerText || "Sem taxas adicionais"}
-
-💵 *Total*: R$ ${r.totalFinal.toFixed(2)}
-`;
-}
-
-function enviarWhatsApp(){
-  const txt = encodeURIComponent(window.__mensagemWhats);
-  window.open(`https://wa.me/?text=${txt}`, "_blank");
-}
-
-atualizar();
 </script>
 
 </body>
