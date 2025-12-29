@@ -2,33 +2,101 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Origem - RF Driver</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Origem – RF Driver</title>
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
+/* FUNDO PREMIUM */
 body{
   min-height:100vh;
   background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
   display:flex;
   justify-content:center;
   align-items:center;
+  overflow:hidden;
   color:#fff;
 }
 
-.container{
-  width:100%;
-  max-width:520px;
-  padding:30px 25px;
-  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
-  border-radius:20px;
-  box-shadow:0 0 40px rgba(255,215,120,.18);
+/* PARTÍCULAS */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    radial-gradient(rgba(255,215,120,0.25) 1px, transparent 1px),
+    radial-gradient(rgba(255,215,120,0.15) 1px, transparent 1px);
+  background-size:3px 3px, 6px 6px;
+  background-position:0 0, 20px 20px;
+  animation:sparkle 20s linear infinite;
+  z-index:0;
 }
 
+@keyframes sparkle{
+  from{transform:translateY(0)}
+  to{transform:translateY(-200px)}
+}
+
+/* CONTAINER CENTRAL */
+.container{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:560px;
+  padding:35px 30px;
+  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
+  border-radius:22px;
+  box-shadow:0 0 40px rgba(255,215,120,.25);
+}
+
+/* HEADER */
+.app-header{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.app-header h1{
+  font-size:2rem;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+}
+
+/* ETAPAS */
+.steps{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  font-size:.9rem;
+}
+
+.step{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  opacity:.4;
+}
+
+.step.active{opacity:1;font-weight:600}
+
+.step span{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#555;
+  font-size:.75rem;
+  line-height:18px;
+  text-align:center;
+}
+
+.step.active span{background:#f5c542}
+
+/* BUSCA */
 .search-box{
   display:flex;
   align-items:center;
@@ -38,6 +106,7 @@ body{
 .search-box input{flex:1}
 .search-icon{opacity:.6}
 
+/* AÇÕES */
 .actions{
   display:flex;
   gap:10px;
@@ -50,12 +119,19 @@ body{
 
 <div class="container">
 
+  <!-- HEADER COM ETAPAS -->
+  <div class="app-header">
+    <h1>RF DRIVER</h1>
+    <div class="steps">
+      <div class="step active"><span>1</span> Origem</div>
+      <div class="step"><span>2</span> Destino</div>
+      <div class="step"><span>3</span> Resumo</div>
+    </div>
+  </div>
+
   <div class="actions">
     <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
   </div>
-
-  <!-- 🔹 TÍTULO AJUSTADO -->
-  <h1>RF DRIVER</h1>
 
   <div class="card">
     <label>Selecione a origem</label>
