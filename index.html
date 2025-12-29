@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RF Driver – Mobilidade com excelência</title>
 
+<!-- ===== PWA / IPHONE ===== -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f5c542">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="RF Driver">
+<link rel="apple-touch-icon" href="/icons/192.png">
+
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
@@ -60,23 +68,15 @@ body::before{
   box-shadow:
     0 0 60px rgba(255,215,120,0.18),
     inset 0 0 25px rgba(255,255,255,0.04);
-
-  /* ANIMAÇÃO DE ENTRADA */
   animation:fadeUp .45s ease-out;
 }
 
 @keyframes fadeUp{
-  from{
-    opacity:0;
-    transform:translateY(18px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
-/* MARCA (LOGO TIPOGRÁFICO) */
+/* MARCA */
 .brand{
   font-size:2.6rem;
   font-weight:800;
@@ -114,7 +114,6 @@ body::before{
 .start-btn{
   margin-top:10px;
 }
-
 .start-btn .btn{
   padding:14px 26px;
   font-size:1.05rem;
@@ -122,12 +121,10 @@ body::before{
   transition:all .25s ease;
   box-shadow:0 0 0 rgba(245,197,66,0);
 }
-
 .start-btn .btn:hover{
   transform:translateY(-1px);
   box-shadow:0 0 18px rgba(245,197,66,.45);
 }
-
 .start-btn .btn:active{
   transform:translateY(1px);
   box-shadow:0 0 8px rgba(245,197,66,.25);
@@ -147,7 +144,6 @@ footer{
 
 <div class="container">
 
-  <!-- MARCA -->
   <div class="brand">RF DRIVER</div>
   <div class="tagline">Mobilidade com excelência</div>
 
@@ -170,7 +166,13 @@ footer{
 </div>
 
 <script src="core/global.js"></script>
+
+<!-- SERVICE WORKER -->
 <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}
+
 document.getElementById("btnIniciar").addEventListener("click", () => {
   App.reset();
   App.go("origem.html");
