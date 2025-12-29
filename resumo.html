@@ -333,11 +333,12 @@ function atualizar(){
   restante.textContent = `A receber: R$ ${r.valorRestante.toFixed(2)}`;
 
   window.__mensagemWhats = `
-🚗 *Corrida RF Driver*
-📍 Origem: ${origem}
-📍 Destino: ${destino}
+🚖 *Corrida RF Driver* 🚖
 
-💰 *Detalhamento*
+📌 Origem: ${origem}
+🛫 Destino: ${destino}
+
+📊 *Taxas adicionais*
 ${listaDetalhes.innerText || "Sem taxas adicionais"}
 
 💵 *Total*: R$ ${r.totalFinal.toFixed(2)}
