@@ -13,7 +13,7 @@
 /* FUNDO PREMIUM */
 body{
   min-height:100vh;
-  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
+  background:radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -27,84 +27,118 @@ body::before{
   position:absolute;
   inset:0;
   background-image:
-    radial-gradient(rgba(255,215,120,0.25) 1px, transparent 1px),
-    radial-gradient(rgba(255,215,120,0.15) 1px, transparent 1px);
+    radial-gradient(rgba(255,215,120,0.18) 1px, transparent 1px),
+    radial-gradient(rgba(255,215,120,0.10) 1px, transparent 1px);
   background-size:3px 3px, 6px 6px;
-  background-position:0 0, 20px 20px;
-  animation:sparkle 20s linear infinite;
+  background-position:0 0, 22px 22px;
+  animation:sparkle 22s linear infinite;
   z-index:0;
 }
 
 @keyframes sparkle{
   from{transform:translateY(0)}
-  to{transform:translateY(-200px)}
+  to{transform:translateY(-220px)}
 }
 
-/* CONTAINER */
+/* CONTAINER – GLASS PREMIUM */
 .container{
   position:relative;
   z-index:1;
   text-align:center;
-  padding:40px 30px;
-  max-width:700px;
+  padding:48px 36px;
+  max-width:720px;
   width:90%;
   background:linear-gradient(
     145deg,
-    rgba(20,20,20,0.95),
-    rgba(0,0,0,0.85)
+    rgba(25,25,25,0.75),
+    rgba(0,0,0,0.65)
   );
-  border-radius:20px;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-radius:26px;
+  border:1px solid rgba(255,215,120,0.18);
   box-shadow:
-    0 0 40px rgba(255,215,120,0.25),
-    inset 0 0 20px rgba(255,255,255,0.05);
+    0 0 60px rgba(255,215,120,0.18),
+    inset 0 0 25px rgba(255,255,255,0.04);
+
+  /* ANIMAÇÃO DE ENTRADA */
+  animation:fadeUp .45s ease-out;
 }
 
-/* LOGO */
-.logo{
-  max-width:320px;
-  width:100%;
-  margin:0 auto 25px auto;
-  display:block;
-  filter:drop-shadow(0 10px 25px rgba(255,215,120,0.6));
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(18px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
-/* TÍTULO */
-h1{
-  font-size:2.2rem;
-  letter-spacing:2px;
-  background:linear-gradient(90deg, #d4af37, #f5e28c, #c9a227);
+/* MARCA (LOGO TIPOGRÁFICO) */
+.brand{
+  font-size:2.6rem;
+  font-weight:800;
+  letter-spacing:3px;
+  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
-/* TEXTO */
-p{
-  font-size:1.1rem;
-  color:#dcdcdc;
-  letter-spacing:.5px;
+/* SUBTÍTULO */
+.tagline{
+  font-size:1.05rem;
+  color:#d0d0d0;
+  letter-spacing:.6px;
 }
 
 /* DIVISOR */
 .divider{
-  width:80px;
+  width:90px;
   height:3px;
-  margin:18px auto;
+  margin:22px auto 18px;
   background:linear-gradient(90deg, transparent, #d4af37, transparent);
-  border-radius:5px;
+  border-radius:6px;
 }
 
-/* BOTÃO */
+/* FRASE DE AUTORIDADE */
+.authority{
+  font-size:.95rem;
+  color:#bfbfbf;
+  margin-bottom:28px;
+}
+
+/* BOTÃO PREMIUM */
 .start-btn{
-  margin-top:30px;
+  margin-top:10px;
+}
+
+.start-btn .btn{
+  padding:14px 26px;
+  font-size:1.05rem;
+  border-radius:14px;
+  transition:all .25s ease;
+  box-shadow:0 0 0 rgba(245,197,66,0);
+}
+
+.start-btn .btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 0 18px rgba(245,197,66,.45);
+}
+
+.start-btn .btn:active{
+  transform:translateY(1px);
+  box-shadow:0 0 8px rgba(245,197,66,.25);
 }
 
 /* FOOTER */
 footer{
-  margin-top:18px;
-  font-size:.9rem;
-  color:#bfbfbf;
-  opacity:.85;
+  margin-top:26px;
+  font-size:.85rem;
+  color:#a8a8a8;
+  opacity:.8;
 }
 </style>
 </head>
@@ -113,15 +147,15 @@ footer{
 
 <div class="container">
 
-  <!-- LOGO -->
-  <!-- Garanta que o arquivo exista na raiz: logo-rf-driver.png -->
-  <img src="logo-rf-driver.png" alt="RF Driver" class="logo">
-
-  <h1>RF DRIVER</h1>
+  <!-- MARCA -->
+  <div class="brand">RF DRIVER</div>
+  <div class="tagline">Mobilidade com excelência</div>
 
   <div class="divider"></div>
 
-  <p>Mobilidade com excelência</p>
+  <div class="authority">
+    Tabela oficial de valores • Cálculo rápido e transparente
+  </div>
 
   <div class="start-btn">
     <button class="btn btn-primary" id="btnIniciar">
