@@ -120,44 +120,62 @@ body{
 <script src="core/datamanager.js"></script>
 
 <script>
+/* ===============================
+   PROTEÇÃO DE FLUXO
+================================ */
 const origem = App.get("origem");
-if(!origem) App.go("origem.html");
+if(!origem){
+  console.warn("Origem não encontrada. Redirecionando para início.");
+  App.go("index.html");
+}
 
+/* ===============================
+   BUSCA DE DESTINOS
+================================ */
 const input = document.getElementById("buscaDestino");
 const lista = document.getElementById("listaDestinos");
 const btn = document.getElementById("btnContinuar");
 
 let destinos = [];
 
-async function carregar(){
+async function carregarDestinos(){
   destinos = await DataManager.listarDestinos(origem);
 }
-carregar();
+carregarDestinos();
 
-input.addEventListener("input",()=>{
+input.addEventListener("input", ()=>{
   const termo = input.value.toLowerCase();
-  lista.innerHTML="";
-  if(!termo){lista.style.display="none";return}
+  lista.innerHTML = "";
 
-  destinos.filter(d=>d.toLowerCase().includes(termo))
-    .forEach(d=>{
-      const div=document.createElement("div");
-      div.textContent=d;
-      div.onclick=async()=>{
-        input.value=d;
-        const valor=await DataManager.obterValor(origem,d);
-        App.set("destino",d);
-        App.set("valorBase",valor);
-        lista.style.display="none";
-        btn.disabled=false;
+  if(!termo){
+    lista.style.display = "none";
+    return;
+  }
+
+  destinos
+    .filter(d => d.toLowerCase().includes(termo))
+    .forEach(d => {
+      const div = document.createElement("div");
+      div.textContent = d;
+      div.onclick = async () => {
+        input.value = d;
+        const valor = await DataManager.obterValor(origem, d);
+
+        App.set("destino", d);
+        App.set("valorBase", valor);
+
+        lista.style.display = "none";
+        btn.disabled = false;
       };
       lista.appendChild(div);
     });
 
-  lista.style.display="block";
+  lista.style.display = "block";
 });
 
-btn.onclick=()=>App.go("resumo.html");
+btn.onclick = () => {
+  App.go("resumo.html");
+};
 </script>
 
 </body>
