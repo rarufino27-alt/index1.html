@@ -20,7 +20,7 @@ body{
 }
 .container{
   width:100%;
-  max-width:620px;
+  max-width:640px;
   padding:30px;
   background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
   border-radius:22px;
@@ -28,10 +28,16 @@ body{
 }
 h2{
   text-align:center;
-  margin-bottom:20px;
+  margin-bottom:6px;
   background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
+}
+.viagem{
+  text-align:center;
+  font-size:.9rem;
+  color:#ddd;
+  margin-bottom:18px;
 }
 .quadrante{
   border:1px solid rgba(255,215,120,.25);
@@ -55,7 +61,7 @@ select,input{
 label{font-size:.85rem}
 .total{
   text-align:center;
-  font-size:1.4rem;
+  font-size:1.5rem;
   margin-top:16px;
   color:#f5c542;
 }
@@ -72,7 +78,12 @@ label{font-size:.85rem}
 
 <div class="container">
 
-<h2>Resumo da Corrida</h2>
+<h2>RF Driver</h2>
+
+<div class="viagem">
+📌 Origem: <strong id="origemTxt"></strong><br>
+🛫 Destino: <strong id="destinoTxt"></strong>
+</div>
 
 <!-- 1️⃣ TIPO DE VIAGEM -->
 <div class="quadrante">
@@ -85,11 +96,11 @@ label{font-size:.85rem}
   </select>
 </div>
 
-<!-- 2️⃣ EXCESSO DE PESSOAS -->
+<!-- 2️⃣ EXTRAS -->
 <div class="quadrante">
-  <label>
-    <input type="checkbox" id="excessoPessoas"> Excesso de pessoas
-  </label>
+  <label><input type="checkbox" id="excessoPessoas"> Excesso de pessoas</label><br>
+  <label><input type="checkbox" id="voltaPraia"> Volta das praias</label><br>
+  <label><input type="checkbox" id="desvioSimples"> Desvio de rota simples</label>
 </div>
 
 <!-- 3️⃣ ANIMAL -->
@@ -123,56 +134,71 @@ label{font-size:.85rem}
 <script src="core/global.js"></script>
 
 <script>
+const origem = App.get("origem");
+const destino = App.get("destino");
+document.getElementById("origemTxt").innerText = origem;
+document.getElementById("destinoTxt").innerText = destino;
+
 const valorBaseOriginal = Number(App.get("valorBase") || 0);
 
 function calcular(){
   let total = valorBaseOriginal;
   let detalhes = [];
 
-  // 1️⃣ Tipo de viagem
-  const tipo = document.getElementById("tipoViagem").value;
+  const tipo = tipoViagem.value;
   if(tipo==="bate_volta"){ total*=2; detalhes.push("🔁 Bate e volta"); }
   if(tipo==="ida_volta"){ total*=1.8; detalhes.push("🔁 Ida e volta"); }
-  if(tipo==="ida_volta_espera"){ total = (total*2)*1.1; detalhes.push("⏳ Ida e volta com espera"); }
+  if(tipo==="ida_volta_espera"){ total=(total*2)*1.1; detalhes.push("⏳ Ida e volta com espera"); }
 
-  // 2️⃣ Excesso de pessoas
-  if(document.getElementById("excessoPessoas").checked){
+  if(excessoPessoas.checked){
     const taxa = total < 30 ? 5 : total*0.5;
     total+=taxa;
     detalhes.push(`👥 Excesso de pessoas: R$ ${taxa.toFixed(2)}`);
   }
 
-  // 3️⃣ Adicional noturno (automático)
-  const h = new Date().getHours();
-  const m = new Date().getMinutes();
-  const noturno = (h>22 || (h===22 && m>=30) || h<5);
-  if(noturno){
+  if(voltaPraia.checked){
+    total+=10;
+    detalhes.push("🏖️ Volta das praias: R$ 10.00");
+  }
+
+  if(desvioSimples.checked){
+    total+=5;
+    detalhes.push("🛣️ Desvio de rota simples: R$ 5.00");
+  }
+
+  const h=new Date().getHours(), m=new Date().getMinutes();
+  if(h>22||(h===22&&m>=30)||h<5){
     const taxa = total < 30 ? 5 : total*0.35;
     total+=taxa;
     detalhes.push(`🌙 Adicional noturno: R$ ${taxa.toFixed(2)}`);
   }
 
-  // 4️⃣ Animal
-  const animal = Number(document.getElementById("animal").value);
+  const animal=Number(animalSel.value);
   if(animal>0){
     total+=animal;
     detalhes.push(`🐶 Transporte de animal: R$ ${animal.toFixed(2)}`);
   }
 
-  // 5️⃣ Espera
-  const min = Number(document.getElementById("minutosEspera").value||0);
+  const min=Number(minutosEspera.value||0);
   if(min>=5){
-    const blocos = Math.floor(min/5);
-    const taxa = blocos*3;
+    const taxa=Math.floor(min/5)*3;
     total+=taxa;
     detalhes.push(`🛣️⏳ Espera (${min}min): R$ ${taxa.toFixed(2)}`);
   }
 
   App.set("total", total);
-
-  document.getElementById("total").innerText = `R$ ${total.toFixed(2)}`;
-  document.getElementById("detalhamento").innerHTML = detalhes.join("<br>");
+  totalDiv.innerText=`R$ ${total.toFixed(2)}`;
+  detalheDiv.innerHTML=detalhes.join("<br>");
 }
+
+const tipoViagem=document.getElementById("tipoViagem");
+const excessoPessoas=document.getElementById("excessoPessoas");
+const voltaPraia=document.getElementById("voltaPraia");
+const desvioSimples=document.getElementById("desvioSimples");
+const animalSel=document.getElementById("animal");
+const minutosEspera=document.getElementById("minutosEspera");
+const totalDiv=document.getElementById("total");
+const detalheDiv=document.getElementById("detalhamento");
 
 document.querySelectorAll("select,input").forEach(e=>e.addEventListener("change",calcular));
 calcular();
@@ -181,12 +207,12 @@ function enviarWhats(){
   const msg =
 `🚖 *RF Driver*
 
-📌 Origem: ${App.get("origem")}
-🛫 Destino: ${App.get("destino")}
+📌 Origem: ${origem}
+🛫 Destino: ${destino}
 💰 *Total*: R$ ${App.get("total").toFixed(2)}
 
 ✍🏽 *Detalhamento*
-${document.getElementById("detalhamento").innerText}
+${detalheDiv.innerText}
 
 💸 *Total*: R$ ${App.get("total").toFixed(2)}`;
 
