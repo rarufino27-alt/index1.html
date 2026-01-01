@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Resumo – RF Driver</title>
+<title>Resumo - RF Driver</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="theme/theme.css">
@@ -12,7 +12,7 @@
 <style>
 body{
   min-height:100vh;
-  background:radial-gradient(circle at top,#1a1a1a 0%,#000 60%);
+  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -22,49 +22,35 @@ body{
   width:100%;
   max-width:620px;
   padding:30px;
-  background:linear-gradient(145deg,rgba(20,20,20,.95),rgba(0,0,0,.85));
+  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
   border-radius:22px;
   box-shadow:0 0 40px rgba(255,215,120,.25);
 }
 h1{
   text-align:center;
-  font-size:2rem;
   background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 .section{margin-top:20px}
-.card{
-  border:1px solid rgba(255,215,120,.2);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:12px;
-}
-.card.highlight{
-  border-color:#f5c542;
-  background:rgba(245,197,66,.08);
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:10px;
-}
+.section h3{margin-bottom:10px;color:#f5c542}
+.line{display:flex;justify-content:space-between;margin:6px 0}
 .total{
-  font-size:1.6rem;
-  font-weight:bold;
+  margin-top:20px;
+  font-size:1.4rem;
+  font-weight:700;
   text-align:center;
-  margin-top:10px;
 }
-.small{font-size:.85rem;color:#bbb}
-.hidden{display:none}
-input[type="number"]{
+select,input{
   width:100%;
-  margin-top:6px;
-  padding:8px;
-  border-radius:8px;
-  border:1px solid #444;
-  background:#000;
+  padding:10px;
+  border-radius:10px;
+  background:#111;
   color:#fff;
+  border:1px solid rgba(255,215,120,.25);
+}
+button{
+  margin-top:15px;
 }
 </style>
 </head>
@@ -72,63 +58,47 @@ input[type="number"]{
 <body>
 
 <div class="container">
+<h1>Resumo da Corrida</h1>
 
-<h1>RF DRIVER</h1>
-
-<div class="card">
-  <p><strong>Origem:</strong> <span id="origemTxt"></span></p>
-  <p><strong>Destino:</strong> <span id="destinoTxt"></span></p>
-  <p><strong>Valor base:</strong> R$ <span id="valorBaseTxt"></span></p>
+<div class="section">
+  <div class="line"><span>Origem</span><span id="origem"></span></div>
+  <div class="line"><span>Destino</span><span id="destino"></span></div>
 </div>
 
 <div class="section">
-  <h3>Taxas adicionais</h3>
-
-  <div class="grid">
-
-    <label class="card"><input type="checkbox" id="feira"> 🛍️ Saída de feira</label>
-    <label class="card"><input type="checkbox" id="praia"> ⛱️ Saída de praias</label>
-    <label class="card"><input type="checkbox" id="excesso"> 👥 Excesso de pessoas</label>
-
-    <div class="card">
-      <strong>🐶 Animal</strong>
-      <select id="animal">
-        <option value="0">Nenhum</option>
-        <option value="5">Pequeno</option>
-        <option value="7">Médio</option>
-        <option value="10">Grande</option>
-      </select>
-      <label class="small">
-        <input type="checkbox" id="viagemLonga"> Viagem longa (+R$ 20)
-      </label>
-    </div>
-
-    <label class="card"><input type="checkbox" id="desvioSimples"> 🛣️ Desvio simples</label>
-
-    <div class="card" id="cardEspera">
-      <label>
-        <input type="checkbox" id="desvioEspera">
-        🛣️⏳ Desvio com espera
-      </label>
-      <input type="number" id="minutosEspera" min="0" placeholder="Minutos de espera">
-      <div class="small">R$ 3,00 a cada 5 minutos (a partir de 5 min)</div>
-    </div>
-
-  </div>
+<h3>Tipo de Viagem</h3>
+<select id="tipoViagem">
+  <option value="normal">Nenhum</option>
+  <option value="bate">Bate e volta</option>
+  <option value="ida">Ida e volta</option>
+  <option value="idaespera">Ida e volta com espera</option>
+</select>
 </div>
 
-<div class="card hidden" id="detalhamentoBox">
-  <strong>✍🏽 Detalhamento</strong>
-  <ul id="detalhamento"></ul>
+<div class="section">
+<h3>Adicionais</h3>
+
+<label><input type="checkbox" id="excesso"> Excesso de pessoas</label><br><br>
+
+<label>Animal</label>
+<select id="animal">
+  <option value="0">Nenhum</option>
+  <option value="5">Pequeno</option>
+  <option value="7">Médio</option>
+  <option value="10">Grande</option>
+  <option value="20">Viagem longa</option>
+</select>
+
+<br><br>
+<label>Desvio com espera (min)</label>
+<input type="number" id="espera" min="0" placeholder="Minutos">
 </div>
 
-<div class="card">
-  <div class="total">💸 Total: R$ <span id="totalTxt"></span></div>
-</div>
+<div class="section" id="detalhamento"></div>
 
-<button class="btn btn-primary" id="btnWhats">📲 Enviar no WhatsApp</button>
-<button class="btn btn-secondary" onclick="App.go('destino.html')">◀ Voltar</button>
+<div class="total" id="total"></div>
 
+<button class="btn btn-primary" onclick="enviarWhats()">Enviar WhatsApp</button>
 </div>
 
 <script src="core/global.js"></script>
@@ -136,76 +106,69 @@ input[type="number"]{
 <script>
 const origem = App.get("origem");
 const destino = App.get("destino");
-const base = Number(App.get("valorBase") || 0);
+let base = App.get("valorBase");
 
-if(!origem || !destino || base <= 0) App.go("index.html");
+document.getElementById("origem").textContent = origem;
+document.getElementById("destino").textContent = destino;
 
-origemTxt.textContent = origem;
-destinoTxt.textContent = destino;
-valorBaseTxt.textContent = base.toFixed(2);
-
-function calcularEspera(min){
-  if(min < 5) return 0;
-  return Math.floor(min / 5) * 3;
+function horarioNoturno(){
+  const h = new Date();
+  const min = h.getHours()*60 + h.getMinutes();
+  return (min >= 1350 || min <= 299);
 }
 
 function calcular(){
-  let total = base;
+  let valor = base;
   let detalhes = [];
 
-  if(feira.checked){ total+=5; detalhes.push("🛍️ Saída de feira: R$ 5.00"); }
-  if(praia.checked){ total+=10; detalhes.push("⛱️ Saída de praias: R$ 10.00"); }
-  if(excesso.checked){ total+=25; detalhes.push("👥 Excesso de pessoas: R$ 25.00"); }
+  // Tipo viagem
+  const tipo = tipoViagem.value;
+  if(tipo==="bate"){ valor*=2; detalhes.push("🔁 Bate e volta"); }
+  if(tipo==="ida"){ valor*=1.8; detalhes.push("🔁 Ida e volta"); }
+  if(tipo==="idaespera"){ valor=(valor*2)*1.1; detalhes.push("⏳ Ida e volta com espera"); }
 
-  let animalValor = Number(animal.value);
-  if(viagemLonga.checked){
-    total+=20;
-    detalhes.push("🐶 Animal (viagem longa): R$ 20.00");
-  }else if(animalValor>0){
-    total+=animalValor;
-    detalhes.push(`🐶 Animal: R$ ${animalValor.toFixed(2)}`);
+  // Excesso pessoas
+  if(excesso.checked){
+    let v = valor < 30 ? 5 : valor*0.5;
+    valor += v;
+    detalhes.push(`👥 Excesso de pessoas: R$ ${v.toFixed(2)}`);
   }
 
-  if(desvioSimples.checked){
-    total+=5;
-    detalhes.push("🛣️ Desvio simples: R$ 5.00");
+  // Animal
+  let a = Number(animal.value);
+  if(a>0){ valor+=a; detalhes.push(`🐶 Transporte animal: R$ ${a.toFixed(2)}`); }
+
+  // Espera
+  let m = Number(espera.value||0);
+  if(m>=5){
+    let blocos = Math.floor(m/5);
+    let v = blocos*3;
+    valor+=v;
+    detalhes.push(`🛣️⏳ Espera ${m} min: R$ ${v.toFixed(2)}`);
   }
 
-  if(desvioEspera.checked){
-    const min = Number(minutosEspera.value || 0);
-    const valor = calcularEspera(min);
-    total += valor;
-    detalhes.push(`🛣️⏳ Desvio com espera (${min} min): R$ ${valor.toFixed(2)}`);
+  // Noturno
+  if(horarioNoturno()){
+    let v = valor < 30 ? 5 : valor*0.35;
+    valor+=v;
+    detalhes.push(`🌙 Adicional noturno: R$ ${v.toFixed(2)}`);
   }
 
-  detalhamento.innerHTML = detalhes.map(d=>`<li>${d}</li>`).join("");
-  detalhamentoBox.classList.toggle("hidden", detalhes.length===0);
+  detalhamento.innerHTML = detalhes.length
+    ? "<h3>Detalhamento</h3>" + detalhes.map(d=>`<div class="line"><span>${d}</span></div>`).join("")
+    : "";
 
-  totalTxt.textContent = total.toFixed(2);
-  return { total, detalhes };
+  total.textContent = `Total: R$ ${valor.toFixed(2)}`;
+  App.set("total", valor);
 }
 
-document.querySelectorAll("input,select").forEach(el=>{
-  el.addEventListener("change",()=>{
-    el.closest(".card")?.classList.toggle(
-      "highlight",
-      el.checked || (el.type==="number" && el.value>0) || el.value>0
-    );
-    calcular();
-  });
-});
-
-btnWhats.onclick=()=>{
-  const r = calcular();
-  let msg = `🚖 RF Driver\n\n📌 Origem: ${origem}\n🛫 Destino: ${destino}\n💰 Total: R$ ${r.total.toFixed(2)}`;
-  if(r.detalhes.length){
-    msg+=`\n\n✍🏽 Detalhamento\n`+r.detalhes.join("\n");
-  }
-  msg+=`\n\n💸 Total: R$ ${r.total.toFixed(2)}`;
-  window.open("https://wa.me/?text="+encodeURIComponent(msg));
-};
-
+document.querySelectorAll("select,input").forEach(e=>e.addEventListener("change", calcular));
 calcular();
+
+function enviarWhats(){
+  const msg = encodeURIComponent(`🚖 RF Driver\n\n📌 Origem: ${origem}\n🛫 Destino: ${destino}\n💰 Total: R$ ${App.get("total").toFixed(2)}`);
+  window.open(`https://wa.me/?text=${msg}`);
+}
 </script>
 
 </body>
