@@ -119,12 +119,15 @@ body{
 <script src="core/global.js"></script>
 <script src="core/datamanager.js"></script>
 
+<script src="core/global.js"></script>
+<script src="core/datamanager.js"></script>
+
 <script>
 /* ===============================
    PROTEÇÃO DE FLUXO
 ================================ */
 const origem = App.get("origem");
-if(!origem){
+if (!origem) {
   console.warn("Origem não encontrada. Redirecionando para início.");
   App.go("index.html");
 }
@@ -138,31 +141,32 @@ const btn = document.getElementById("btnContinuar");
 
 let destinos = [];
 
-async function carregarDestinos(){
-  destinos = await DataManager.listarDestinos(origem);
+async function carregarDestinos() {
+  // ⬇️ CONTRATO CORRETO
+  destinos = await DataManager.getDestinos(origem);
 }
 carregarDestinos();
 
-input.addEventListener("input", ()=>{
+input.addEventListener("input", () => {
   const termo = input.value.toLowerCase();
   lista.innerHTML = "";
 
-  if(!termo){
+  if (!termo) {
     lista.style.display = "none";
     return;
   }
 
   destinos
-    .filter(d => d.toLowerCase().includes(termo))
-    .forEach(d => {
+    .filter(item => item.destino.toLowerCase().includes(termo))
+    .forEach(item => {
       const div = document.createElement("div");
-      div.textContent = d;
-      div.onclick = async () => {
-        input.value = d;
-        const valor = await DataManager.obterValor(origem, d);
+      div.textContent = `${item.destino} — R$ ${item.valor}`;
+      div.onclick = () => {
+        input.value = item.destino;
 
-        App.set("destino", d);
-        App.set("valorBase", valor);
+        // ⬇️ ESTADO GLOBAL SALVO CORRETAMENTE
+        App.set("destino", item.destino);
+        App.set("valorBase", Number(item.valor));
 
         lista.style.display = "none";
         btn.disabled = false;
@@ -174,6 +178,10 @@ input.addEventListener("input", ()=>{
 });
 
 btn.onclick = () => {
+  if (!App.get("destino") || App.get("valorBase") <= 0) {
+    alert("Selecione um destino válido");
+    return;
+  }
   App.go("resumo.html");
 };
 </script>
