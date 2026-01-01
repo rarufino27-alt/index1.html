@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RF Driver – Mobilidade com excelência</title>
 
-<!-- ===== PWA / IPHONE ===== -->
+<!-- PWA -->
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#f5c542">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="RF Driver">
-<link rel="apple-touch-icon" href="/icons/192.png">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
-/* FUNDO PREMIUM */
+/* FUNDO */
 body{
   min-height:100vh;
   background:radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
@@ -29,29 +29,33 @@ body{
   color:#fff;
 }
 
-/* PARTÍCULAS DOURADAS */
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:
-    radial-gradient(rgba(255,215,120,0.18) 1px, transparent 1px),
-    radial-gradient(rgba(255,215,120,0.10) 1px, transparent 1px);
-  background-size:3px 3px, 6px 6px;
-  background-position:0 0, 22px 22px;
-  animation:sparkle 22s linear infinite;
-  z-index:0;
+/* BOTÃO SUPERIOR */
+.top-install{
+  position:fixed;
+  top:16px;
+  right:16px;
+  z-index:10;
 }
 
-@keyframes sparkle{
-  from{transform:translateY(0)}
-  to{transform:translateY(-220px)}
+.top-install a{
+  padding:10px 16px;
+  background:#f5c542;
+  color:#000;
+  font-weight:700;
+  font-size:.85rem;
+  border-radius:14px;
+  text-decoration:none;
+  box-shadow:0 0 15px rgba(245,197,66,.45);
+  transition:.2s;
 }
 
-/* CONTAINER – GLASS PREMIUM */
+.top-install a:hover{
+  transform:translateY(-1px);
+  box-shadow:0 0 25px rgba(245,197,66,.65);
+}
+
+/* CONTAINER */
 .container{
-  position:relative;
-  z-index:1;
   text-align:center;
   padding:48px 36px;
   max-width:720px;
@@ -62,18 +66,11 @@ body::before{
     rgba(0,0,0,0.65)
   );
   backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
   border-radius:26px;
   border:1px solid rgba(255,215,120,0.18);
   box-shadow:
     0 0 60px rgba(255,215,120,0.18),
     inset 0 0 25px rgba(255,255,255,0.04);
-  animation:fadeUp .45s ease-out;
-}
-
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(18px)}
-  to{opacity:1;transform:translateY(0)}
 }
 
 /* MARCA */
@@ -87,14 +84,11 @@ body::before{
   margin-bottom:8px;
 }
 
-/* SUBTÍTULO */
 .tagline{
   font-size:1.05rem;
   color:#d0d0d0;
-  letter-spacing:.6px;
 }
 
-/* DIVISOR */
 .divider{
   width:90px;
   height:3px;
@@ -103,44 +97,38 @@ body::before{
   border-radius:6px;
 }
 
-/* FRASE DE AUTORIDADE */
 .authority{
   font-size:.95rem;
   color:#bfbfbf;
   margin-bottom:28px;
 }
 
-/* BOTÃO PREMIUM */
-.start-btn{
-  margin-top:10px;
-}
+/* BOTÃO INICIAR */
 .start-btn .btn{
   padding:14px 26px;
   font-size:1.05rem;
   border-radius:14px;
-  transition:all .25s ease;
-  box-shadow:0 0 0 rgba(245,197,66,0);
-}
-.start-btn .btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 0 18px rgba(245,197,66,.45);
-}
-.start-btn .btn:active{
-  transform:translateY(1px);
-  box-shadow:0 0 8px rgba(245,197,66,.25);
+  transition:.25s;
 }
 
-/* FOOTER */
+.start-btn .btn:hover{
+  box-shadow:0 0 18px rgba(245,197,66,.45);
+}
+
 footer{
   margin-top:26px;
   font-size:.85rem;
   color:#a8a8a8;
-  opacity:.8;
 }
 </style>
 </head>
 
 <body>
+
+<!-- BOTÃO DE INSTALAÇÃO -->
+<div class="top-install">
+  <a href="instalar-app.html">📲 Instalar App</a>
+</div>
 
 <div class="container">
 
@@ -167,12 +155,7 @@ footer{
 
 <script src="core/global.js"></script>
 
-<!-- SERVICE WORKER -->
 <script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/service-worker.js");
-}
-
 document.getElementById("btnIniciar").addEventListener("click", () => {
   App.reset();
   App.go("origem.html");
