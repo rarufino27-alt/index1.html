@@ -167,7 +167,7 @@ calcular();
 
 function enviarWhats(){
   const msg = encodeURIComponent(`🚖 RF Driver\n\n📌 Origem: ${origem}\n🛫 Destino: ${destino}\n💰 Total: R$ ${App.get("total").toFixed(2)}`);
-  window.open(`https://wa.me/?text=${msg}`);
+  window.open(`https://api.whatsapp.com/send?text=${msg}`);
 }
 </script>
 
