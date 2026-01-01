@@ -2,16 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Resumo – RF Driver</title>
-
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#f5c542">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="RF Driver">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
@@ -20,95 +12,58 @@
 <style>
 body{
   min-height:100vh;
-  background:radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
+  background:radial-gradient(circle at top,#1a1a1a 0%,#000 60%);
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:16px;
-}
-
-.container{
-  width:100%;
-  max-width:420px;
-  background:#0d0d0d;
-  border:1px solid #242424;
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
-}
-
-.logo{
-  text-align:center;
-  font-size:22px;
-  font-weight:700;
-  color:#f5c542;
-  margin-bottom:10px;
-}
-
-.subtitle{
-  text-align:center;
-  font-size:14px;
-  color:#aaa;
-  margin-bottom:20px;
-}
-
-.card{
-  background:#161616;
-  border:1px solid #242424;
-  border-radius:12px;
-  padding:16px;
-  margin-bottom:12px;
-}
-
-.card h3{
-  font-size:14px;
-  color:#f5c542;
-  margin-bottom:8px;
-}
-
-.line{
-  display:flex;
-  justify-content:space-between;
-  font-size:14px;
-  margin-bottom:6px;
-  color:#eaeaea;
-}
-
-.line span{
-  color:#aaa;
-}
-
-.total{
-  font-size:22px;
-  font-weight:700;
-  color:#1DB954;
-  text-align:center;
-  margin:20px 0;
-}
-
-.buttons{
-  display:flex;
-  gap:10px;
-}
-
-button{
-  flex:1;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  font-size:15px;
-  font-weight:600;
-  cursor:pointer;
-}
-
-.btn-back{
-  background:#242424;
   color:#fff;
 }
-
-.btn-confirm{
-  background:#f5c542;
-  color:#000;
+.container{
+  width:100%;
+  max-width:620px;
+  padding:30px;
+  background:linear-gradient(145deg,rgba(20,20,20,.95),rgba(0,0,0,.85));
+  border-radius:22px;
+  box-shadow:0 0 40px rgba(255,215,120,.25);
+}
+h1{
+  text-align:center;
+  font-size:2rem;
+  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.section{
+  margin-top:20px;
+}
+.card{
+  border:1px solid rgba(255,215,120,.2);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:12px;
+}
+.card.highlight{
+  border-color:#f5c542;
+  background:rgba(245,197,66,.08);
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:10px;
+}
+.total{
+  font-size:1.6rem;
+  font-weight:bold;
+  text-align:center;
+  margin-top:20px;
+}
+.btn{
+  width:100%;
+  margin-top:12px;
+}
+.small{
+  font-size:.85rem;
+  color:#bbb;
 }
 </style>
 </head>
@@ -117,69 +72,133 @@ button{
 
 <div class="container">
 
-  <div class="logo">RF Driver</div>
-  <div class="subtitle">Resumo da Viagem</div>
+<h1>RF DRIVER</h1>
 
-  <div class="card">
-    <h3>Origem</h3>
-    <div class="line">
-      <span id="origem">–</span>
-    </div>
+<div class="section card">
+  <p><strong>Origem:</strong> <span id="origemTxt"></span></p>
+  <p><strong>Destino:</strong> <span id="destinoTxt"></span></p>
+  <p><strong>Valor base:</strong> R$ <span id="valorBaseTxt"></span></p>
+</div>
+
+<div class="section">
+  <h3>Taxas adicionais</h3>
+
+  <div class="grid">
+
+    <label class="card">
+      <input type="checkbox" id="idaVolta"> Ida e volta (+100%)
+    </label>
+
+    <label class="card">
+      <input type="checkbox" id="saidaPraia"> 🏖️ Saída de praia (+R$ 10)
+      <div class="small">Domingos e feriados</div>
+    </label>
+
+    <label class="card">
+      <input type="checkbox" id="feira"> Saída de feira (+R$ 5)
+    </label>
+
+    <label class="card">
+      <input type="checkbox" id="excesso"> Excesso de passageiros (+R$ 10)
+    </label>
+
+    <label class="card">
+      <input type="checkbox" id="animal"> Transporte de animal (+R$ 10)
+    </label>
+
+    <label class="card">
+      <input type="checkbox" id="buscarLonge"> Buscar passageiro longe (+R$ 10)
+    </label>
+
   </div>
+</div>
 
-  <div class="card">
-    <h3>Destino</h3>
-    <div class="line">
-      <span id="destino">–</span>
-    </div>
+<div class="section card">
+  <div class="total">
+    Total: R$ <span id="totalTxt"></span>
   </div>
+</div>
 
-  <div class="card">
-    <h3>Detalhamento</h3>
-    <div class="line">
-      <span>Distância</span>
-      <strong id="distancia">0 km</strong>
-    </div>
-    <div class="line">
-      <span>Valor base</span>
-      <strong id="base">R$ 0,00</strong>
-    </div>
-    <div class="line">
-      <span>Adicionais</span>
-      <strong id="adicionais">R$ 0,00</strong>
-    </div>
-  </div>
+<button class="btn btn-primary" id="btnWhats">
+  📲 Enviar orçamento no WhatsApp
+</button>
 
-  <div class="total" id="total">R$ 0,00</div>
-
-  <div class="buttons">
-    <button class="btn-back" onclick="voltar()">Voltar</button>
-    <button class="btn-confirm" onclick="confirmar()">Confirmar</button>
-  </div>
+<button class="btn btn-secondary" onclick="App.go('destino.html')">
+  ◀ Voltar
+</button>
 
 </div>
 
+<script src="core/global.js"></script>
+
 <script>
-const dados = JSON.parse(localStorage.getItem('rf_driver_resumo')) || {};
+/* ===============================
+   PROTEÇÃO DE FLUXO
+================================ */
+const origem = App.get("origem");
+const destino = App.get("destino");
+let valorBase = Number(App.get("valorBase") || 0);
 
-document.getElementById('origem').innerText = dados.origem || '-';
-document.getElementById('destino').innerText = dados.destino || '-';
-document.getElementById('distancia').innerText = (dados.distancia || 0) + ' km';
-document.getElementById('base').innerText = formatar(dados.base || 0);
-document.getElementById('adicionais').innerText = formatar(dados.adicionais || 0);
-document.getElementById('total').innerText = formatar(dados.total || 0);
-
-function formatar(v){
-  return 'R$ ' + Number(v).toFixed(2).replace('.', ',');
+if(!origem || !destino || valorBase <= 0){
+  App.go("index.html");
 }
 
-function voltar(){
-  window.history.back();
+/* ===============================
+   UI BASE
+================================ */
+origemTxt.textContent = origem;
+destinoTxt.textContent = destino;
+valorBaseTxt.textContent = valorBase.toFixed(2);
+
+/* ===============================
+   CÁLCULO
+================================ */
+function calcular(){
+  let total = valorBase;
+
+  if(idaVolta.checked) total *= 2;
+  if(saidaPraia.checked) total += 10;
+  if(feira.checked) total += 5;
+  if(excesso.checked) total += 10;
+  if(animal.checked) total += 10;
+  if(buscarLonge.checked) total += 10;
+
+  totalTxt.textContent = total.toFixed(2);
+  return total;
 }
 
-function confirmar(){
-  alert('Valor confirmado: ' + formatar(dados.total || 0));
-}
+/* ===============================
+   UX – HIGHLIGHT
+================================ */
+document.querySelectorAll("input").forEach(i=>{
+  i.addEventListener("change",()=>{
+    i.closest(".card")?.classList.toggle("highlight",i.checked);
+    calcular();
+  });
+});
+
+calcular();
+
+/* ===============================
+   WHATSAPP
+================================ */
+btnWhats.onclick = ()=>{
+  const total = calcular();
+  const msg = `
+🚖 *RF DRIVER*
+
+Origem: ${origem}
+Destino: ${destino}
+Valor base: R$ ${valorBase.toFixed(2)}
+
+💰 *Total: R$ ${total.toFixed(2)}*
+  `.trim();
+
+  window.open(
+    "https://wa.me/?text=" + encodeURIComponent(msg),
+    "_blank"
+  );
+};
 </script>
 
 </body>
