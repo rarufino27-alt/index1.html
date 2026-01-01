@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Resumo - RF Driver</title>
+<title>Resumo – RF Driver</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="theme/theme.css">
@@ -26,148 +26,171 @@ body{
   border-radius:22px;
   box-shadow:0 0 40px rgba(255,215,120,.25);
 }
-h1{
+h2{
   text-align:center;
+  margin-bottom:20px;
   background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.section{margin-top:20px}
-.section h3{margin-bottom:10px;color:#f5c542}
-.line{display:flex;justify-content:space-between;margin:6px 0}
-.total{
-  margin-top:20px;
-  font-size:1.4rem;
-  font-weight:700;
-  text-align:center;
+.quadrante{
+  border:1px solid rgba(255,215,120,.25);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
+}
+.quadrante h3{
+  font-size:.95rem;
+  margin-bottom:8px;
+  color:#f5c542;
 }
 select,input{
   width:100%;
   padding:10px;
   border-radius:10px;
+  border:none;
   background:#111;
   color:#fff;
-  border:1px solid rgba(255,215,120,.25);
 }
-button{
-  margin-top:15px;
+label{font-size:.85rem}
+.total{
+  text-align:center;
+  font-size:1.4rem;
+  margin-top:16px;
+  color:#f5c542;
 }
+.detalhamento{
+  font-size:.85rem;
+  margin-top:10px;
+  color:#ddd;
+}
+.btn{width:100%;margin-top:10px}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-<h1>Resumo da Corrida</h1>
 
-<div class="section">
-  <div class="line"><span>Origem</span><span id="origem"></span></div>
-  <div class="line"><span>Destino</span><span id="destino"></span></div>
+<h2>Resumo da Corrida</h2>
+
+<!-- 1️⃣ TIPO DE VIAGEM -->
+<div class="quadrante">
+  <h3>Tipo de viagem</h3>
+  <select id="tipoViagem">
+    <option value="ida">Ida</option>
+    <option value="bate_volta">Bate e volta</option>
+    <option value="ida_volta">Ida e volta</option>
+    <option value="ida_volta_espera">Ida e volta com espera</option>
+  </select>
 </div>
 
-<div class="section">
-<h3>Tipo de Viagem</h3>
-<select id="tipoViagem">
-  <option value="normal">Nenhum</option>
-  <option value="bate">Bate e volta</option>
-  <option value="ida">Ida e volta</option>
-  <option value="idaespera">Ida e volta com espera</option>
-</select>
+<!-- 2️⃣ EXCESSO DE PESSOAS -->
+<div class="quadrante">
+  <label>
+    <input type="checkbox" id="excessoPessoas"> Excesso de pessoas
+  </label>
 </div>
 
-<div class="section">
-<h3>Adicionais</h3>
-
-<label><input type="checkbox" id="excesso"> Excesso de pessoas</label><br><br>
-
-<label>Animal</label>
-<select id="animal">
-  <option value="0">Nenhum</option>
-  <option value="5">Pequeno</option>
-  <option value="7">Médio</option>
-  <option value="10">Grande</option>
-  <option value="20">Viagem longa</option>
-</select>
-
-<br><br>
-<label>Desvio com espera (min)</label>
-<input type="number" id="espera" min="0" placeholder="Minutos">
+<!-- 3️⃣ ANIMAL -->
+<div class="quadrante">
+  <h3>Transporte de animal</h3>
+  <select id="animal">
+    <option value="0">Nenhum</option>
+    <option value="5">Pequeno</option>
+    <option value="7">Médio</option>
+    <option value="10">Grande</option>
+    <option value="20">Viagem longa</option>
+  </select>
 </div>
 
-<div class="section" id="detalhamento"></div>
+<!-- 4️⃣ DESVIO COM ESPERA -->
+<div class="quadrante">
+  <h3>Desvio de rota com espera</h3>
+  <input type="number" id="minutosEspera" min="0" placeholder="Minutos de espera">
+</div>
 
-<div class="total" id="total"></div>
+<!-- DETALHAMENTO -->
+<div class="detalhamento" id="detalhamento"></div>
 
-<button class="btn btn-primary" onclick="enviarWhats()">Enviar WhatsApp</button>
+<!-- TOTAL -->
+<div class="total" id="total">R$ 0,00</div>
+
+<button class="btn btn-primary" onclick="enviarWhats()">📤 Enviar no WhatsApp</button>
+
 </div>
 
 <script src="core/global.js"></script>
 
 <script>
-const origem = App.get("origem");
-const destino = App.get("destino");
-let base = App.get("valorBase");
-
-document.getElementById("origem").textContent = origem;
-document.getElementById("destino").textContent = destino;
-
-function horarioNoturno(){
-  const h = new Date();
-  const min = h.getHours()*60 + h.getMinutes();
-  return (min >= 1350 || min <= 299);
-}
+const valorBaseOriginal = Number(App.get("valorBase") || 0);
 
 function calcular(){
-  let valor = base;
+  let total = valorBaseOriginal;
   let detalhes = [];
 
-  // Tipo viagem
-  const tipo = tipoViagem.value;
-  if(tipo==="bate"){ valor*=2; detalhes.push("🔁 Bate e volta"); }
-  if(tipo==="ida"){ valor*=1.8; detalhes.push("🔁 Ida e volta"); }
-  if(tipo==="idaespera"){ valor=(valor*2)*1.1; detalhes.push("⏳ Ida e volta com espera"); }
+  // 1️⃣ Tipo de viagem
+  const tipo = document.getElementById("tipoViagem").value;
+  if(tipo==="bate_volta"){ total*=2; detalhes.push("🔁 Bate e volta"); }
+  if(tipo==="ida_volta"){ total*=1.8; detalhes.push("🔁 Ida e volta"); }
+  if(tipo==="ida_volta_espera"){ total = (total*2)*1.1; detalhes.push("⏳ Ida e volta com espera"); }
 
-  // Excesso pessoas
-  if(excesso.checked){
-    let v = valor < 30 ? 5 : valor*0.5;
-    valor += v;
-    detalhes.push(`👥 Excesso de pessoas: R$ ${v.toFixed(2)}`);
+  // 2️⃣ Excesso de pessoas
+  if(document.getElementById("excessoPessoas").checked){
+    const taxa = total < 30 ? 5 : total*0.5;
+    total+=taxa;
+    detalhes.push(`👥 Excesso de pessoas: R$ ${taxa.toFixed(2)}`);
   }
 
-  // Animal
-  let a = Number(animal.value);
-  if(a>0){ valor+=a; detalhes.push(`🐶 Transporte animal: R$ ${a.toFixed(2)}`); }
-
-  // Espera
-  let m = Number(espera.value||0);
-  if(m>=5){
-    let blocos = Math.floor(m/5);
-    let v = blocos*3;
-    valor+=v;
-    detalhes.push(`🛣️⏳ Espera ${m} min: R$ ${v.toFixed(2)}`);
+  // 3️⃣ Adicional noturno (automático)
+  const h = new Date().getHours();
+  const m = new Date().getMinutes();
+  const noturno = (h>22 || (h===22 && m>=30) || h<5);
+  if(noturno){
+    const taxa = total < 30 ? 5 : total*0.35;
+    total+=taxa;
+    detalhes.push(`🌙 Adicional noturno: R$ ${taxa.toFixed(2)}`);
   }
 
-  // Noturno
-  if(horarioNoturno()){
-    let v = valor < 30 ? 5 : valor*0.35;
-    valor+=v;
-    detalhes.push(`🌙 Adicional noturno: R$ ${v.toFixed(2)}`);
+  // 4️⃣ Animal
+  const animal = Number(document.getElementById("animal").value);
+  if(animal>0){
+    total+=animal;
+    detalhes.push(`🐶 Transporte de animal: R$ ${animal.toFixed(2)}`);
   }
 
-  detalhamento.innerHTML = detalhes.length
-    ? "<h3>Detalhamento</h3>" + detalhes.map(d=>`<div class="line"><span>${d}</span></div>`).join("")
-    : "";
+  // 5️⃣ Espera
+  const min = Number(document.getElementById("minutosEspera").value||0);
+  if(min>=5){
+    const blocos = Math.floor(min/5);
+    const taxa = blocos*3;
+    total+=taxa;
+    detalhes.push(`🛣️⏳ Espera (${min}min): R$ ${taxa.toFixed(2)}`);
+  }
 
-  total.textContent = `Total: R$ ${valor.toFixed(2)}`;
-  App.set("total", valor);
+  App.set("total", total);
+
+  document.getElementById("total").innerText = `R$ ${total.toFixed(2)}`;
+  document.getElementById("detalhamento").innerHTML = detalhes.join("<br>");
 }
 
-document.querySelectorAll("select,input").forEach(e=>e.addEventListener("change", calcular));
+document.querySelectorAll("select,input").forEach(e=>e.addEventListener("change",calcular));
 calcular();
 
 function enviarWhats(){
-  const msg = encodeURIComponent(`🚖 RF Driver\n\n📌 Origem: ${origem}\n🛫 Destino: ${destino}\n💰 Total: R$ ${App.get("total").toFixed(2)}`);
-  window.open(`https://api.whatsapp.com/send?text=${msg}`);
+  const msg =
+`🚖 *RF Driver*
+
+📌 Origem: ${App.get("origem")}
+🛫 Destino: ${App.get("destino")}
+💰 *Total*: R$ ${App.get("total").toFixed(2)}
+
+✍🏽 *Detalhamento*
+${document.getElementById("detalhamento").innerText}
+
+💸 *Total*: R$ ${App.get("total").toFixed(2)}`;
+
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
 }
 </script>
 
