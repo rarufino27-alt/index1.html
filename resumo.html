@@ -146,8 +146,8 @@ function calcular(){
   let detalhes = [];
 
   const tipo = tipoViagem.value;
-  if(tipo==="bate_volta"){ total*=2; detalhes.push("🔁 Bate e volta"); }
-  if(tipo==="ida_volta"){ total*=1.8; detalhes.push("🔁 Ida e volta"); }
+  if(tipo==="bate_volta"){ total*=1.8; detalhes.push("🔁 Bate e volta"); }
+  if(tipo==="ida_volta"){ total*=2; detalhes.push("🔁 Ida e volta"); }
   if(tipo==="ida_volta_espera"){ total=(total*2)*1.1; detalhes.push("⏳ Ida e volta com espera"); }
 
   if(excessoPessoas.checked){
