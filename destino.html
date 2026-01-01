@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Destino - RF Driver</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="theme/theme.css">
@@ -36,7 +35,9 @@ body{
   -webkit-text-fill-color:transparent;
   margin-bottom:10px;
 }
-.steps{display:flex;justify-content:center;gap:14px;font-size:.9rem}
+.steps{
+  display:flex;justify-content:center;gap:14px;font-size:.9rem
+}
 .step{display:flex;align-items:center;gap:6px;opacity:.4}
 .step.done{opacity:.8}
 .step.active{opacity:1;font-weight:600}
@@ -62,8 +63,12 @@ body{
   box-shadow:0 10px 25px rgba(0,0,0,.6);
   max-height:240px;overflow:auto;display:none;z-index:5
 }
-.search-results div{padding:12px 16px;cursor:pointer}
-.search-results div:hover{background:rgba(245,197,66,.15)}
+.search-results div{
+  padding:12px 16px;cursor:pointer
+}
+.search-results div:hover{
+  background:rgba(245,197,66,.15)
+}
 .actions{margin-bottom:15px;display:flex;gap:10px}
 </style>
 </head>
@@ -88,14 +93,7 @@ body{
 
   <label>Digite o destino</label>
   <div class="search-wrapper">
-    <input
-      type="text"
-      id="buscaDestino"
-      class="search-input"
-      placeholder="Carregando destinos..."
-      autocomplete="off"
-      disabled
-    >
+    <input id="buscaDestino" class="search-input" placeholder="Ex: Shopping, Rodoviária..." autocomplete="off">
     <div id="listaDestinos" class="search-results"></div>
   </div>
 
@@ -105,44 +103,24 @@ body{
 
 </div>
 
-<!-- SCRIPTS CENTRAIS -->
 <script src="core/global.js"></script>
 <script src="core/datamanager.js"></script>
 
 <script>
-/* ===============================
-   PROTEÇÃO DE FLUXO
-================================ */
 const origem = App.get("origem");
-if (!origem) {
-  App.go("index.html");
-}
+if (!origem) App.go("index.html");
 
-/* ===============================
-   BUSCA DE DESTINOS
-================================ */
 const input = document.getElementById("buscaDestino");
 const lista = document.getElementById("listaDestinos");
 const btn = document.getElementById("btnContinuar");
 
 let destinos = [];
 
-/* CARREGAMENTO SEGURO */
 (async function(){
-  try{
-    destinos = await DataManager.getDestinos(origem);
-    if(!destinos.length){
-      console.error("❌ Nenhum destino encontrado para:", origem);
-    }
-    input.disabled = false;
-    input.placeholder = "Ex: Shopping, Rodoviária...";
-  }catch(e){
-    console.error("❌ Erro ao carregar destinos:", e);
-    input.placeholder = "Erro ao carregar destinos";
-  }
+  destinos = await DataManager.listarDestinos(origem);
 })();
 
-input.addEventListener("input", () => {
+input.addEventListener("input", async () => {
   const termo = input.value.toLowerCase();
   lista.innerHTML = "";
 
@@ -151,27 +129,25 @@ input.addEventListener("input", () => {
     return;
   }
 
-  destinos
-    .filter(item => item.destino.toLowerCase().includes(termo))
-    .forEach(item => {
-      const div = document.createElement("div");
-      div.textContent = `${item.destino} — R$ ${item.valor}`;
-      div.onclick = () => {
-        input.value = item.destino;
-        App.set("destino", item.destino);
-        App.set("valorBase", Number(item.valor));
-        lista.style.display = "none";
-        btn.disabled = false;
-      };
-      lista.appendChild(div);
-    });
+  for (const nome of destinos.filter(d => d.toLowerCase().includes(termo))) {
+    const valor = await DataManager.obterValor(origem, nome);
+
+    const div = document.createElement("div");
+    div.textContent = `${nome} — R$ ${valor}`;
+    div.onclick = () => {
+      input.value = nome;
+      App.set("destino", nome);
+      App.set("valorBase", valor);
+      lista.style.display = "none";
+      btn.disabled = false;
+    };
+    lista.appendChild(div);
+  }
 
   lista.style.display = "block";
 });
 
-btn.onclick = () => {
-  App.go("resumo.html");
-};
+btn.onclick = () => App.go("resumo.html");
 </script>
 
 </body>
