@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RF Driver – Mobilidade com excelência</title>
+<title>Resumo – RF Driver</title>
 
-<!-- PWA / IPHONE -->
+<!-- PWA -->
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#f5c542">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,124 +18,97 @@
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
-/* FUNDO PREMIUM */
 body{
   min-height:100vh;
   background:radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
-  color:#fff;
+  padding:16px;
 }
 
-/* PARTÍCULAS DOURADAS */
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:
-    radial-gradient(rgba(255,215,120,0.18) 1px, transparent 1px),
-    radial-gradient(rgba(255,215,120,0.10) 1px, transparent 1px);
-  background-size:3px 3px, 6px 6px;
-  background-position:0 0, 22px 22px;
-  animation:sparkle 22s linear infinite;
-  z-index:0;
-}
-
-@keyframes sparkle{
-  from{transform:translateY(0)}
-  to{transform:translateY(-220px)}
-}
-
-/* CONTAINER – GLASS PREMIUM */
 .container{
-  position:relative;
-  z-index:1;
+  width:100%;
+  max-width:420px;
+  background:#0d0d0d;
+  border:1px solid #242424;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+}
+
+.logo{
   text-align:center;
-  padding:48px 36px;
-  max-width:720px;
-  width:90%;
-  background:linear-gradient(
-    145deg,
-    rgba(25,25,25,0.75),
-    rgba(0,0,0,0.65)
-  );
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-radius:26px;
-  border:1px solid rgba(255,215,120,0.18);
-  box-shadow:
-    0 0 60px rgba(255,215,120,0.18),
-    inset 0 0 25px rgba(255,255,255,0.04);
-
-  animation:fadeUp .45s ease-out;
+  font-size:22px;
+  font-weight:700;
+  color:#f5c542;
+  margin-bottom:10px;
 }
 
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(18px)}
-  to{opacity:1;transform:translateY(0)}
+.subtitle{
+  text-align:center;
+  font-size:14px;
+  color:#aaa;
+  margin-bottom:20px;
 }
 
-/* MARCA */
-.brand{
-  font-size:2.6rem;
-  font-weight:800;
-  letter-spacing:3px;
-  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+.card{
+  background:#161616;
+  border:1px solid #242424;
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.card h3{
+  font-size:14px;
+  color:#f5c542;
   margin-bottom:8px;
 }
 
-/* SUBTÍTULO */
-.tagline{
-  font-size:1.05rem;
-  color:#d0d0d0;
-  letter-spacing:.6px;
+.line{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:6px;
+  color:#eaeaea;
 }
 
-/* DIVISOR */
-.divider{
-  width:90px;
-  height:3px;
-  margin:22px auto 18px;
-  background:linear-gradient(90deg, transparent, #d4af37, transparent);
-  border-radius:6px;
+.line span{
+  color:#aaa;
 }
 
-/* FRASE DE AUTORIDADE */
-.authority{
-  font-size:.95rem;
-  color:#bfbfbf;
-  margin-bottom:28px;
+.total{
+  font-size:22px;
+  font-weight:700;
+  color:#1DB954;
+  text-align:center;
+  margin:20px 0;
 }
 
-/* BOTÃO PREMIUM */
-.start-btn .btn{
-  padding:14px 26px;
-  font-size:1.05rem;
-  border-radius:14px;
-  transition:all .25s ease;
-  box-shadow:0 0 0 rgba(245,197,66,0);
+.buttons{
+  display:flex;
+  gap:10px;
 }
 
-.start-btn .btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 0 18px rgba(245,197,66,.45);
+button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
 }
 
-.start-btn .btn:active{
-  transform:translateY(1px);
-  box-shadow:0 0 8px rgba(245,197,66,.25);
+.btn-back{
+  background:#242424;
+  color:#fff;
 }
 
-/* FOOTER */
-footer{
-  margin-top:26px;
-  font-size:.85rem;
-  color:#a8a8a8;
-  opacity:.8;
+.btn-confirm{
+  background:#f5c542;
+  color:#000;
 }
 </style>
 </head>
@@ -144,39 +117,69 @@ footer{
 
 <div class="container">
 
-  <div class="brand">RF DRIVER</div>
-  <div class="tagline">Mobilidade com excelência</div>
+  <div class="logo">RF Driver</div>
+  <div class="subtitle">Resumo da Viagem</div>
 
-  <div class="divider"></div>
-
-  <div class="authority">
-    Tabela oficial de valores • Cálculo rápido e transparente
+  <div class="card">
+    <h3>Origem</h3>
+    <div class="line">
+      <span id="origem">–</span>
+    </div>
   </div>
 
-  <div class="start-btn">
-    <button class="btn btn-primary" id="btnIniciar">
-      ▶ Iniciar Cálculo
-    </button>
+  <div class="card">
+    <h3>Destino</h3>
+    <div class="line">
+      <span id="destino">–</span>
+    </div>
   </div>
 
-  <footer>
-    Experiência premium em cada viagem
-  </footer>
+  <div class="card">
+    <h3>Detalhamento</h3>
+    <div class="line">
+      <span>Distância</span>
+      <strong id="distancia">0 km</strong>
+    </div>
+    <div class="line">
+      <span>Valor base</span>
+      <strong id="base">R$ 0,00</strong>
+    </div>
+    <div class="line">
+      <span>Adicionais</span>
+      <strong id="adicionais">R$ 0,00</strong>
+    </div>
+  </div>
+
+  <div class="total" id="total">R$ 0,00</div>
+
+  <div class="buttons">
+    <button class="btn-back" onclick="voltar()">Voltar</button>
+    <button class="btn-confirm" onclick="confirmar()">Confirmar</button>
+  </div>
 
 </div>
 
-<script src="core/global.js"></script>
-
-<!-- SERVICE WORKER -->
 <script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/service-worker.js");
+const dados = JSON.parse(localStorage.getItem('rf_driver_resumo')) || {};
+
+document.getElementById('origem').innerText = dados.origem || '-';
+document.getElementById('destino').innerText = dados.destino || '-';
+document.getElementById('distancia').innerText = (dados.distancia || 0) + ' km';
+document.getElementById('base').innerText = formatar(dados.base || 0);
+document.getElementById('adicionais').innerText = formatar(dados.adicionais || 0);
+document.getElementById('total').innerText = formatar(dados.total || 0);
+
+function formatar(v){
+  return 'R$ ' + Number(v).toFixed(2).replace('.', ',');
 }
 
-document.getElementById("btnIniciar").addEventListener("click", () => {
-  App.reset();
-  App.go("origem.html");
-});
+function voltar(){
+  window.history.back();
+}
+
+function confirmar(){
+  alert('Valor confirmado: ' + formatar(dados.total || 0));
+}
 </script>
 
 </body>
