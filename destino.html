@@ -110,7 +110,7 @@ body{
 
 </div>
 
-<!-- SCRIPTS CENTRAIS (APENAS UMA VEZ) -->
+<!-- SCRIPTS CENTRAIS -->
 <script src="core/global.js"></script>
 <script src="core/datamanager.js"></script>
 
@@ -124,7 +124,7 @@ if (!origem) {
 }
 
 /* ===============================
-   BUSCA DE DESTINOS
+   BUSCA DE DESTINOS (CORRIGIDA)
 ================================ */
 const input = document.getElementById("buscaDestino");
 const lista = document.getElementById("listaDestinos");
@@ -133,7 +133,12 @@ const btn = document.getElementById("btnContinuar");
 let destinos = [];
 
 (async function(){
-  destinos = await DataManager.getDestinos(origem);
+  const tabela = await DataManager.getTabela();
+  destinos = tabela.filter(item => item.origem === origem);
+
+  if (!destinos.length) {
+    console.warn("Nenhum destino encontrado para a origem:", origem);
+  }
 })();
 
 input.addEventListener("input", () => {
@@ -142,6 +147,7 @@ input.addEventListener("input", () => {
 
   if (!termo) {
     lista.style.display = "none";
+    btn.disabled = true;
     return;
   }
 
@@ -149,7 +155,9 @@ input.addEventListener("input", () => {
     .filter(item => item.destino.toLowerCase().includes(termo))
     .forEach(item => {
       const div = document.createElement("div");
-      div.textContent = `${item.destino} — R$ ${item.valor}`;
+      div.textContent =
+        `${item.destino} — R$ ${Number(item.valor).toFixed(2).replace('.', ',')}`;
+
       div.onclick = () => {
         input.value = item.destino;
         App.set("destino", item.destino);
@@ -157,10 +165,11 @@ input.addEventListener("input", () => {
         lista.style.display = "none";
         btn.disabled = false;
       };
+
       lista.appendChild(div);
     });
 
-  lista.style.display = "block";
+  lista.style.display = lista.children.length ? "block" : "none";
 });
 
 btn.onclick = () => {
