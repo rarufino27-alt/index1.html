@@ -57,6 +57,15 @@ h1{
 }
 .small{font-size:.85rem;color:#bbb}
 .hidden{display:none}
+input[type="number"]{
+  width:100%;
+  margin-top:6px;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #444;
+  background:#000;
+  color:#fff;
+}
 </style>
 </head>
 
@@ -95,7 +104,15 @@ h1{
     </div>
 
     <label class="card"><input type="checkbox" id="desvioSimples"> 🛣️ Desvio simples</label>
-    <label class="card"><input type="checkbox" id="desvioEspera"> 🛣️⏳ Desvio com espera</label>
+
+    <div class="card" id="cardEspera">
+      <label>
+        <input type="checkbox" id="desvioEspera">
+        🛣️⏳ Desvio com espera
+      </label>
+      <input type="number" id="minutosEspera" min="0" placeholder="Minutos de espera">
+      <div class="small">R$ 3,00 a cada 5 minutos (a partir de 5 min)</div>
+    </div>
 
   </div>
 </div>
@@ -127,6 +144,11 @@ origemTxt.textContent = origem;
 destinoTxt.textContent = destino;
 valorBaseTxt.textContent = base.toFixed(2);
 
+function calcularEspera(min){
+  if(min < 5) return 0;
+  return Math.floor(min / 5) * 3;
+}
+
 function calcular(){
   let total = base;
   let detalhes = [];
@@ -144,8 +166,17 @@ function calcular(){
     detalhes.push(`🐶 Animal: R$ ${animalValor.toFixed(2)}`);
   }
 
-  if(desvioSimples.checked){ total+=5; detalhes.push("🛣️ Desvio simples: R$ 5.00"); }
-  if(desvioEspera.checked){ total+=10; detalhes.push("🛣️⏳ Desvio com espera: R$ 10.00"); }
+  if(desvioSimples.checked){
+    total+=5;
+    detalhes.push("🛣️ Desvio simples: R$ 5.00");
+  }
+
+  if(desvioEspera.checked){
+    const min = Number(minutosEspera.value || 0);
+    const valor = calcularEspera(min);
+    total += valor;
+    detalhes.push(`🛣️⏳ Desvio com espera (${min} min): R$ ${valor.toFixed(2)}`);
+  }
 
   detalhamento.innerHTML = detalhes.map(d=>`<li>${d}</li>`).join("");
   detalhamentoBox.classList.toggle("hidden", detalhes.length===0);
@@ -156,7 +187,10 @@ function calcular(){
 
 document.querySelectorAll("input,select").forEach(el=>{
   el.addEventListener("change",()=>{
-    el.closest(".card")?.classList.toggle("highlight",el.checked||el.value>0);
+    el.closest(".card")?.classList.toggle(
+      "highlight",
+      el.checked || (el.type==="number" && el.value>0) || el.value>0
+    );
     calcular();
   });
 });
