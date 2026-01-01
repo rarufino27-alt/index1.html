@@ -19,7 +19,6 @@ body{
   align-items:center;
   color:#fff;
 }
-
 .container{
   width:100%;
   max-width:560px;
@@ -28,8 +27,6 @@ body{
   border-radius:22px;
   box-shadow:0 0 40px rgba(255,215,120,.25);
 }
-
-/* HEADER */
 .app-header{text-align:center;margin-bottom:22px}
 .app-header h1{
   font-size:2rem;
@@ -51,8 +48,6 @@ body{
   font-size:.75rem;line-height:18px;text-align:center
 }
 .step.done span{background:#1db954}
-
-/* SEARCH */
 .search-wrapper{position:relative}
 .search-input{
   width:100%;
@@ -75,7 +70,6 @@ body{
 .search-results div:hover{
   background:rgba(245,197,66,.15)
 }
-
 .actions{margin-bottom:15px;display:flex;gap:10px}
 </style>
 </head>
@@ -116,9 +110,7 @@ body{
 
 </div>
 
-<script src="core/global.js"></script>
-<script src="core/datamanager.js"></script>
-
+<!-- SCRIPTS CENTRAIS (APENAS UMA VEZ) -->
 <script src="core/global.js"></script>
 <script src="core/datamanager.js"></script>
 
@@ -128,7 +120,6 @@ body{
 ================================ */
 const origem = App.get("origem");
 if (!origem) {
-  console.warn("Origem não encontrada. Redirecionando para início.");
   App.go("index.html");
 }
 
@@ -141,11 +132,9 @@ const btn = document.getElementById("btnContinuar");
 
 let destinos = [];
 
-async function carregarDestinos() {
-  // ⬇️ CONTRATO CORRETO
+(async function(){
   destinos = await DataManager.getDestinos(origem);
-}
-carregarDestinos();
+})();
 
 input.addEventListener("input", () => {
   const termo = input.value.toLowerCase();
@@ -163,11 +152,8 @@ input.addEventListener("input", () => {
       div.textContent = `${item.destino} — R$ ${item.valor}`;
       div.onclick = () => {
         input.value = item.destino;
-
-        // ⬇️ ESTADO GLOBAL SALVO CORRETAMENTE
         App.set("destino", item.destino);
         App.set("valorBase", Number(item.valor));
-
         lista.style.display = "none";
         btn.disabled = false;
       };
@@ -178,10 +164,6 @@ input.addEventListener("input", () => {
 });
 
 btn.onclick = () => {
-  if (!App.get("destino") || App.get("valorBase") <= 0) {
-    alert("Selecione um destino válido");
-    return;
-  }
   App.go("resumo.html");
 };
 </script>
