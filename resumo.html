@@ -67,7 +67,7 @@ label{font-size:.85rem}
 }
 .detalhamento{
   font-size:.85rem;
-  margin-top:10px;
+  margin-top:12px;
   color:#ddd;
 }
 .btn{width:100%;margin-top:10px}
@@ -96,7 +96,7 @@ label{font-size:.85rem}
   </select>
 </div>
 
-<!-- 2️⃣ EXTRAS -->
+<!-- 2️⃣ TAXAS -->
 <div class="quadrante">
   <label><input type="checkbox" id="excessoPessoas"> Excesso de pessoas</label><br>
   <label><input type="checkbox" id="voltaPraia"> Volta das praias</label><br>
@@ -145,6 +145,9 @@ function calcular(){
   let total = valorBaseOriginal;
   let detalhes = [];
 
+  // ✅ VIAGEM BASE (SEMPRE)
+  detalhes.push(`🚕 Viagem: R$ ${valorBaseOriginal.toFixed(2)}`);
+
   const tipo = tipoViagem.value;
   if(tipo==="bate_volta"){ total*=1.8; detalhes.push("🔁 Bate e volta"); }
   if(tipo==="ida_volta"){ total*=2; detalhes.push("🔁 Ida e volta"); }
@@ -158,7 +161,7 @@ function calcular(){
 
   if(voltaPraia.checked){
     total+=10;
-    detalhes.push("🏖️ Volta das praias: R$ 10.00");
+    detalhes.push("⛱️ Volta das praias: R$ 10.00");
   }
 
   if(desvioSimples.checked){
@@ -209,7 +212,6 @@ function enviarWhats(){
 
 📌 Origem: ${origem}
 🛫 Destino: ${destino}
-💰 *Total*: R$ ${App.get("total").toFixed(2)}
 
 ✍🏽 *Detalhamento*
 ${detalheDiv.innerText}
