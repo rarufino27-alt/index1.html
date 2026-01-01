@@ -33,9 +33,7 @@ h1{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.section{
-  margin-top:20px;
-}
+.section{margin-top:20px}
 .card{
   border:1px solid rgba(255,215,120,.2);
   border-radius:14px;
@@ -55,16 +53,10 @@ h1{
   font-size:1.6rem;
   font-weight:bold;
   text-align:center;
-  margin-top:20px;
+  margin-top:10px;
 }
-.btn{
-  width:100%;
-  margin-top:12px;
-}
-.small{
-  font-size:.85rem;
-  color:#bbb;
-}
+.small{font-size:.85rem;color:#bbb}
+.hidden{display:none}
 </style>
 </head>
 
@@ -74,7 +66,7 @@ h1{
 
 <h1>RF DRIVER</h1>
 
-<div class="section card">
+<div class="card">
   <p><strong>Origem:</strong> <span id="origemTxt"></span></p>
   <p><strong>Destino:</strong> <span id="destinoTxt"></span></p>
   <p><strong>Valor base:</strong> R$ <span id="valorBaseTxt"></span></p>
@@ -85,120 +77,101 @@ h1{
 
   <div class="grid">
 
-    <label class="card">
-      <input type="checkbox" id="idaVolta"> Ida e volta (+100%)
-    </label>
+    <label class="card"><input type="checkbox" id="feira"> 🛍️ Saída de feira</label>
+    <label class="card"><input type="checkbox" id="praia"> ⛱️ Saída de praias</label>
+    <label class="card"><input type="checkbox" id="excesso"> 👥 Excesso de pessoas</label>
 
-    <label class="card">
-      <input type="checkbox" id="saidaPraia"> 🏖️ Saída de praia (+R$ 10)
-      <div class="small">Domingos e feriados</div>
-    </label>
+    <div class="card">
+      <strong>🐶 Animal</strong>
+      <select id="animal">
+        <option value="0">Nenhum</option>
+        <option value="5">Pequeno</option>
+        <option value="7">Médio</option>
+        <option value="10">Grande</option>
+      </select>
+      <label class="small">
+        <input type="checkbox" id="viagemLonga"> Viagem longa (+R$ 20)
+      </label>
+    </div>
 
-    <label class="card">
-      <input type="checkbox" id="feira"> Saída de feira (+R$ 5)
-    </label>
-
-    <label class="card">
-      <input type="checkbox" id="excesso"> Excesso de passageiros (+R$ 10)
-    </label>
-
-    <label class="card">
-      <input type="checkbox" id="animal"> Transporte de animal (+R$ 10)
-    </label>
-
-    <label class="card">
-      <input type="checkbox" id="buscarLonge"> Buscar passageiro longe (+R$ 10)
-    </label>
+    <label class="card"><input type="checkbox" id="desvioSimples"> 🛣️ Desvio simples</label>
+    <label class="card"><input type="checkbox" id="desvioEspera"> 🛣️⏳ Desvio com espera</label>
 
   </div>
 </div>
 
-<div class="section card">
-  <div class="total">
-    Total: R$ <span id="totalTxt"></span>
-  </div>
+<div class="card hidden" id="detalhamentoBox">
+  <strong>✍🏽 Detalhamento</strong>
+  <ul id="detalhamento"></ul>
 </div>
 
-<button class="btn btn-primary" id="btnWhats">
-  📲 Enviar orçamento no WhatsApp
-</button>
+<div class="card">
+  <div class="total">💸 Total: R$ <span id="totalTxt"></span></div>
+</div>
 
-<button class="btn btn-secondary" onclick="App.go('destino.html')">
-  ◀ Voltar
-</button>
+<button class="btn btn-primary" id="btnWhats">📲 Enviar no WhatsApp</button>
+<button class="btn btn-secondary" onclick="App.go('destino.html')">◀ Voltar</button>
 
 </div>
 
 <script src="core/global.js"></script>
 
 <script>
-/* ===============================
-   PROTEÇÃO DE FLUXO
-================================ */
 const origem = App.get("origem");
 const destino = App.get("destino");
-let valorBase = Number(App.get("valorBase") || 0);
+const base = Number(App.get("valorBase") || 0);
 
-if(!origem || !destino || valorBase <= 0){
-  App.go("index.html");
-}
+if(!origem || !destino || base <= 0) App.go("index.html");
 
-/* ===============================
-   UI BASE
-================================ */
 origemTxt.textContent = origem;
 destinoTxt.textContent = destino;
-valorBaseTxt.textContent = valorBase.toFixed(2);
+valorBaseTxt.textContent = base.toFixed(2);
 
-/* ===============================
-   CÁLCULO
-================================ */
 function calcular(){
-  let total = valorBase;
+  let total = base;
+  let detalhes = [];
 
-  if(idaVolta.checked) total *= 2;
-  if(saidaPraia.checked) total += 10;
-  if(feira.checked) total += 5;
-  if(excesso.checked) total += 10;
-  if(animal.checked) total += 10;
-  if(buscarLonge.checked) total += 10;
+  if(feira.checked){ total+=5; detalhes.push("🛍️ Saída de feira: R$ 5.00"); }
+  if(praia.checked){ total+=10; detalhes.push("⛱️ Saída de praias: R$ 10.00"); }
+  if(excesso.checked){ total+=25; detalhes.push("👥 Excesso de pessoas: R$ 25.00"); }
+
+  let animalValor = Number(animal.value);
+  if(viagemLonga.checked){
+    total+=20;
+    detalhes.push("🐶 Animal (viagem longa): R$ 20.00");
+  }else if(animalValor>0){
+    total+=animalValor;
+    detalhes.push(`🐶 Animal: R$ ${animalValor.toFixed(2)}`);
+  }
+
+  if(desvioSimples.checked){ total+=5; detalhes.push("🛣️ Desvio simples: R$ 5.00"); }
+  if(desvioEspera.checked){ total+=10; detalhes.push("🛣️⏳ Desvio com espera: R$ 10.00"); }
+
+  detalhamento.innerHTML = detalhes.map(d=>`<li>${d}</li>`).join("");
+  detalhamentoBox.classList.toggle("hidden", detalhes.length===0);
 
   totalTxt.textContent = total.toFixed(2);
-  return total;
+  return { total, detalhes };
 }
 
-/* ===============================
-   UX – HIGHLIGHT
-================================ */
-document.querySelectorAll("input").forEach(i=>{
-  i.addEventListener("change",()=>{
-    i.closest(".card")?.classList.toggle("highlight",i.checked);
+document.querySelectorAll("input,select").forEach(el=>{
+  el.addEventListener("change",()=>{
+    el.closest(".card")?.classList.toggle("highlight",el.checked||el.value>0);
     calcular();
   });
 });
 
-calcular();
-
-/* ===============================
-   WHATSAPP
-================================ */
-btnWhats.onclick = ()=>{
-  const total = calcular();
-  const msg = `
-🚖 *RF DRIVER*
-
-Origem: ${origem}
-Destino: ${destino}
-Valor base: R$ ${valorBase.toFixed(2)}
-
-💰 *Total: R$ ${total.toFixed(2)}*
-  `.trim();
-
-  window.open(
-    "https://wa.me/?text=" + encodeURIComponent(msg),
-    "_blank"
-  );
+btnWhats.onclick=()=>{
+  const r = calcular();
+  let msg = `🚖 RF Driver\n\n📌 Origem: ${origem}\n🛫 Destino: ${destino}\n💰 Total: R$ ${r.total.toFixed(2)}`;
+  if(r.detalhes.length){
+    msg+=`\n\n✍🏽 Detalhamento\n`+r.detalhes.join("\n");
+  }
+  msg+=`\n\n💸 Total: R$ ${r.total.toFixed(2)}`;
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
 };
+
+calcular();
 </script>
 
 </body>
