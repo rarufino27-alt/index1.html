@@ -1,4 +1,3 @@
-{
 [
   { "origem": "Centro do Cabo", "destino": "Engenho Novo Até a STATUS", "valor": 15, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Engenho Novo Até o Posto", "valor": 15, "regiao": "Cabo" },
@@ -26,4 +25,3 @@
   { "origem": "Centro do Cabo", "destino": "Tabatinga até o arruado", "valor": 50, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Tabatinga após o arruado", "valor": 60, "regiao": "Cabo" }
 ]
-}
