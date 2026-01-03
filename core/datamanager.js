@@ -8,6 +8,11 @@ const DataManager = {
     "data/engenhos.json",
     "data/interurbanas.json",
     "data/interestaduais.json"
+    "data/lazer-festa.json"
+    "data/hositais-clinicas.json"
+    "data/longas-locais.json"
+    "data/mercado.json"
+    "data/shoppings.json"
   ],
 
   async carregar() {
@@ -53,3 +58,4 @@ const DataManager = {
     return rota ? rota.valor : null;
   }
 };
+
