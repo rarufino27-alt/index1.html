@@ -1,4 +1,3 @@
-{
 [
   { "origem": "Centro do Cabo", "destino": "Clinica Saúde (Centro)", "valor": 10, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Clinica Amor & Saúde (Centro)", "valor": 10, "regiao": "Cabo" },
@@ -17,4 +16,4 @@
   { "origem": "Centro do Cabo", "destino": "Hospital Samaritano (Centro)", "valor": 10, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Hospital Dom Helder Câmara", "valor": 20, "regiao": "Cabo" }
 ]
-}
+
