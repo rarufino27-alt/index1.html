@@ -34,27 +34,25 @@ body{
   color:#fff;
 }
 
-/* BOTÃO SUPERIOR */
-.top-install{
+/* AÇÕES DO TOPO */
+.top-actions{
   position:fixed;
-  top:160px;
-  right:60px;
+  top:150px;
+  right:260px;
+  display:flex;
+  gap:10px;
   z-index:10;
 }
 
-.top-install a{
+.top-actions .btn{
   padding:10px 16px;
-  background:#f5c542;
-  color:#000;
   font-weight:700;
   font-size:.85rem;
   border-radius:14px;
-  text-decoration:none;
   box-shadow:0 0 15px rgba(245,197,66,.45);
-  transition:.2s;
 }
 
-.top-install a:hover{
+.top-actions .btn:hover{
   transform:translateY(-1px);
   box-shadow:0 0 25px rgba(245,197,66,.65);
 }
@@ -80,7 +78,7 @@ body{
 
 /* MARCA */
 .brand{
-  font-size:1.9rem;
+  font-size:2.6rem;
   font-weight:800;
   letter-spacing:3px;
   background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
@@ -90,7 +88,7 @@ body{
 }
 
 .tagline{
-  font-size:0.8rem;
+  font-size:1.05rem;
   color:#d0d0d0;
 }
 
@@ -103,7 +101,7 @@ body{
 }
 
 .authority{
-  font-size:.6rem;
+  font-size:.95rem;
   color:#bfbfbf;
   margin-bottom:28px;
 }
@@ -130,9 +128,10 @@ footer{
 
 <body>
 
-<!-- BOTÃO DE INSTALAÇÃO -->
-<div class="top-install">
-  <a href="instalar-app.html">📲 Instalar App</a>
+<!-- AÇÕES DO TOPO -->
+<div class="top-actions">
+  <button class="btn btn-secondary" onclick="abrirRegras()">📋 Regras</button>
+  <a class="btn btn-primary" href="instalar-app.html">📲 Instalar App</a>
 </div>
 
 <div class="container">
@@ -165,6 +164,10 @@ document.getElementById("btnIniciar").addEventListener("click", () => {
   App.reset();
   App.go("origem.html");
 });
+
+function abrirRegras(){
+  window.location.href = "regras.html";
+}
 </script>
 
 </body>
