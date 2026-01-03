@@ -24,4 +24,33 @@
   { "origem": "Centro do Cabo", "destino": "Bunge Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" }
+ ],
+
+ [
+  { "origem": "Centro do Cabo", "destino": "Loginvest (TUPAN)", "valor": 25, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "CONE antes do Armazena", "valor": 15, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "CONE ponte dos Carvalhos", "valor": 25, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Armazena Em frente ao Dom Helder", "valor": 20, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Americanas", "valor": 25, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "AMAZON", "valor": 25, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "FotLev", "valor": 25, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Coca Cola Solar Cabo", "valor": 30, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Coca Cola Prazeres", "valor": 40, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "PepsiCo Cabo", "valor": 30, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Ball Cabo", "valor": 30, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Camil Cabo", "valor": 30, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Urbano Cabo", "valor": 30, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Amcor serraria Cabo", "valor": 30, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Amanco Suape (Pedágio Incluso)", "valor": 42, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Dexco Suape (Pedágio Incluso)", "valor": 42, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Pamesa Suape (Pedágio Incluso)", "valor": 42, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Refinaria LESTE Suape (Pedágio Incluso)", "valor": 47, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "SuperGas Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Ultragás Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Liquigás Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Tecon Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Bunge Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
+  { "origem": "Centro do Cabo", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" }
  ]
+
