@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Regras – RF Driver</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="theme/theme.css">
+<link rel="stylesheet" href="theme/layout.css">
+<link rel="stylesheet" href="theme/components.css">
+
+<style>
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  color:#fff;
+}
+.container{
+  width:100%;
+  max-width:720px;
+  margin:20px;
+  padding:24px;
+  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
+  border-radius:22px;
+  box-shadow:0 0 40px rgba(255,215,120,.25);
+}
+h2{
+  text-align:center;
+  margin-bottom:10px;
+  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.regra{
+  margin-bottom:14px;
+  padding:14px;
+  border:1px solid rgba(255,215,120,.25);
+  border-radius:14px;
+  font-size:.95rem;
+  line-height:1.4;
+}
+.regra strong{
+  color:#f5c542;
+}
+.btn{
+  width:100%;
+  margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Regras para Motoristas</h2>
+
+<div class="regra"><strong>1.</strong> Os valores apresentados no app servem como base mínima de negociação.</div>
+<div class="regra"><strong>2.</strong> O motorista pode ajustar o valor conforme horário, trânsito e condições da viagem.</div>
+<div class="regra"><strong>3.</strong> Viagens com espera, desvio ou retorno devem ser informadas antes do início.</div>
+<div class="regra"><strong>4.</strong> Horários noturnos podem ter acréscimo conforme regra do aplicativo.</div>
+<div class="regra"><strong>5.</strong> Viagens interurbanas e interestaduais devem ser confirmadas previamente.</div>
+<div class="regra"><strong>6.</strong> O pagamento deve ser combinado antes do início da corrida.</div>
+<div class="regra"><strong>7.</strong> Cancelamentos após deslocamento podem gerar cobrança.</div>
+<div class="regra"><strong>8.</strong> O motorista tem autonomia para recusar corridas fora das condições acordadas.</div>
+<div class="regra"><strong>9.</strong> O RF Driver não se responsabiliza por acordos feitos fora do app.</div>
+<div class="regra"><strong>10.</strong> O uso do app implica concordância com estas regras.</div>
+
+<button class="btn btn-primary" onclick="voltar()">⬅ Voltar</button>
+
+</div>
+
+<script>
+function voltar(){
+  window.history.back();
+}
+</script>
+
+</body>
+</html>
