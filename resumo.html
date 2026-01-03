@@ -227,17 +227,16 @@ ${detalheDiv.innerText}
   window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
 }
 
-  function voltarDestino(){
-  // mantém origem, apenas volta para escolha de destino
-  window.location.href = "destino.html";
-}
-
 function novoPreco(){
-  // limpa dados principais e reinicia o fluxo
-  App.remove("destino");
-  App.remove("valorBase");
-  App.remove("total");
+  // limpeza segura (compatível com qualquer App.js)
+  try {
+    localStorage.removeItem("origem");
+    localStorage.removeItem("destino");
+    localStorage.removeItem("valorBase");
+    localStorage.removeItem("total");
+  } catch(e) {}
 
+  // redirecionamento direto
   window.location.href = "origem.html";
 }
 </script>
