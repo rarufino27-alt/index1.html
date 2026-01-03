@@ -1,56 +1,55 @@
-/* ===============================
-   DATA MANAGER — RF DRIVER
-   CONTRATO ESTÁVEL (ARRAY SAFE)
-================================ */
+const DataManager = {
+  rotas: [],
 
-window.DataManager = (function () {
+  arquivos: [
+    "data/locais.json",
+    "data/praias.json",
+    "data/empresas.json",
+    "data/engenhos.json",
+    "data/interurbanas.json",
+    "data/interestaduais.json"
+  ],
 
-  const DATA_URL = "data/precos.json"; // ✅ CORRETO PARA GITHUB PAGES
-  let cache = null;
-
-  async function carregar() {
-    if (cache) return cache;
-
+  async carregar() {
     try {
-      const res = await fetch(DATA_URL, { cache: "no-store" });
-      if (!res.ok) {
-        throw new Error("Falha ao carregar precos.json");
-      }
+      const respostas = await Promise.all(
+        this.arquivos.map(a => fetch(a).then(r => {
+          if (!r.ok) throw new Error("Falha ao carregar " + a);
+          return r.json();
+        }))
+      );
 
-      cache = await res.json();
-      return cache;
-
-    } catch (err) {
-      console.error("❌ Erro ao carregar precos.json", err);
-      cache = {};
-      return cache;
+      this.rotas = respostas.flat();
+      console.log("✅ Rotas carregadas:", this.rotas.length);
+    } catch (e) {
+      console.error("❌ Erro ao carregar rotas", e);
+      throw e;
     }
+  },
+
+  listarOrigens() {
+    const origens = [...new Set(this.rotas.map(r => r.origem))];
+    return origens.sort();
+  },
+
+  listarDestinos(origem) {
+    return this.rotas
+      .filter(r => r.origem === origem)
+      .map(r => r.destino);
+  },
+
+  buscarValor(origem, destino) {
+    let rota = this.rotas.find(
+      r => r.origem === origem && r.destino === destino
+    );
+
+    // rota invertida (ida/volta)
+    if (!rota) {
+      rota = this.rotas.find(
+        r => r.origem === destino && r.destino === origem
+      );
+    }
+
+    return rota ? rota.valor : null;
   }
-
-  async function listarOrigens() {
-    const data = await carregar();
-    return Object.keys(data).sort();
-  }
-
-  async function listarDestinos(origem) {
-    const data = await carregar();
-    const lista = data[origem];
-    if (!Array.isArray(lista)) return [];
-    return lista.map(i => i.destino).filter(Boolean).sort();
-  }
-
-  async function obterValor(origem, destino) {
-    const data = await carregar();
-    const lista = data[origem];
-    if (!Array.isArray(lista)) return 0;
-    const item = lista.find(i => i.destino === destino);
-    return item ? Number(item.valor) : 0;
-  }
-
-  return {
-    listarOrigens,
-    listarDestinos,
-    obterValor
-  };
-
-})();
+};
