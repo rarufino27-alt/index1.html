@@ -1,4 +1,3 @@
-{
 [
   { "origem": "Centro do Cabo", "destino": "Gaibu / Enseadas (Praia/Principais)", "valor": 30, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Gaibu loteamento Águas Cumpridas", "valor": 35, "regiao": "Cabo" },
@@ -20,4 +19,3 @@
   { "origem": "Centro do Cabo", "destino": "Praia de Serrambi", "valor": 100, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Praia do CUPE", "valor": 70, "regiao": "Cabo" }
 ]
-}
