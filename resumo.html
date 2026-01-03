@@ -127,6 +127,12 @@ label{font-size:.85rem}
 <!-- TOTAL -->
 <div class="total" id="total">R$ 0,00</div>
 
+  <!-- AÇÕES -->
+<div style="display:flex;gap:10px;margin-top:16px">
+  <button class="btn btn-secondary" onclick="voltarDestino()">⬅ Voltar para destino</button>
+  <button class="btn btn-warning" onclick="novoPreco()">🔄 Novo preço</button>
+</div>
+
 <button class="btn btn-primary" onclick="enviarWhats()">📤 Enviar no WhatsApp</button>
 
 </div>
@@ -219,6 +225,20 @@ ${detalheDiv.innerText}
 💸 *Total*: R$ ${App.get("total").toFixed(2)}`;
 
   window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+}
+
+  function voltarDestino(){
+  // mantém origem, apenas volta para escolha de destino
+  window.location.href = "destino.html";
+}
+
+function novoPreco(){
+  // limpa dados principais e reinicia o fluxo
+  App.remove("destino");
+  App.remove("valorBase");
+  App.remove("total");
+
+  window.location.href = "origem.html";
 }
 </script>
 
