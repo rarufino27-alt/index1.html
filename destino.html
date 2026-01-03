@@ -122,11 +122,19 @@ const btn = document.getElementById("btnContinuar");
 
 let destinos = [];
 
-(async function(){
-  destinos = await DataManager.listarDestinos(origem);
-})();
+async function carregarDestinos(){
+  try{
+    await DataManager.carregar(); // 🔑 carrega TODOS os JSONs
+    destinos = DataManager.listarDestinos(origem);
+    console.log("✅ Destinos carregados:", destinos);
+  }catch(e){
+    console.error("❌ Erro ao carregar destinos", e);
+  }
+}
 
-input.addEventListener("input", async () => {
+carregarDestinos();
+
+input.addEventListener("input", () => {
   const termo = input.value.toLowerCase();
   lista.innerHTML = "";
 
@@ -135,20 +143,25 @@ input.addEventListener("input", async () => {
     return;
   }
 
-  for (const nome of destinos.filter(d => d.toLowerCase().includes(termo))) {
-    const valor = await DataManager.obterValor(origem, nome);
+  destinos
+    .filter(d => d.toLowerCase().includes(termo))
+    .forEach(nome => {
 
-    const div = document.createElement("div");
-    div.textContent = nome; // ✅ MOSTRA APENAS O DESTINO
-    div.onclick = () => {
-      input.value = nome;
-      App.set("destino", nome);
-      App.set("valorBase", valor); // 🔒 valor continua salvo
-      lista.style.display = "none";
-      btn.disabled = false;
-    };
-    lista.appendChild(div);
-  }
+      const valor = DataManager.buscarValor(origem, nome);
+
+      const div = document.createElement("div");
+      div.textContent = nome;
+
+      div.onclick = () => {
+        input.value = nome;
+        App.set("destino", nome);
+        App.set("valorBase", valor);
+        lista.style.display = "none";
+        btn.disabled = false;
+      };
+
+      lista.appendChild(div);
+    });
 
   lista.style.display = "block";
 });
