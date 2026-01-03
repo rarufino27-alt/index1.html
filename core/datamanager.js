@@ -9,7 +9,7 @@ const DataManager = {
     "data/interurbanas.json",
     "data/interestaduais.json",
     "data/lazer-festa.json",
-    "data/hositais-clinicas.json",
+    "data/hospitais-clinicas.json",
     "data/longas-locais.json",
     "data/mercado.json",
     "data/shoppings.json"
@@ -18,10 +18,12 @@ const DataManager = {
   async carregar() {
     try {
       const respostas = await Promise.all(
-        this.arquivos.map(a => fetch(a).then(r => {
-          if (!r.ok) throw new Error("Falha ao carregar " + a);
-          return r.json();
-        }))
+        this.arquivos.map(a =>
+          fetch(a).then(r => {
+            if (!r.ok) throw new Error("Falha ao carregar " + a);
+            return r.json();
+          })
+        )
       );
 
       this.rotas = respostas.flat();
@@ -58,5 +60,3 @@ const DataManager = {
     return rota ? rota.valor : null;
   }
 };
-
-
