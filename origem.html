@@ -133,8 +133,15 @@ const btn = document.getElementById("btnContinuar");
 let origens = [];
 
 async function carregar(){
-  origens = await DataManager.listarOrigens();
+  try{
+    await DataManager.carregar(); // 🔑 carrega os JSONs primeiro
+    origens = DataManager.listarOrigens();
+    console.log("✅ Origens carregadas:", origens);
+  }catch(e){
+    console.error("❌ Falha ao carregar origens", e);
+  }
 }
+
 carregar();
 
 input.addEventListener("input",()=>{
