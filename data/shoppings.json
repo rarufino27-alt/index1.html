@@ -1,5 +1,4 @@
-{
- [
+[
   { "origem": "Centro do Cabo", "destino": "Shopping Costa Dourada", "valor": 15, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Shopping Recife", "valor": 65, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Shopping Guararapes", "valor": 45, "regiao": "Cabo" },
@@ -12,4 +11,3 @@
   { "origem": "Centro do Cabo", "destino": "Shopping Outlet Recife Br-232", "valor": 100, "regiao": "Cabo" }
  ]
 
-}
