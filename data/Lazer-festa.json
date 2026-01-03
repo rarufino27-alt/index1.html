@@ -1,4 +1,3 @@
-{
  [
   { "origem": "Centro do Cabo", "destino": "Castelo Recepções", "valor": 30, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Fazenda casa Branca - Pirapama", "valor": 25, "regiao": "Cabo" },
@@ -17,4 +16,3 @@
   { "origem": "Centro do Cabo", "destino": "Churrascaria Leitão (Nossa Sra do Ó)", "valor": 25, "regiao": "Cabo" }
  ]
 
-}
