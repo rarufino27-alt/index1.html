@@ -7,11 +7,11 @@ const DataManager = {
     "data/empresas.json",
     "data/engenhos.json",
     "data/interurbanas.json",
-    "data/interestaduais.json"
-    "data/lazer-festa.json"
-    "data/hositais-clinicas.json"
-    "data/longas-locais.json"
-    "data/mercado.json"
+    "data/interestaduais.json",
+    "data/lazer-festa.json",
+    "data/hositais-clinicas.json",
+    "data/longas-locais.json",
+    "data/mercado.json",
     "data/shoppings.json"
   ],
 
@@ -58,4 +58,5 @@ const DataManager = {
     return rota ? rota.valor : null;
   }
 };
+
 
