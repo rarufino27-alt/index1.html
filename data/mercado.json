@@ -14,8 +14,7 @@
   { "origem": "Centro do Cabo", "destino": "Arco Vita Centro", "valor": 10, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Arco Vita Ipojuca", "valor": 35, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Arco Vita Nossa Sra do Ó", "valor": 60, "regiao": "Cabo" },
-  { "origem": "Centro do Cabo", "destino": "Novo Atacarejo Centro", "valor": 10, "regiao": "Cabo" }
- 
+  { "origem": "Centro do Cabo", "destino": "Novo Atacarejo Centro", "valor": 10, "regiao": "Cabo" }, 
   { "origem": "Centro do Cabo", "destino": "Arco mix Cohab", "valor": 10, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Arco mix Centro", "valor": 10, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Arco mix Gaibú", "valor": 30, "regiao": "Cabo" },
@@ -33,5 +32,6 @@
   { "origem": "Centro do Cabo", "destino": "Arco Vita Nossa Sra do Ó", "valor": 60, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Novo Atacarejo Centro", "valor": 10, "regiao": "Cabo" }
  ]
+
 
 
