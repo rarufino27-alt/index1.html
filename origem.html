@@ -12,13 +12,13 @@
 
 <body>
 
-<!-- HEADER / MARCA -->
+<!-- HEADER -->
 <div class="card highlight" style="text-align:center">
   <h1 style="letter-spacing:2px">RF DRIVER</h1>
   <p class="muted">Selecionar origem da corrida</p>
 </div>
 
-<!-- SELETOR -->
+<!-- SELETOR DE ORIGEM -->
 <div class="card">
   <label for="origem">Origem</label>
   <select id="origem">
@@ -40,8 +40,6 @@
 async function carregarOrigens(){
   try{
     await DataManager.carregar();
-
-    // 🔑 FUNÇÃO CORRETA PARA SEU PROJETO
     const origens = DataManager.listarOrigens();
 
     const select = document.getElementById("origem");
@@ -53,10 +51,9 @@ async function carregarOrigens(){
     });
 
     console.log("✅ Origens carregadas:", origens);
-
   }catch(e){
     console.error("❌ Erro ao carregar origens", e);
-    alert("Erro ao carregar as origens. Verifique os dados.");
+    alert("Erro ao carregar origens");
   }
 }
 
