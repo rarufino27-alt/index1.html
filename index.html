@@ -7,12 +7,9 @@
 
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#f5c542">
+<meta name="theme-color" content="#d4af37">
 
-<!-- PWA / Android -->
 <meta name="mobile-web-app-capable" content="yes">
-
-<!-- PWA / iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="RF Driver">
@@ -21,141 +18,55 @@
 <link rel="stylesheet" href="./theme/theme.css">
 <link rel="stylesheet" href="./theme/layout.css">
 <link rel="stylesheet" href="./theme/components.css">
-
-<style>
-/* FUNDO */
-body{
-  min-height:100vh;
-  background:radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-  color:#fff;
-}
-
-/* AÇÕES DO TOPO */
-.top-actions{
-  position:fixed;
-  top:150px;
-  right:50px;
-  display:flex;
-  gap:80px;
-  z-index:10;
-}
-
-.top-actions .btn{
-  padding:4px 12px;
-  font-weight:700;
-  font-size:.75rem;
-  border-radius:14px;
-  box-shadow:0 0 15px rgba(245,197,66,.45);
-}
-
-.top-actions .btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 0 25px rgba(245,197,66,.65);
-}
-
-/* CONTAINER */
-.container{
-  text-align:center;
-  padding:48px 36px;
-  max-width:720px;
-  width:90%;
-  background:linear-gradient(
-    145deg,
-    rgba(25,25,25,0.75),
-    rgba(0,0,0,0.65)
-  );
-  backdrop-filter:blur(12px);
-  border-radius:26px;
-  border:1px solid rgba(255,215,120,0.18);
-  box-shadow:
-    0 0 60px rgba(255,215,120,0.18),
-    inset 0 0 25px rgba(255,255,255,0.04);
-}
-
-/* MARCA */
-.brand{
-  font-size:1,9rem;
-  font-weight:800;
-  letter-spacing:3px;
-  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  margin-bottom:8px;
-}
-
-.tagline{
-  font-size:0.8rem;
-  color:#d0d0d0;
-}
-
-.divider{
-  width:90px;
-  height:3px;
-  margin:22px auto 18px;
-  background:linear-gradient(90deg, transparent, #d4af37, transparent);
-  border-radius:6px;
-}
-
-.authority{
-  font-size:.6rem;
-  color:#bfbfbf;
-  margin-bottom:28px;
-}
-
-/* BOTÃO INICIAR */
-.start-btn .btn{
-  padding:14px 26px;
-  font-size:1.05rem;
-  border-radius:14px;
-  transition:.25s;
-}
-
-.start-btn .btn:hover{
-  box-shadow:0 0 18px rgba(245,197,66,.45);
-}
-
-footer{
-  margin-top:26px;
-  font-size:.85rem;
-  color:#a8a8a8;
-}
-</style>
 </head>
 
 <body>
 
-<!-- AÇÕES DO TOPO -->
-<div class="top-actions">
-  <button class="btn btn-secondary" onclick="abrirRegras()">📋 Regras</button>
-  <a class="btn btn-primary" href="instalar-app.html">📲 Instalar App</a>
+<!-- HEADER -->
+<div class="card highlight" style="text-align:center">
+  <h1 style="letter-spacing:2px">RF DRIVER</h1>
+  <p class="muted">Mobilidade com excelência</p>
 </div>
 
-<div class="container">
+<!-- AÇÕES -->
+<div class="grid">
 
-  <div class="brand">RF DRIVER</div>
-  <div class="tagline">Mobilidade com excelência</div>
-
-  <div class="divider"></div>
-
-  <div class="authority">
-    Tabela oficial de valores • Cálculo rápido e transparente
-  </div>
-
-  <div class="start-btn">
-    <button class="btn btn-primary" id="btnIniciar">
-      ▶ Iniciar Cálculo
+  <div class="card">
+    <h3>📋 Regras do Grupo</h3>
+    <p class="muted">
+      Consulte as diretrizes oficiais para operação correta.
+    </p>
+    <button class="btn btn-outline" onclick="abrirRegras()">
+      Ver Regras
     </button>
   </div>
 
-  <footer>
-    Experiência premium em cada viagem
-  </footer>
+  <div class="card">
+    <h3>📲 Instalar Aplicativo</h3>
+    <p class="muted">
+      Instale o RF Driver no seu celular para acesso rápido.
+    </p>
+    <a class="btn btn-outline" href="instalar-app.html">
+      Instalar App
+    </a>
+  </div>
 
 </div>
+
+<!-- AÇÃO PRINCIPAL -->
+<div class="card highlight" style="text-align:center">
+  <h2>Iniciar cálculo de corrida</h2>
+  <p class="muted">
+    Selecione origem e destino para obter o valor correto.
+  </p>
+  <button class="btn btn-primary" id="btnIniciar">
+    ▶ Iniciar Cálculo
+  </button>
+</div>
+
+<p class="muted" style="text-align:center;margin-top:12px">
+  Ferramenta oficial RF Driver
+</p>
 
 <script src="core/global.js"></script>
 
