@@ -17,25 +17,12 @@
   justify-content:center;
   padding:20px;
 }
-
 .box{
   width:100%;
   max-width:420px;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:50;
-}
-
-.modal-content{
-  width:90%;
-  max-width:420px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 </style>
 </head>
@@ -43,37 +30,42 @@
 <body>
 
 <div class="page">
-  <div class="box">
+<div class="box">
 
-    <div class="card highlight" style="text-align:center">
-      <h1>RF DRIVER</h1>
-      <p class="muted">Selecione a origem</p>
-    </div>
-
-    <div class="card">
-      <div class="select-display" id="origemBtn">
-        Toque para escolher a origem
-      </div>
-    </div>
-
-    <div class="card highlight" style="text-align:center">
-      <button class="btn btn-primary" id="btnAvancar" disabled>
-        Continuar
-      </button>
-    </div>
-
+  <!-- HEADER -->
+  <div class="card highlight" style="text-align:center">
+    <h1>RF DRIVER</h1>
+    <p class="muted">Selecionar origem da corrida</p>
   </div>
+
+  <!-- SELETOR -->
+  <div class="card">
+    <div class="select-display" id="origemBtn">
+      Toque para escolher a origem
+    </div>
+  </div>
+
+  <!-- AÇÃO PRINCIPAL -->
+  <div class="card highlight" style="text-align:center">
+    <button class="btn btn-primary" id="btnAvancar" disabled>
+      Continuar
+    </button>
+  </div>
+
+  <!-- BOTÃO INÍCIO -->
+  <div class="card" style="text-align:center">
+    <button class="btn btn-outline" onclick="App.go('index.html')">
+      ⬅ Início
+    </button>
+  </div>
+
+</div>
 </div>
 
 <!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content card">
-    <input
-      type="text"
-      id="busca"
-      placeholder="Buscar origem..."
-      autofocus
-    >
+<div class="modal" id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);align-items:center;justify-content:center;z-index:50">
+  <div class="card" style="width:90%;max-width:420px">
+    <input type="text" id="busca" placeholder="Buscar origem...">
     <div id="lista" style="margin-top:10px;max-height:260px;overflow:auto"></div>
   </div>
 </div>
@@ -89,17 +81,16 @@ const busca = document.getElementById("busca");
 const btn = document.getElementById("btnAvancar");
 
 let origens = [];
-let origemSelecionada = "";
 
 origemBtn.onclick = () => {
   modal.style.display = "flex";
   busca.value = "";
   render(origens);
-  setTimeout(() => busca.focus(), 100);
+  setTimeout(()=>busca.focus(),100);
 };
 
 modal.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
+  if(e.target === modal) modal.style.display = "none";
 };
 
 async function carregar(){
@@ -107,15 +98,13 @@ async function carregar(){
   origens = DataManager.listarOrigens();
 }
 
-function render(listaItens){
+function render(arr){
   lista.innerHTML = "";
-  listaItens.forEach(o => {
+  arr.forEach(o=>{
     const div = document.createElement("div");
     div.textContent = o;
     div.style.padding = "12px";
-    div.style.cursor = "pointer";
-    div.onclick = () => {
-      origemSelecionada = o;
+    div.onclick = ()=>{
       origemBtn.textContent = o;
       App.set("origem", o);
       modal.style.display = "none";
@@ -125,12 +114,12 @@ function render(listaItens){
   });
 }
 
-busca.oninput = () => {
+busca.oninput = ()=>{
   const t = busca.value.toLowerCase();
-  render(origens.filter(o => o.toLowerCase().includes(t)));
+  render(origens.filter(o=>o.toLowerCase().includes(t)));
 };
 
-btn.onclick = () => App.go("destino.html");
+btn.onclick = ()=>App.go("destino.html");
 
 carregar();
 </script>
