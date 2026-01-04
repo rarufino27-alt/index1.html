@@ -155,7 +155,6 @@
   { "origem": "Engenho Novo Recanto do Paraíso", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
   { "origem": "Engenho Novo Recanto do Paraíso", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
 
- [
   { "origem": "Bairro São Francisco Baixo", "destino": "Loginvest (TUPAN)", "valor": 25, "regiao": "Cabo" },
   { "origem": "Bairro São Francisco Baixo", "destino": "CONE antes do Armazena", "valor": 18, "regiao": "Cabo" },
   { "origem": "Bairro São Francisco Baixo", "destino": "CONE ponte dos Carvalhos", "valor": 25, "regiao": "Cabo" },
@@ -208,7 +207,6 @@
   { "origem": "Bairro São Francisco Alto", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
   { "origem": "Bairro São Francisco Alto", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
 
-  [
   { "origem": "Charnequinha Baixa", "destino": "Loginvest (TUPAN)", "valor": 25, "regiao": "Cabo" },
   { "origem": "Charnequinha Baixa", "destino": "CONE antes do Armazena", "valor": 18, "regiao": "Cabo" },
   { "origem": "Charnequinha Baixa", "destino": "CONE ponte dos Carvalhos", "valor": 25, "regiao": "Cabo" },
@@ -833,7 +831,7 @@
   { "origem": "Pirapama Parte Alta", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
   { "origem": "Pirapama Parte Alta", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
 
-   { "origem": "Barbalho 1 e 2", "destino": "Loginvest (TUPAN)", "valor": 25, "regiao": "Cabo" },
+  { "origem": "Barbalho 1 e 2", "destino": "Loginvest (TUPAN)", "valor": 25, "regiao": "Cabo" },
   { "origem": "Barbalho 1 e 2", "destino": "CONE antes do Armazena", "valor": 18, "regiao": "Cabo" },
   { "origem": "Barbalho 1 e 2", "destino": "CONE ponte dos Carvalhos", "valor": 25, "regiao": "Cabo" },
   { "origem": "Barbalho 1 e 2", "destino": "Armazena Em frente ao Dom Helder", "valor": 20, "regiao": "Cabo" },
@@ -859,3 +857,4 @@
   { "origem": "Barbalho 1 e 2", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
   { "origem": "Barbalho 1 e 2", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" }
   ]   
+
