@@ -1,35 +1,78 @@
+/* ===============================
+   CARDS
+   =============================== */
+
 .card{
-  background:var(--card);
+  background:linear-gradient(
+    180deg,
+    var(--card),
+    var(--card-soft)
+  );
   border:1px solid var(--border);
   border-radius:var(--radius);
-  padding:14px;
-  margin-bottom:14px;
+  padding:16px;
+  margin-bottom:16px;
+  box-shadow:0 10px 28px rgba(0,0,0,.45);
 }
+
+/* Card em destaque */
+.card.highlight{
+  border:1px solid var(--gold);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,175,55,.10),
+      rgba(23,26,33,.95)
+    );
+  box-shadow:0 12px 32px rgba(212,175,55,.18);
+}
+
+/* ===============================
+   GRID
+   =============================== */
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+  gap:14px;
 }
 
-.highlight{
-  border:2px solid var(--primary);
-  background:#22261f;
+/* ===============================
+   TÍTULOS
+   =============================== */
+
+h2, h3{
+  margin:8px 0 6px;
+  font-weight:600;
+  color:var(--gold);
 }
 
-h2,h3{
-  margin:8px 0;
-  color:var(--primary);
+h2{
+  font-size:1.1rem;
 }
+
+h3{
+  font-size:1rem;
+}
+
+/* ===============================
+   TEXTOS AUXILIARES
+   =============================== */
 
 .muted{
-  color:var(--muted);
+  color:var(--text-muted);
   font-size:13px;
 }
 
+/* ===============================
+   VALORES / TOTAIS
+   =============================== */
+
 .total{
-  font-size:26px;
-  font-weight:bold;
+  font-size:28px;
+  font-weight:700;
   text-align:center;
-  color:var(--primary);
+  color:var(--gold);
+  margin-top:6px;
+  letter-spacing:.5px;
 }
