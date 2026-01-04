@@ -24,7 +24,6 @@
   { "origem": "Centro do Cabo", "destino": "Bunge Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" },
-
   { "origem": "Cohab", "destino": "Loginvest (TUPAN)", "valor": 25, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "CONE antes do Armazena", "valor": 18, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "CONE ponte dos Carvalhos", "valor": 25, "regiao": "Cabo" },
@@ -51,6 +50,7 @@
   { "origem": "Cohab", "destino": "Termope Suape (Pedágio Incluso)", "valor": 67, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "UltraCargo Suape (Pedágio Incluso)", "valor": 62, "regiao": "Cabo" }
  ]
+
 
 
 
