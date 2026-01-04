@@ -23,7 +23,7 @@
   { "origem": "Centro do Cabo", "destino": "Jussaral", "valor": 100, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Massauassu", "valor": 90, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Tabatinga até o arruado", "valor": 50, "regiao": "Cabo" },
-  { "origem": "Centro do Cabo", "destino": "Tabatinga após o arruado", "valor": 60, "regiao": "Cabo" }
+  { "origem": "Centro do Cabo", "destino": "Tabatinga após o arruado", "valor": 60, "regiao": "Cabo" },
 
   { "origem": "Cohab", "destino": "Engenho Novo Até a STATUS", "valor": 18, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "Engenho Novo Até o Posto", "valor": 18, "regiao": "Cabo" },
@@ -51,5 +51,6 @@
   { "origem": "Cohab", "destino": "Tabatinga até o arruado", "valor": 45, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "Tabatinga após o arruado", "valor": 55, "regiao": "Cabo" }
 ]
+
 
 
