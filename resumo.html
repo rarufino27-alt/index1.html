@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="./theme/components.css">
 
 <style>
-/* ================= BASE ================= */
 body{
   background:linear-gradient(180deg,#fafafa,#f0f0f0);
   color:#222;
@@ -31,7 +30,7 @@ body{
   gap:16px;
 }
 
-/* ================= AUTORIDADE ================= */
+/* AUTORIDADE */
 .header{
   text-align:center;
   padding:20px;
@@ -46,12 +45,7 @@ body{
   color:#d4af37;
 }
 
-.header span{
-  font-size:.75rem;
-  color:#666;
-}
-
-/* ================= ROTA ================= */
+/* ROTA */
 .route{
   background:#fff;
   border-radius:20px;
@@ -59,18 +53,18 @@ body{
   box-shadow:0 6px 18px rgba(0,0,0,.06);
 }
 
-.route .point{
+.route .item{
   text-align:center;
-  margin-bottom:10px;
+  font-weight:700;
 }
 
 .route .arrow{
   text-align:center;
-  font-size:1.2rem;
   color:#d4af37;
+  font-size:1.2rem;
 }
 
-/* ================= BLOCOS ================= */
+/* BLOCOS */
 .block{
   background:#fff;
   border-radius:18px;
@@ -80,12 +74,11 @@ body{
 
 label{
   font-size:.8rem;
-  color:#444;
-  display:block;
+  font-weight:700;
   margin-bottom:6px;
+  display:block;
 }
 
-/* ===== INPUTS ===== */
 select,
 input[type="number"]{
   width:100%;
@@ -94,13 +87,9 @@ input[type="number"]{
   border:1px solid #ccc;
   background:#fff;
   color:#000;
-  font-size:.95rem;
 }
 
-select option{ color:#000; }
-input::placeholder{ color:#666; }
-
-/* ================= ADICIONAIS ================= */
+/* ADICIONAIS */
 .option{
   display:flex;
   justify-content:space-between;
@@ -109,15 +98,14 @@ input::placeholder{ color:#666; }
   border-radius:14px;
   border:1px solid #eee;
   margin-bottom:8px;
-  transition:.25s;
 }
 
 .option.active{
-  background:rgba(212,175,55,.10);
+  background:rgba(212,175,55,.1);
   border-color:#d4af37;
 }
 
-/* ================= DETALHAMENTO ================= */
+/* DETALHAMENTO */
 .details{
   font-size:.85rem;
 }
@@ -128,57 +116,27 @@ input::placeholder{ color:#666; }
   margin-bottom:6px;
 }
 
-/* ================= TOTAL ================= */
+/* TOTAL */
 .totalBox{
   text-align:center;
   padding:22px;
   border-radius:22px;
   background:#fff;
   box-shadow:0 10px 26px rgba(0,0,0,.1);
-  position:relative;
 }
 
-.badge{
-  position:absolute;
-  top:-10px;
-  right:12px;
-  background:linear-gradient(180deg,#e6c97a,#d4af37);
-  color:#000;
-  font-size:.65rem;
-  padding:6px 10px;
-  border-radius:12px;
-  font-weight:700;
-}
-
-.totalLabel{
-  font-size:.7rem;
-  color:#777;
-}
-
-.total{
-  display:block;
-  margin-top:6px;
+.totalBox strong{
   font-size:2.3rem;
   color:#d4af37;
-  font-weight:800;
-  animation:totalIn .35s ease;
 }
 
-/* ================= BOTÃO ================= */
+/* BOTÃO */
 .btn-final{
   padding:16px;
   border-radius:18px;
   border:none;
   background:linear-gradient(180deg,#e6c97a,#d4af37);
-  font-size:1rem;
   font-weight:700;
-  color:#000;
-}
-
-/* ================= ANIMAÇÃO ================= */
-@keyframes totalIn{
-  from{opacity:.4;transform:scale(1.08)}
-  to{opacity:1;transform:scale(1)}
 }
 </style>
 </head>
@@ -188,71 +146,56 @@ input::placeholder{ color:#666; }
 <div class="page">
 <div class="container">
 
-  <!-- AUTORIDADE -->
+  <!-- HEADER -->
   <div class="header">
-    <h1>RESUMO DA CORRIDA</h1>
-    <span>Tabela oficial RF Driver</span>
+    <h1><strong>RF Driver – Orçamento de viagem</strong></h1>
   </div>
 
   <!-- ROTA -->
   <div class="route">
-    <div class="point"><strong>Origem</strong><br><span id="origemTxt"></span></div>
+    <div class="item">📌 <strong>Origem</strong><br><span id="origemTxt"></span></div>
     <div class="arrow">⬇</div>
-    <div class="point"><strong>Destino</strong><br><span id="destinoTxt"></span></div>
+    <div class="item">🏁 <strong>Destino</strong><br><span id="destinoTxt"></span></div>
   </div>
 
   <!-- TIPO -->
   <div class="block">
-    <label>Tipo de viagem</label>
+    <label>🚕 <strong>Tipo de viagem</strong></label>
     <select id="tipoViagem">
-      <option value="ida">Somente ida</option>
-      <option value="bate_volta">Bate e volta</option>
-      <option value="ida_volta">Ida e volta (até 1h)</option>
-      <option value="ida_volta_espera">Ida e volta (acima de 1h)</option>
+      <option value="ida">🚕 Ida</option>
+      <option value="bate_volta">♻️ Bate e volta</option>
+      <option value="ida_volta">🚕♻️ Ida e volta</option>
+      <option value="ida_volta_espera">🚕♻️ Ida e volta (com espera)</option>
     </select>
   </div>
 
   <!-- ADICIONAIS -->
   <div class="block">
-    <div class="option"><span>Excesso de pessoas</span><input type="checkbox" id="excessoPessoas"></div>
-    <div class="option"><span>Volta das praias</span><input type="checkbox" id="voltaPraia"></div>
-    <div class="option"><span>Desvio de rota</span><input type="checkbox" id="desvioSimples"></div>
-  </div>
-
-  <!-- ANIMAL -->
-  <div class="block">
-    <label>Transporte de animal</label>
-    <select id="animal">
-      <option value="0">Não</option>
-      <option value="5">Pequeno</option>
-      <option value="7">Médio</option>
-      <option value="10">Grande</option>
-      <option value="20">Viagem longa</option>
-    </select>
+    <div class="option"><span>🛣️ <strong>Desvio de rota</strong></span><input type="checkbox" id="desvioSimples"></div>
+    <div class="option"><span>🐶 <strong>Transporte animal</strong></span><input type="checkbox" id="excessoPessoas"></div>
+    <div class="option"><span>⏱️ <strong>Tempo de espera</strong></span><input type="checkbox" id="voltaPraia"></div>
   </div>
 
   <!-- ESPERA -->
   <div class="block">
-    <label>Tempo de espera (min)</label>
+    <label>⏱️ <strong>Minutos de espera</strong></label>
     <input type="number" id="minutosEspera" placeholder="Ex: 10">
   </div>
 
   <!-- DETALHAMENTO -->
   <div class="block">
-    <strong>Como o valor foi formado</strong>
+    <label><strong>Detalhamento</strong></label>
     <div class="details" id="detalhamento"></div>
   </div>
 
   <!-- TOTAL -->
   <div class="totalBox">
-    <div class="badge">OFICIAL RF DRIVER</div>
-    <div class="totalLabel">VALOR FINAL</div>
-    <strong id="total" class="total">R$ 0,00</strong>
+    💰 <strong>Total</strong><br>
+    <strong id="total">R$ 0,00</strong>
   </div>
 
-  <!-- AÇÃO -->
   <button class="btn-final" onclick="enviarWhats()">
-    Enviar orçamento no WhatsApp
+    Enviar no WhatsApp
   </button>
 
 </div>
@@ -261,11 +204,9 @@ input::placeholder{ color:#666; }
 <script src="core/global.js"></script>
 
 <script>
-// ===== CONFIG ADMIN =====
+// CONFIG ADMIN
 const TARIFA_DINAMICA_ATIVA = true;
 const TARIFA_MULTIPLICADOR = 1.5;
-const TARIFA_MOTIVO = "Alta demanda";
-// =======================
 
 const origem = App.get("origem");
 const destino = App.get("destino");
@@ -275,10 +216,9 @@ document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
 
 const tipoViagem = document.getElementById("tipoViagem");
+const desvioSimples = document.getElementById("desvioSimples");
 const excessoPessoas = document.getElementById("excessoPessoas");
 const voltaPraia = document.getElementById("voltaPraia");
-const desvioSimples = document.getElementById("desvioSimples");
-const animalSel = document.getElementById("animal");
 const minutosEspera = document.getElementById("minutosEspera");
 const totalDiv = document.getElementById("total");
 const detalheDiv = document.getElementById("detalhamento");
@@ -290,127 +230,68 @@ function calcular(){
   let detalhes = [];
   detalhesWhats = [];
 
-  // VALOR BASE
-  detalhes.push(["Viagem base", valorBaseOriginal]);
-  detalhesWhats.push(`• Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
+  detalhes.push(["🚖 Viagem base", valorBaseOriginal]);
+  detalhesWhats.push(`🚖 *Viagem base*: R$ ${valorBaseOriginal.toFixed(2)}`);
 
-  // TARIFA DINÂMICA
   if(TARIFA_DINAMICA_ATIVA){
-    const novo = total * TARIFA_MULTIPLICADOR;
-    const acres = novo - total;
-    total = novo;
-    detalhes.push([`Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`, acres]);
-    detalhesWhats.push(`• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acres.toFixed(2)}`);
+    const acres = total * (TARIFA_MULTIPLICADOR - 1);
+    total += acres;
+    detalhes.push(["⚡ Tarifa dinâmica", acres]);
+    detalhesWhats.push(`⚡ *Tarifa dinâmica*: +R$ ${acres.toFixed(2)}`);
   }
 
-  // TIPO DE VIAGEM
   if(tipoViagem.value==="bate_volta"){
-    const acres = total * 0.8;
-    total += acres;
-    detalhes.push(["Bate e volta", acres]);
-    detalhesWhats.push(`• Bate e volta: +R$ ${acres.toFixed(2)}`);
+    const t = total * 0.8;
+    total += t;
+    detalhes.push(["♻️ Bate e volta", t]);
+    detalhesWhats.push(`♻️ *Bate e volta*: +R$ ${t.toFixed(2)}`);
   }
 
   if(tipoViagem.value==="ida_volta"){
-    const acres = total;
-    total += acres;
-    detalhes.push(["Ida e volta", acres]);
-    detalhesWhats.push(`• Ida e volta: +R$ ${acres.toFixed(2)}`);
-  }
-
-  if(tipoViagem.value==="ida_volta_espera"){
-    const acres = (total * 2) * 0.1;
-    total = (total * 2) + acres;
-    detalhes.push(["Ida e volta com espera", acres]);
-    detalhesWhats.push(`• Ida e volta com espera: +R$ ${acres.toFixed(2)}`);
-  }
-
-  // ADICIONAIS
-  if(excessoPessoas.checked){
-    const t = total < 30 ? 5 : total * 0.5;
-    total += t;
-    detalhes.push(["Excesso de pessoas", t]);
-    detalhesWhats.push(`• Excesso de pessoas: +R$ ${t.toFixed(2)}`);
-  }
-
-  if(voltaPraia.checked){
-    total += 10;
-    detalhes.push(["Volta das praias", 10]);
-    detalhesWhats.push("• Volta das praias: +R$ 10,00");
+    total *= 2;
+    detalhes.push(["🚕♻️ Ida e volta", total/2]);
+    detalhesWhats.push(`🚕♻️ *Ida e volta*: +R$ ${(total/2).toFixed(2)}`);
   }
 
   if(desvioSimples.checked){
     total += 5;
-    detalhes.push(["Desvio de rota", 5]);
-    detalhesWhats.push("• Desvio de rota: +R$ 5,00");
+    detalhes.push(["🛣️ Desvio de rota", 5]);
+    detalhesWhats.push("🛣️ *Desvio de rota*: +R$ 5,00");
   }
 
-  // ANIMAL
-  const animal = Number(animalSel.value || 0);
-  if(animal > 0){
-    total += animal;
-    detalhes.push(["Transporte de animal", animal]);
-    detalhesWhats.push(`• Transporte de animal: +R$ ${animal.toFixed(2)}`);
-  }
-
-  // ESPERA
-  const min = Number(minutosEspera.value || 0);
-  if(min >= 5){
-    const t = Math.floor(min / 5) * 3;
+  if(minutosEspera.value >= 5){
+    const t = Math.floor(minutosEspera.value/5)*3;
     total += t;
-    detalhes.push([`Tempo de espera (${min} min)`, t]);
-    detalhesWhats.push(`• Tempo de espera (${min} min): +R$ ${t.toFixed(2)}`);
+    detalhes.push(["⏱️ Tempo de espera", t]);
+    detalhesWhats.push(`⏱️ *Tempo de espera*: +R$ ${t.toFixed(2)}`);
   }
 
-  detalheDiv.innerHTML = detalhes.map((d,i)=>
-    `<div>
-      <span>${d[0]}</span>
-      <strong style="color:${i===0?'#333':'#d4af37'}">
-        R$ ${d[1].toFixed(2)}
-      </strong>
-    </div>`
-  ).join("");
+  detalheDiv.innerHTML = detalhes.map(d=>`
+    <div><span><strong>${d[0]}</strong></span><strong>R$ ${d[1].toFixed(2)}</strong></div>
+  `).join("");
 
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
-  App.set("total", total);
 }
 
-document.querySelectorAll("input[type=checkbox]").forEach(chk=>{
-  chk.addEventListener("change",()=>{
-    chk.closest(".option")?.classList.toggle("active", chk.checked);
-    animarTotal();
-    calcular();
-  });
+document.querySelectorAll("select,input").forEach(el=>{
+  el.addEventListener("change",calcular);
 });
-
-document.querySelectorAll("select,input[type=number]").forEach(el=>{
-  el.addEventListener("change",()=>{
-    animarTotal();
-    calcular();
-  });
-});
-
-function animarTotal(){
-  totalDiv.classList.remove("total");
-  void totalDiv.offsetWidth;
-  totalDiv.classList.add("total");
-}
 
 calcular();
 
 function enviarWhats(){
   const msg =
-`🚖 RF Driver – Orçamento de Corrida
+`🚖 *RF Driver – Orçamento de viagem*
 
-Origem: ${origem}
-Destino: ${destino}
+📌 *Origem*: ${origem}
+🏁 *Destino*: ${destino}
 
-Detalhamento:
+*Detalhamento*
 ${detalhesWhats.join("\n")}
 
-Total: R$ ${App.get("total").toFixed(2)}`;
+💰 *Total*: ${totalDiv.innerText}`;
 
-  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
 }
 </script>
 
