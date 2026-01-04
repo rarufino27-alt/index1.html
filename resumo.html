@@ -5,18 +5,29 @@
 <title>Resumo – RF Driver</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="theme/theme.css">
-<link rel="stylesheet" href="theme/layout.css">
-<link rel="stylesheet" href="theme/components.css">
+<link rel="stylesheet" href="./theme/theme.css">
+<link rel="stylesheet" href="./theme/layout.css">
+<link rel="stylesheet" href="./theme/components.css">
 
 <style>
-/* ===== AJUSTES PREMIUM DO RESUMO ===== */
+:root{
+  --gold:#D4AF37;
+  --gold-soft:#E6C97A;
+  --bg:#F5F5F5;
+  --text:#444;
+  --dark:#111;
+}
+
+body{
+  background:radial-gradient(circle at top,#fff,#f2f2f2);
+  color:var(--text);
+}
 
 .page{
   min-height:100vh;
   display:flex;
   justify-content:center;
-  padding:20px;
+  padding:22px;
 }
 
 .box{
@@ -24,61 +35,128 @@
   max-width:420px;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:18px;
 }
 
-/* TOTAL COM PRESENÇA */
-.total{
-  font-size:2.3rem;
-  font-weight:800;
-  color:var(--gold);
-  letter-spacing:1px;
-  margin-bottom:4px;
+/* HEADER */
+.header{
+  padding:26px 22px;
+  border-radius:24px;
+  background:linear-gradient(180deg,#fff,#f3f3f3);
+  border:1px solid rgba(212,175,55,.35);
+  box-shadow:0 10px 26px rgba(0,0,0,.08);
+  text-align:center;
 }
-.total::after{
-  content:"valor final";
-  display:block;
-  font-size:.7rem;
-  color:var(--text-muted);
+
+.header h1{
+  font-size:1.45rem;
   letter-spacing:2px;
+  background:linear-gradient(180deg,var(--gold),var(--gold-soft));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.header p{
+  font-size:.85rem;
+  color:#666;
+}
+
+/* CONTEXTO */
+.context{
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  text-align:center;
+}
+
+.context strong{
+  display:block;
   margin-top:4px;
 }
 
-/* QUADRANTES DE TAXA */
-.taxa-card{
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:10px;
-  transition:all .25s ease;
+/* SECTIONS */
+.section{
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
 }
 
-.taxa-card label{
+.section h3{
+  font-size:1rem;
+  margin-bottom:10px;
+}
+
+/* ADICIONAIS */
+.extra{
   display:flex;
   align-items:center;
-  gap:10px;
-  cursor:pointer;
+  justify-content:space-between;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #eee;
+  margin-bottom:8px;
+  transition:.25s;
 }
 
-.taxa-card.active{
+.extra.active{
   border-color:var(--gold);
   background:linear-gradient(
     180deg,
-    rgba(212,175,55,.18),
-    rgba(23,26,33,.95)
+    rgba(212,175,55,.15),
+    #fff
   );
-  box-shadow:0 8px 22px rgba(212,175,55,.25);
-  transform:scale(1.02);
 }
 
-@keyframes pulseGold{
-  0%{box-shadow:0 0 0 rgba(212,175,55,0)}
-  50%{box-shadow:0 0 22px rgba(212,175,55,.45)}
-  100%{box-shadow:0 0 0 rgba(212,175,55,0)}
+/* DETALHAMENTO */
+.detalhamento{
+  font-size:.85rem;
+  line-height:1.5;
 }
 
-.taxa-card.pulse{
-  animation:pulseGold .35s ease;
+.detalhamento div{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+
+/* TOTAL */
+.total-box{
+  background:linear-gradient(180deg,#fff,#f3f3f3);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 10px 26px rgba(0,0,0,.1);
+  text-align:center;
+}
+
+.total-label{
+  font-size:.75rem;
+  color:#777;
+}
+
+.total{
+  font-size:2.1rem;
+  font-weight:800;
+  color:var(--dark);
+}
+
+/* BOTÕES */
+.primary{
+  background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  border:none;
+  padding:18px;
+  border-radius:18px;
+  font-size:1.05rem;
+  font-weight:700;
+  box-shadow:0 8px 18px rgba(212,175,55,.35);
+}
+
+.secondary{
+  border:1px solid #ccc;
+  padding:14px;
+  border-radius:16px;
+  background:#fff;
 }
 </style>
 </head>
@@ -88,111 +166,90 @@
 <div class="page">
 <div class="box">
 
-<!-- HEADER -->
-<div class="card highlight" style="text-align:center">
-  <h2>Orçamento de Viagem</h2>
-  <p class="muted">Valor calculado com base nas opções selecionadas</p>
-</div>
-
-<!-- CONTEXTO -->
-<div class="card" style="text-align:center">
-  <p class="muted">📌🛫 Origem ou Destino</p>
-  <strong id="origemTxt"></strong>
-
-  <p class="muted" style="margin-top:8px">🛫📌 Destino ou Origem</p>
-  <strong id="destinoTxt"></strong>
-</div>
-
-<!-- TIPO DE VIAGEM -->
-<div class="card">
-  <h3>Tipo de viagem</h3>
-  <select id="tipoViagem">
-    <option value="ida">Ida</option>
-    <option value="bate_volta">Bate e volta (viagem rápida)</option>
-    <option value="ida_volta">Ida e volta (até 1h)</option>
-    <option value="ida_volta_espera">Ida e volta (acima de 1h)</option>
-  </select>
-</div>
-
-<!-- TAXAS COM ANIMAÇÃO -->
-<div class="card">
-  <h3>Adicionais</h3>
-
-  <div class="taxas-grid">
-
-    <div class="taxa-card">
-      <label>
-        <span class="taxa-icon">👥</span>
-        <span class="taxa-text">Excesso de pessoas</span>
-        <input type="checkbox" id="excessoPessoas">
-      </label>
-    </div>
-
-    <div class="taxa-card">
-      <label>
-        <span class="taxa-icon">⛱️</span>
-        <span class="taxa-text">Volta das praias</span>
-        <input type="checkbox" id="voltaPraia">
-      </label>
-    </div>
-
-    <div class="taxa-card">
-      <label>
-        <span class="taxa-icon">🛣️</span>
-        <span class="taxa-text">Desvio de rota simples</span>
-        <input type="checkbox" id="desvioSimples">
-      </label>
-    </div>
-
+  <!-- HEADER -->
+  <div class="header">
+    <h1>RESUMO DA CORRIDA</h1>
+    <p>Conferência e detalhamento do valor</p>
   </div>
-</div>
 
-<!-- ANIMAL -->
-<div class="card">
-  <h3>Transporte de animal</h3>
-  <select id="animal">
-    <option value="0">Nenhum</option>
-    <option value="5">Pequeno</option>
-    <option value="7">Médio</option>
-    <option value="10">Grande</option>
-    <option value="20">Viagem longa</option>
-  </select>
-</div>
+  <!-- CONTEXTO -->
+  <div class="context">
+    <p>📍 Origem</p>
+    <strong id="origemTxt"></strong>
 
-<!-- ESPERA -->
-<div class="card">
-  <h3>Desvio com espera</h3>
-  <input
-    type="number"
-    id="minutosEspera"
-    min="0"
-    placeholder="Minutos de espera"
-  >
-</div>
+    <p style="margin-top:10px">🏁 Destino</p>
+    <strong id="destinoTxt"></strong>
+  </div>
 
-<!-- DETALHAMENTO -->
-<div class="card">
-  <h3>Detalhamento</h3>
-  <div id="detalhamento" class="muted"></div>
-</div>
+  <!-- TIPO DE VIAGEM -->
+  <div class="section">
+    <h3>Tipo de viagem</h3>
+    <select id="tipoViagem">
+      <option value="ida">Somente ida</option>
+      <option value="bate_volta">Bate e volta</option>
+      <option value="ida_volta">Ida e volta (até 1h)</option>
+      <option value="ida_volta_espera">Ida e volta (acima de 1h)</option>
+    </select>
+  </div>
 
-<!-- TOTAL -->
-<div class="card highlight" style="text-align:center">
-  <div class="total" id="total">R$ 0,00</div>
-  <button class="btn btn-primary" onclick="enviarWhats()">
+  <!-- ADICIONAIS -->
+  <div class="section">
+    <h3>Adicionais</h3>
+
+    <div class="extra">
+      <span>👥 Excesso de pessoas</span>
+      <input type="checkbox" id="excessoPessoas">
+    </div>
+
+    <div class="extra">
+      <span>⛱️ Volta das praias</span>
+      <input type="checkbox" id="voltaPraia">
+    </div>
+
+    <div class="extra">
+      <span>🛣️ Desvio de rota</span>
+      <input type="checkbox" id="desvioSimples">
+    </div>
+  </div>
+
+  <!-- ANIMAL -->
+  <div class="section">
+    <h3>Transporte de animal</h3>
+    <select id="animal">
+      <option value="0">Não</option>
+      <option value="5">Pequeno</option>
+      <option value="7">Médio</option>
+      <option value="10">Grande</option>
+      <option value="20">Viagem longa</option>
+    </select>
+  </div>
+
+  <!-- ESPERA -->
+  <div class="section">
+    <h3>Tempo de espera</h3>
+    <input type="number" id="minutosEspera" placeholder="Minutos de espera">
+  </div>
+
+  <!-- DETALHAMENTO -->
+  <div class="section">
+    <h3>Detalhamento</h3>
+    <div class="detalhamento" id="detalhamento"></div>
+  </div>
+
+  <!-- TOTAL -->
+  <div class="total-box">
+    <div class="total-label">TOTAL DA CORRIDA</div>
+    <div class="total" id="total">R$ 0,00</div>
+  </div>
+
+  <!-- AÇÕES -->
+  <button class="primary" onclick="enviarWhats()">
     📤 Enviar orçamento no WhatsApp
   </button>
-</div>
 
-<!-- AÇÕES -->
-<div class="grid">
-  <div class="card">
-    <button class="btn btn-outline" onclick="voltarDestino()">◀ Voltar</button>
-  </div>
-  <div class="card">
-    <button class="btn btn-outline" onclick="novoPreco()">🔄 Novo cálculo</button>
-  </div>
-</div>
+  <button class="secondary" onclick="App.go('destino.html')">
+    ⬅ Voltar
+  </button>
 
 </div>
 </div>
@@ -202,11 +259,10 @@
 <script>
 const origem = App.get("origem");
 const destino = App.get("destino");
+const valorBaseOriginal = Number(App.get("valorBase") || 0);
 
 document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
-
-const valorBaseOriginal = Number(App.get("valorBase") || 0);
 
 const tipoViagem = document.getElementById("tipoViagem");
 const excessoPessoas = document.getElementById("excessoPessoas");
@@ -217,95 +273,95 @@ const minutosEspera = document.getElementById("minutosEspera");
 const totalDiv = document.getElementById("total");
 const detalheDiv = document.getElementById("detalhamento");
 
-/* ANIMAÇÃO DOS QUADRANTES */
-document.querySelectorAll(".taxa-card input").forEach(input => {
-  const card = input.closest(".taxa-card");
-  input.addEventListener("change", () => {
-    if(input.checked){
-      card.classList.add("active","pulse");
-      setTimeout(()=>card.classList.remove("pulse"),350);
-    }else{
-      card.classList.remove("active");
-    }
-    calcular();
-  });
-});
+let detalhesWhats = [];
 
 function calcular(){
   let total = valorBaseOriginal;
   let detalhes = [];
+  detalhesWhats = [];
 
-  detalhes.push(`🚕 Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
+  detalhes.push(["Viagem base", valorBaseOriginal]);
+  detalhesWhats.push(`• Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
 
-  const tipo = tipoViagem.value;
-  if(tipo==="bate_volta"){ total*=1.8; detalhes.push("🔁 Bate e volta"); }
-  if(tipo==="ida_volta"){ total*=2; detalhes.push("🔁 Ida e volta"); }
-  if(tipo==="ida_volta_espera"){ total=(total*2)*1.1; detalhes.push("⏳ Ida e volta com espera"); }
+  if(tipoViagem.value==="bate_volta"){ total*=1.8; detalhesWhats.push("• Bate e volta"); }
+  if(tipoViagem.value==="ida_volta"){ total*=2; detalhesWhats.push("• Ida e volta"); }
+  if(tipoViagem.value==="ida_volta_espera"){ total=(total*2)*1.1; detalhesWhats.push("• Ida e volta com espera"); }
 
   if(excessoPessoas.checked){
-    const taxa = total < 30 ? 5 : total*0.5;
-    total+=taxa;
-    detalhes.push(`👥 Excesso de pessoas: R$ ${taxa.toFixed(2)}`);
+    const t = total < 30 ? 5 : total*0.5;
+    total+=t;
+    detalhes.push(["Excesso de pessoas",t]);
+    detalhesWhats.push(`• Excesso de pessoas: R$ ${t.toFixed(2)}`);
   }
 
   if(voltaPraia.checked){
     total+=10;
-    detalhes.push("⛱️ Volta das praias: R$ 10.00");
+    detalhes.push(["Volta das praias",10]);
+    detalhesWhats.push("• Volta das praias: R$ 10,00");
   }
 
   if(desvioSimples.checked){
     total+=5;
-    detalhes.push("🛣️ Desvio de rota: R$ 5.00");
+    detalhes.push(["Desvio de rota",5]);
+    detalhesWhats.push("• Desvio de rota: R$ 5,00");
   }
 
   const h=new Date().getHours(), m=new Date().getMinutes();
   if(h>22||(h===22&&m>=30)||h<5){
-    const taxa = total < 30 ? 5 : total*0.35;
-    total+=taxa;
-    detalhes.push(`🌙 Adicional noturno: R$ ${taxa.toFixed(2)}`);
+    const t = total < 30 ? 5 : total*0.35;
+    total+=t;
+    detalhes.push(["Adicional noturno",t]);
+    detalhesWhats.push(`• Adicional noturno: R$ ${t.toFixed(2)}`);
   }
 
-  const animal=Number(animalSel.value);
+  const animal=Number(animalSel.value||0);
   if(animal>0){
     total+=animal;
-    detalhes.push(`🐶 Transporte de animal: R$ ${animal.toFixed(2)}`);
+    detalhes.push(["Transporte de animal",animal]);
+    detalhesWhats.push(`• Transporte de animal: R$ ${animal.toFixed(2)}`);
   }
 
   const min=Number(minutosEspera.value||0);
   if(min>=5){
-    const taxa=Math.floor(min/5)*3;
-    total+=taxa;
-    detalhes.push(`⏱️ Espera (${min} min): R$ ${taxa.toFixed(2)}`);
+    const t=Math.floor(min/5)*3;
+    total+=t;
+    detalhes.push([`Espera (${min} min)`,t]);
+    detalhesWhats.push(`• Espera (${min} min): R$ ${t.toFixed(2)}`);
   }
+
+  detalheDiv.innerHTML = detalhes.map(d =>
+    `<div><span>${d[0]}</span><strong>R$ ${Number(d[1]).toFixed(2)}</strong></div>`
+  ).join("");
 
   App.set("total", total);
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
-  detalheDiv.innerHTML = detalhes.join("<br>");
 }
 
 document.querySelectorAll("select,input").forEach(e=>{
-  if(e.type!=="checkbox") e.addEventListener("change",calcular);
+  e.addEventListener("change",()=>{
+    e.closest(".extra")?.classList.toggle("active",e.checked);
+    calcular();
+  });
 });
 
 calcular();
 
 function enviarWhats(){
   const msg =
-`🚖 *Orçamento RF Driver*
+`🚖 *RF Driver – Orçamento de Corrida*
 
-📌 Origem: ${origem}
-🛫 Destino: ${destino}
+📍 Origem: ${origem}
+🏁 Destino: ${destino}
 
-✍🏽 *Detalhamento*
-${detalheDiv.innerText}
+🧾 *Detalhamento*
+${detalhesWhats.join("\n")}
 
-💸 *Total*: R$ ${App.get("total").toFixed(2)}`;
+💰 *Total*: R$ ${App.get("total").toFixed(2)}
+
+Valor calculado conforme tabela RF Driver.`;
 
   window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
 }
-
-function voltarDestino(){ App.go("destino.html"); }
-function novoPreco(){ localStorage.clear(); App.go("origem.html"); }
 </script>
 
 </body>
