@@ -2,172 +2,64 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Origem - RF Driver</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Origem – RF Driver</title>
 
-<link rel="stylesheet" href="theme/theme.css">
-<link rel="stylesheet" href="theme/layout.css">
-<link rel="stylesheet" href="theme/components.css">
-
-<style>
-body{
-  min-height:100vh;
-  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#fff;
-}
-
-.container{
-  width:100%;
-  max-width:560px;
-  padding:35px 30px;
-  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
-  border-radius:22px;
-  box-shadow:0 0 40px rgba(255,215,120,.25);
-}
-
-/* HEADER */
-.app-header{text-align:center;margin-bottom:22px}
-.app-header h1{
-  font-size:2rem;
-  letter-spacing:2px;
-  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  margin-bottom:10px;
-}
-.steps{
-  display:flex;justify-content:center;gap:14px;font-size:.9rem
-}
-.step{display:flex;align-items:center;gap:6px;opacity:.4}
-.step.active{opacity:1;font-weight:600}
-.step span{
-  width:18px;height:18px;border-radius:50%;
-  background:#f5c542;color:#000;
-  font-size:.75rem;line-height:18px;text-align:center
-}
-
-/* SEARCH PREMIUM */
-.search-wrapper{position:relative}
-.search-input{
-  width:100%;
-  padding:14px 16px;
-  border-radius:14px;
-  border:1px solid rgba(255,215,120,.25);
-  background:rgba(0,0,0,.4);
-  color:#fff;
-  font-size:1rem;
-}
-.search-input::placeholder{color:#aaa}
-.search-results{
-  position:absolute;
-  top:105%;
-  left:0;
-  right:0;
-  background:#0f0f0f;
-  border-radius:14px;
-  box-shadow:0 10px 25px rgba(0,0,0,.6);
-  max-height:240px;
-  overflow:auto;
-  display:none;
-  z-index:5;
-}
-.search-results div{
-  padding:12px 16px;
-  cursor:pointer;
-}
-.search-results div:hover{
-  background:rgba(245,197,66,.15);
-}
-
-.actions{margin-bottom:15px;display:flex;gap:10px}
-</style>
+<link rel="stylesheet" href="./theme/theme.css">
+<link rel="stylesheet" href="./theme/layout.css">
+<link rel="stylesheet" href="./theme/components.css">
 </head>
 
 <body>
 
-<div class="container">
-
-  <div class="app-header">
-    <h1>RF DRIVER</h1>
-    <div class="steps">
-      <div class="step active"><span>1</span> Origem</div>
-      <div class="step"><span>2</span> Destino</div>
-      <div class="step"><span>3</span> Resumo</div>
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="btn btn-secondary" onclick="App.go('index.html')">🏠 Início</button>
-  </div>
-
-  <label>Digite a origem</label>
-  <div class="search-wrapper">
-    <input
-      type="text"
-      id="buscaOrigem"
-      class="search-input"
-      placeholder="Ex: Centro, Aeroporto..."
-      autocomplete="off"
-    >
-    <div id="listaOrigens" class="search-results"></div>
-  </div>
-
-  <button id="btnContinuar" class="btn btn-primary" disabled style="margin-top:20px">
-    Continuar
-  </button>
-
+<!-- HEADER -->
+<div class="card highlight" style="text-align:center">
+  <h2>Selecionar Origem</h2>
+  <p class="muted">Escolha o ponto inicial da corrida</p>
 </div>
 
-<script src="core/global.js"></script>
+<!-- FORMULÁRIO -->
+<div class="card">
+  <label for="origem">Origem</label>
+  <select id="origem">
+    <option value="">Selecione a origem</option>
+  </select>
+</div>
+
+<!-- AÇÃO -->
+<div class="card highlight" style="text-align:center">
+  <button class="btn btn-primary" id="btnAvancar">
+    Avançar para destino →
+  </button>
+</div>
+
 <script src="core/datamanager.js"></script>
+<script src="core/global.js"></script>
 
 <script>
-const input = document.getElementById("buscaOrigem");
-const lista = document.getElementById("listaOrigens");
-const btn = document.getElementById("btnContinuar");
+async function carregarOrigens(){
+  await DataManager.carregar();
+  const select = document.getElementById("origem");
 
-let origens = [];
-
-async function carregar(){
-  try{
-    await DataManager.carregar(); // 🔑 carrega os JSONs primeiro
-    origens = DataManager.listarOrigens();
-    console.log("✅ Origens carregadas:", origens);
-  }catch(e){
-    console.error("❌ Falha ao carregar origens", e);
-  }
+  DataManager.getOrigens().forEach(o => {
+    const opt = document.createElement("option");
+    opt.value = o;
+    opt.textContent = o;
+    select.appendChild(opt);
+  });
 }
 
-carregar();
-
-input.addEventListener("input",()=>{
-  const termo = input.value.toLowerCase();
-  lista.innerHTML="";
-  if(!termo){lista.style.display="none";return}
-
-  origens.filter(o=>o.toLowerCase().includes(termo))
-    .forEach(o=>{
-      const div=document.createElement("div");
-      div.textContent=o;
-      div.onclick=()=>{
-        input.value=o;
-        App.set("origem",o);
-        App.set("destino",null);
-        App.set("valorBase",0);
-        lista.style.display="none";
-        btn.disabled=false;
-      };
-      lista.appendChild(div);
-    });
-
-  lista.style.display="block";
+document.getElementById("btnAvancar").addEventListener("click", () => {
+  const origem = document.getElementById("origem").value;
+  if(!origem){
+    alert("Selecione a origem");
+    return;
+  }
+  App.setOrigem(origem);
+  App.go("destino.html");
 });
 
-btn.onclick=()=>App.go("destino.html");
+carregarOrigens();
 </script>
 
 </body>
