@@ -34,7 +34,7 @@
   { "origem": "Centro do Cabo", "destino": "Hospital InfantoJuvenil (Centro)", "valor": 10, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Hospital São Sebastião (Centro)", "valor": 10, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Hospital Samaritano (Centro)", "valor": 10, "regiao": "Cabo" },
-  { "origem": "Centro do Cabo", "destino": "Hospital Dom Helder Câmara", "valor": 20, "regiao": "Cabo" }
+  { "origem": "Centro do Cabo", "destino": "Hospital Dom Helder Câmara", "valor": 20, "regiao": "Cabo" },
 
   { "origem": "Cohab", "destino": "Clinica Saúde (Centro)", "valor": 10, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "Clinica Amor & Saúde (Centro)", "valor": 13, "regiao": "Cabo" },
@@ -73,5 +73,6 @@
   { "origem": "Cohab", "destino": "Hospital Samaritano (Centro)", "valor": 10, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "Hospital Dom Helder Câmara", "valor": 20, "regiao": "Cabo" }
 ]
+
 
 
