@@ -14,12 +14,15 @@
   --gold:#D4AF37;
   --gold-soft:#E6C97A;
   --bg:#F5F5F5;
-  --text:#444;
+  --text:#333;
+  --muted:#777;
   --dark:#111;
 }
 
+/* ================= BASE ================= */
 body{
-  background:radial-gradient(circle at top,#fff,#f2f2f2);
+  background:
+    radial-gradient(circle at top,#ffffff 0%,#f1f1f1 70%);
   color:var(--text);
 }
 
@@ -38,57 +41,72 @@ body{
   gap:18px;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 .header{
   padding:26px 22px;
   border-radius:24px;
-  background:linear-gradient(180deg,#fff,#f3f3f3);
+  background:
+    linear-gradient(180deg,#ffffff,#f4f4f4);
   border:1px solid rgba(212,175,55,.35);
-  box-shadow:0 10px 26px rgba(0,0,0,.08);
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.08);
   text-align:center;
 }
 
 .header h1{
   font-size:1.45rem;
   letter-spacing:2px;
-  background:linear-gradient(180deg,var(--gold),var(--gold-soft));
+  background:
+    linear-gradient(120deg,var(--gold),var(--gold-soft));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
 .header p{
-  font-size:.85rem;
-  color:#666;
+  font-size:.8rem;
+  color:var(--muted);
 }
 
-/* CONTEXTO */
-.context{
+/* ================= TRAJETO ================= */
+.route{
   background:#fff;
-  border-radius:18px;
-  padding:16px;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,.08);
+}
+
+.route-item{
   text-align:center;
-}
-
-.context strong{
-  display:block;
-  margin-top:4px;
-}
-
-/* SECTIONS */
-.section{
-  background:#fff;
-  border-radius:18px;
-  padding:16px;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-
-.section h3{
-  font-size:1rem;
   margin-bottom:10px;
 }
 
-/* ADICIONAIS */
+.route-label{
+  font-size:.7rem;
+  color:var(--muted);
+}
+
+.route-value{
+  font-weight:700;
+  font-size:.95rem;
+}
+
+/* ================= SEÇÕES ================= */
+.section{
+  background:#fff;
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,.08);
+}
+
+.section h3{
+  font-size:.95rem;
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* ================= ADICIONAIS ================= */
 .extra{
   display:flex;
   align-items:center;
@@ -102,17 +120,17 @@ body{
 
 .extra.active{
   border-color:var(--gold);
-  background:linear-gradient(
-    180deg,
-    rgba(212,175,55,.15),
-    #fff
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(212,175,55,.12),
+      #fff
+    );
 }
 
-/* DETALHAMENTO */
+/* ================= DETALHAMENTO ================= */
 .detalhamento{
   font-size:.85rem;
-  line-height:1.5;
 }
 
 .detalhamento div{
@@ -121,41 +139,47 @@ body{
   margin-bottom:6px;
 }
 
-/* TOTAL */
+/* ================= TOTAL ================= */
 .total-box{
-  background:linear-gradient(180deg,#fff,#f3f3f3);
-  border-radius:22px;
-  padding:18px;
-  box-shadow:0 10px 26px rgba(0,0,0,.1);
+  background:
+    linear-gradient(180deg,#ffffff,#f4f4f4);
+  border-radius:26px;
+  padding:22px;
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.12);
   text-align:center;
+  border:1px solid rgba(212,175,55,.4);
 }
 
 .total-label{
-  font-size:.75rem;
-  color:#777;
+  font-size:.7rem;
+  color:var(--muted);
+  letter-spacing:1px;
 }
 
 .total{
-  font-size:2.1rem;
-  font-weight:800;
+  font-size:2.3rem;
+  font-weight:900;
   color:var(--dark);
+  margin-top:4px;
 }
 
-/* BOTÕES */
+/* ================= BOTÕES ================= */
 .primary{
-  background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  background:
+    linear-gradient(180deg,var(--gold-soft),var(--gold));
   border:none;
   padding:18px;
-  border-radius:18px;
+  border-radius:20px;
   font-size:1.05rem;
-  font-weight:700;
-  box-shadow:0 8px 18px rgba(212,175,55,.35);
+  font-weight:800;
+  box-shadow:0 10px 22px rgba(212,175,55,.4);
 }
 
 .secondary{
   border:1px solid #ccc;
   padding:14px;
-  border-radius:16px;
+  border-radius:18px;
   background:#fff;
 }
 </style>
@@ -169,21 +193,24 @@ body{
   <!-- HEADER -->
   <div class="header">
     <h1>RESUMO DA CORRIDA</h1>
-    <p>Conferência e detalhamento do valor</p>
+    <p>Valor calculado com base na tabela oficial RF Driver</p>
   </div>
 
-  <!-- CONTEXTO -->
-  <div class="context">
-    <p>📍 Origem</p>
-    <strong id="origemTxt"></strong>
-
-    <p style="margin-top:10px">🏁 Destino</p>
-    <strong id="destinoTxt"></strong>
+  <!-- TRAJETO -->
+  <div class="route">
+    <div class="route-item">
+      <div class="route-label">ORIGEM</div>
+      <div class="route-value" id="origemTxt"></div>
+    </div>
+    <div class="route-item">
+      <div class="route-label">DESTINO</div>
+      <div class="route-value" id="destinoTxt"></div>
+    </div>
   </div>
 
-  <!-- TIPO DE VIAGEM -->
+  <!-- TIPO -->
   <div class="section">
-    <h3>Tipo de viagem</h3>
+    <h3>🚕 Tipo de viagem</h3>
     <select id="tipoViagem">
       <option value="ida">Somente ida</option>
       <option value="bate_volta">Bate e volta</option>
@@ -194,7 +221,7 @@ body{
 
   <!-- ADICIONAIS -->
   <div class="section">
-    <h3>Adicionais</h3>
+    <h3>➕ Adicionais</h3>
 
     <div class="extra">
       <span>👥 Excesso de pessoas</span>
@@ -214,7 +241,7 @@ body{
 
   <!-- ANIMAL -->
   <div class="section">
-    <h3>Transporte de animal</h3>
+    <h3>🐾 Transporte de animal</h3>
     <select id="animal">
       <option value="0">Não</option>
       <option value="5">Pequeno</option>
@@ -226,29 +253,29 @@ body{
 
   <!-- ESPERA -->
   <div class="section">
-    <h3>Tempo de espera</h3>
+    <h3>⏱️ Tempo de espera</h3>
     <input type="number" id="minutosEspera" placeholder="Minutos de espera">
   </div>
 
   <!-- DETALHAMENTO -->
   <div class="section">
-    <h3>Detalhamento</h3>
+    <h3>🧾 Composição do valor</h3>
     <div class="detalhamento" id="detalhamento"></div>
   </div>
 
   <!-- TOTAL -->
   <div class="total-box">
-    <div class="total-label">TOTAL DA CORRIDA</div>
+    <div class="total-label">VALOR FINAL DA CORRIDA</div>
     <div class="total" id="total">R$ 0,00</div>
   </div>
 
   <!-- AÇÕES -->
   <button class="primary" onclick="enviarWhats()">
-    📤 Enviar orçamento no WhatsApp
+    📤 Enviar orçamento detalhado no WhatsApp
   </button>
 
   <button class="secondary" onclick="App.go('destino.html')">
-    ⬅ Voltar
+    ⬅ Ajustar destino
   </button>
 
 </div>
