@@ -7,10 +7,10 @@
 
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#d4af37">
+<meta name="theme-color" content="#D4AF37">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="RF Driver">
 <link rel="apple-touch-icon" href="./icons/192.png">
 
@@ -19,7 +19,27 @@
 <link rel="stylesheet" href="./theme/components.css">
 
 <style>
-/* ===== MOBILE PREMIUM LAYOUT ===== */
+:root{
+  --gold:#D4AF37;
+  --gold-soft:#E6C97A;
+  --bg:#F5F5F5;
+  --text:#444;
+  --dark:#111;
+}
+
+/* ===== BASE ===== */
+body{
+  background:
+    radial-gradient(
+      circle at top,
+      #ffffff 0%,
+      #f3f3f3 60%,
+      #ededed 100%
+    );
+  color:var(--text);
+}
+
+/* ===== LAYOUT ===== */
 .page{
   min-height:100vh;
   display:flex;
@@ -33,51 +53,68 @@
   max-width:420px;
   display:flex;
   flex-direction:column;
-  gap:18px;
+  gap:22px;
 }
 
-/* MARCA FORTE */
-.brand-box{
+/* ===== HERO ===== */
+.hero{
   text-align:center;
-  padding:28px 20px;
-  border-radius:22px;
+  padding:32px 24px;
+  border-radius:26px;
   background:
     linear-gradient(
       180deg,
-      rgba(212,175,55,.15),
-      rgba(23,26,33,.95)
+      #ffffff,
+      #f2f2f2
     );
   border:1px solid rgba(212,175,55,.35);
   box-shadow:
-    0 0 40px rgba(212,175,55,.25),
-    inset 0 0 18px rgba(255,255,255,.04);
+    0 10px 28px rgba(0,0,0,.08),
+    inset 0 0 18px rgba(255,255,255,.6);
 }
 
-.brand{
-  font-size:1.9rem;
+.hero-title{
+  font-size:1.8rem;
   font-weight:800;
-  letter-spacing:3px;
-  color:var(--gold);
+  letter-spacing:2px;
+  background:linear-gradient(180deg,var(--gold),var(--gold-soft));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-.tagline{
+.hero-sub{
   margin-top:6px;
-  font-size:.85rem;
-  color:var(--text-muted);
+  font-size:.9rem;
+  color:#666;
 }
 
-/* BOTÕES */
-.action-btn{
+/* ===== BOTÃO PRINCIPAL ===== */
+.primary-action{
   padding:18px;
   font-size:1.05rem;
   font-weight:700;
   border-radius:18px;
+  background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  color:#000;
+  border:none;
+  box-shadow:0 8px 18px rgba(212,175,55,.35);
 }
 
-.secondary-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+/* ===== AÇÕES SECUNDÁRIAS ===== */
+.secondary{
+  display:flex;
   gap:12px;
+}
+
+.secondary .btn{
+  flex:1;
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  text-align:center;
+  font-size:.75rem;
+  color:#777;
 }
 </style>
 </head>
@@ -87,38 +124,36 @@
 <div class="page">
   <div class="box">
 
-    <!-- MARCA -->
-    <div class="brand-box">
-      <div class="brand">RF DRIVER</div>
-      <div class="tagline">Mobilidade com excelência</div>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-title">RF DRIVER</div>
+      <div class="hero-sub">Mobilidade com excelência</div>
     </div>
 
     <!-- AÇÃO PRINCIPAL -->
-    <button class="btn btn-primary action-btn" id="btnIniciar">
+    <button class="btn primary-action" id="btnIniciar">
       ▶ Iniciar cálculo de corrida
     </button>
 
     <!-- AÇÕES SECUNDÁRIAS -->
-    <div class="secondary-actions">
+    <div class="secondary">
       <button class="btn btn-outline" onclick="abrirRegras()">
         📋 Regras
       </button>
-
       <a class="btn btn-outline" href="instalar-app.html">
         📲 Instalar App
       </a>
     </div>
 
     <!-- FOOTER -->
-    <p class="muted" style="text-align:center;font-size:.75rem">
-      Ferramenta oficial RF Driver
-    </p>
+    <div class="footer">
+      Ferramenta oficial para motoristas RF Driver
+    </div>
 
   </div>
 </div>
 
 <script src="core/global.js"></script>
-
 <script>
 document.getElementById("btnIniciar").onclick = () => {
   App.reset();
