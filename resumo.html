@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="./theme/components.css">
 
 <style>
-/* ================= BASE ================= */
 body{
   background:linear-gradient(180deg,#fafafa,#f1f1f1);
   color:#222;
@@ -31,7 +30,7 @@ body{
   gap:16px;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 .header{
   text-align:center;
   padding:20px;
@@ -52,7 +51,7 @@ body{
   color:#666;
 }
 
-/* ================= ROTA ================= */
+/* ROTA */
 .route{
   background:#fff;
   border-radius:20px;
@@ -71,7 +70,7 @@ body{
   font-size:1.3rem;
 }
 
-/* ================= BLOCOS ================= */
+/* BLOCOS */
 .block{
   background:#fff;
   border-radius:18px;
@@ -86,7 +85,7 @@ label{
   margin-bottom:6px;
 }
 
-/* ================= INPUTS ================= */
+/* INPUTS */
 select,
 input[type="number"]{
   width:100%;
@@ -100,7 +99,7 @@ input[type="number"]{
 
 input::placeholder{ color:#777; }
 
-/* ================= OPÇÕES ================= */
+/* OPÇÕES */
 .option{
   display:flex;
   justify-content:space-between;
@@ -117,7 +116,7 @@ input::placeholder{ color:#777; }
   border-color:#d4af37;
 }
 
-/* ================= DETALHAMENTO ================= */
+/* DETALHAMENTO */
 .details{
   font-size:.85rem;
 }
@@ -128,7 +127,7 @@ input::placeholder{ color:#777; }
   margin-bottom:6px;
 }
 
-/* ================= TOTAL ================= */
+/* TOTAL */
 .totalBox{
   text-align:center;
   padding:22px;
@@ -167,7 +166,7 @@ input::placeholder{ color:#777; }
   to{opacity:1;transform:scale(1)}
 }
 
-/* ================= BOTÃO ================= */
+/* BOTÃO */
 .btn-final{
   padding:16px;
   border-radius:18px;
@@ -198,14 +197,14 @@ input::placeholder{ color:#777; }
     <div class="item">🏁 <strong>Destino</strong><br><span id="destinoTxt"></span></div>
   </div>
 
-  <!-- TIPO DE VIAGEM -->
+  <!-- TIPO DE VIAGEM (CORRIGIDO) -->
   <div class="block">
     <label>🚖 <strong>Tipo de viagem</strong></label>
     <select id="tipoViagem">
       <option value="ida">🚕 Ida</option>
-      <option value="bate_volta">♻️ Bate e volta</option>
-      <option value="ida_volta">🚕♻️ Ida e volta</option>
-      <option value="ida_volta_espera">🚕♻️ Ida e volta (com espera)</option>
+      <option value="bateVolta">♻️ Bate e volta</option>
+      <option value="idaVolta">🚕♻️ Ida e volta (até 1h)</option>
+      <option value="idaVoltaEspera">🚕♻️ Ida e volta (a partir de 1h)</option>
     </select>
   </div>
 
@@ -260,8 +259,8 @@ input::placeholder{ color:#777; }
 </div>
 
 <script src="core/global.js"></script>
-<script src="core/taxas.js"></script>
-<script src="core/dinamico.js"></script>
+<script src="core/taxas.js?v=4"></script>
+<script src="core/dinamico.js?v=4"></script>
 
 <script>
 const origem = App.get("origem");
@@ -353,7 +352,10 @@ function calcular(){
   }
 
   detalheDiv.innerHTML = detalhes.map(d=>`
-    <div><span><strong>${d[0]}</strong></span><strong>R$ ${d[1].toFixed(2)}</strong></div>
+    <div>
+      <span><strong>${d[0]}</strong></span>
+      <strong>R$ ${d[1].toFixed(2)}</strong>
+    </div>
   `).join("");
 
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
