@@ -21,8 +21,7 @@
 
 /* ================= BASE ================= */
 body{
-  background:
-    radial-gradient(circle at top,#ffffff 0%,#f1f1f1 70%);
+  background:radial-gradient(circle at top,#ffffff 0%,#f1f1f1 70%);
   color:var(--text);
 }
 
@@ -45,19 +44,16 @@ body{
 .header{
   padding:26px 22px;
   border-radius:24px;
-  background:
-    linear-gradient(180deg,#ffffff,#f4f4f4);
+  background:linear-gradient(180deg,#ffffff,#f4f4f4);
   border:1px solid rgba(212,175,55,.35);
-  box-shadow:
-    0 12px 28px rgba(0,0,0,.08);
+  box-shadow:0 12px 28px rgba(0,0,0,.08);
   text-align:center;
 }
 
 .header h1{
   font-size:1.45rem;
   letter-spacing:2px;
-  background:
-    linear-gradient(120deg,var(--gold),var(--gold-soft));
+  background:linear-gradient(120deg,var(--gold),var(--gold-soft));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -106,6 +102,25 @@ body{
   gap:8px;
 }
 
+/* ================= INPUTS BRANCOS ================= */
+select,
+input[type="number"]{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  background:#ffffff;          /* ✔ BRANCO */
+  color:#000;                  /* ✔ TEXTO PRETO */
+  font-size:.95rem;
+}
+
+select:focus,
+input[type="number"]:focus{
+  outline:none;
+  border-color:var(--gold);
+  box-shadow:0 0 0 2px rgba(212,175,55,.15);
+}
+
 /* ================= ADICIONAIS ================= */
 .extra{
   display:flex;
@@ -120,12 +135,11 @@ body{
 
 .extra.active{
   border-color:var(--gold);
-  background:
-    linear-gradient(
-      180deg,
-      rgba(212,175,55,.12),
-      #fff
-    );
+  background:linear-gradient(
+    180deg,
+    rgba(212,175,55,.12),
+    #fff
+  );
 }
 
 /* ================= DETALHAMENTO ================= */
@@ -141,12 +155,10 @@ body{
 
 /* ================= TOTAL ================= */
 .total-box{
-  background:
-    linear-gradient(180deg,#ffffff,#f4f4f4);
+  background:linear-gradient(180deg,#ffffff,#f4f4f4);
   border-radius:26px;
   padding:22px;
-  box-shadow:
-    0 14px 30px rgba(0,0,0,.12);
+  box-shadow:0 14px 30px rgba(0,0,0,.12);
   text-align:center;
   border:1px solid rgba(212,175,55,.4);
 }
@@ -166,8 +178,7 @@ body{
 
 /* ================= BOTÕES ================= */
 .primary{
-  background:
-    linear-gradient(180deg,var(--gold-soft),var(--gold));
+  background:linear-gradient(180deg,var(--gold-soft),var(--gold));
   border:none;
   padding:18px;
   border-radius:20px;
