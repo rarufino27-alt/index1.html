@@ -8,103 +8,56 @@
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
-
-<style>
-body{
-  min-height:100vh;
-  background:radial-gradient(circle at top, #1a1a1a 0%, #000 60%);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#fff;
-}
-.container{
-  width:100%;
-  max-width:640px;
-  padding:30px;
-  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.85));
-  border-radius:22px;
-  box-shadow:0 0 40px rgba(255,215,120,.25);
-}
-h2{
-  text-align:center;
-  margin-bottom:6px;
-  background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.viagem{
-  text-align:center;
-  font-size:.9rem;
-  color:#ddd;
-  margin-bottom:18px;
-}
-.quadrante{
-  border:1px solid rgba(255,215,120,.25);
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:14px;
-}
-.quadrante h3{
-  font-size:.95rem;
-  margin-bottom:8px;
-  color:#f5c542;
-}
-select,input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:#111;
-  color:#fff;
-}
-label{font-size:.85rem}
-.total{
-  text-align:center;
-  font-size:1.5rem;
-  margin-top:16px;
-  color:#f5c542;
-}
-.detalhamento{
-  font-size:.85rem;
-  margin-top:12px;
-  color:#ddd;
-}
-.btn{width:100%;margin-top:10px}
-</style>
 </head>
 
 <body>
 
-<div class="container">
-
-<h2>RF Driver</h2>
-
-<div class="viagem">
-📌 Origem: <strong id="origemTxt"></strong><br>
-🛫 Destino: <strong id="destinoTxt"></strong>
+<!-- HEADER -->
+<div class="card highlight" style="text-align:center">
+  <h2>Resumo da Corrida</h2>
+  <p class="muted">Confira os detalhes e o valor final</p>
 </div>
 
-<!-- 1️⃣ TIPO DE VIAGEM -->
-<div class="quadrante">
+<!-- CONTEXTO -->
+<div class="card" style="text-align:center">
+  <p class="muted">📌 Origem</p>
+  <strong id="origemTxt"></strong>
+
+  <p class="muted" style="margin-top:8px">🛫 Destino</p>
+  <strong id="destinoTxt"></strong>
+</div>
+
+<!-- COMPOSIÇÃO DO PREÇO -->
+<div class="card">
   <h3>Tipo de viagem</h3>
   <select id="tipoViagem">
     <option value="ida">Ida</option>
-    <option value="bate_volta">Bate e volta (Viagem Rápida)</option>
-    <option value="ida_volta">Ida e volta c/ menos de 1h de espera</option>
-    <option value="ida_volta_espera">Ida e volta a partir de 1h de espera</option>
+    <option value="bate_volta">Bate e volta (viagem rápida)</option>
+    <option value="ida_volta">Ida e volta (até 1h)</option>
+    <option value="ida_volta_espera">Ida e volta (acima de 1h)</option>
   </select>
 </div>
 
-<!-- 2️⃣ TAXAS -->
-<div class="quadrante">
-  <label><input type="checkbox" id="excessoPessoas"> Excesso de pessoas</label><br>
-  <label><input type="checkbox" id="voltaPraia"> Volta das praias</label><br>
-  <label><input type="checkbox" id="desvioSimples"> Desvio de rota simples</label>
+<div class="card">
+  <h3>Adicionais</h3>
+
+  <label>
+    <input type="checkbox" id="excessoPessoas">
+    Excesso de pessoas
+  </label>
+
+  <label>
+    <input type="checkbox" id="voltaPraia">
+    Volta das praias
+  </label>
+
+  <label>
+    <input type="checkbox" id="desvioSimples">
+    Desvio de rota simples
+  </label>
 </div>
 
-<!-- 3️⃣ ANIMAL -->
-<div class="quadrante">
+<div class="card">
   <h3>Transporte de animal</h3>
   <select id="animal">
     <option value="0">Nenhum</option>
@@ -115,26 +68,44 @@ label{font-size:.85rem}
   </select>
 </div>
 
-<!-- 4️⃣ DESVIO COM ESPERA -->
-<div class="quadrante">
-  <h3>Desvio de rota com espera</h3>
-  <input type="number" id="minutosEspera" min="0" placeholder="Minutos de espera">
+<div class="card">
+  <h3>Desvio com espera</h3>
+  <input
+    type="number"
+    id="minutosEspera"
+    min="0"
+    placeholder="Minutos de espera"
+  >
 </div>
 
 <!-- DETALHAMENTO -->
-<div class="detalhamento" id="detalhamento"></div>
-
-<!-- TOTAL -->
-<div class="total" id="total">R$ 0,00</div>
-
-  <!-- AÇÕES -->
-<div style="display:flex;gap:10px;margin-top:16px">
-  <button class="btn btn-secondary" onclick="voltarDestino()">⬅ Voltar para destino</button>
-  <button class="btn btn-warning" onclick="novoPreco()">🔄 Novo preço</button>
+<div class="card">
+  <h3>Detalhamento</h3>
+  <div id="detalhamento" class="muted"></div>
 </div>
 
-<button class="btn btn-primary" onclick="enviarWhats()">📤 Enviar no WhatsApp</button>
+<!-- TOTAL E AÇÃO FINAL -->
+<div class="card highlight" style="text-align:center">
+  <div class="total" id="total">R$ 0,00</div>
 
+  <button class="btn btn-primary" onclick="enviarWhats()">
+    📤 Enviar orçamento no WhatsApp
+  </button>
+</div>
+
+<!-- AÇÕES AUXILIARES -->
+<div class="grid">
+  <div class="card">
+    <button class="btn btn-outline" onclick="voltarDestino()">
+      ◀ Voltar para destino
+    </button>
+  </div>
+
+  <div class="card">
+    <button class="btn btn-outline" onclick="novoPreco()">
+      🔄 Novo cálculo
+    </button>
+  </div>
 </div>
 
 <script src="core/global.js"></script>
@@ -142,17 +113,26 @@ label{font-size:.85rem}
 <script>
 const origem = App.get("origem");
 const destino = App.get("destino");
+
 document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
 
 const valorBaseOriginal = Number(App.get("valorBase") || 0);
 
+const tipoViagem = document.getElementById("tipoViagem");
+const excessoPessoas = document.getElementById("excessoPessoas");
+const voltaPraia = document.getElementById("voltaPraia");
+const desvioSimples = document.getElementById("desvioSimples");
+const animalSel = document.getElementById("animal");
+const minutosEspera = document.getElementById("minutosEspera");
+const totalDiv = document.getElementById("total");
+const detalheDiv = document.getElementById("detalhamento");
+
 function calcular(){
   let total = valorBaseOriginal;
   let detalhes = [];
 
-  // ✅ VIAGEM BASE (SEMPRE)
-  detalhes.push(`🚕 Viagem: R$ ${valorBaseOriginal.toFixed(2)}`);
+  detalhes.push(`🚕 Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
 
   const tipo = tipoViagem.value;
   if(tipo==="bate_volta"){ total*=1.8; detalhes.push("🔁 Bate e volta"); }
@@ -172,7 +152,7 @@ function calcular(){
 
   if(desvioSimples.checked){
     total+=5;
-    detalhes.push("🛣️ Desvio de rota simples: R$ 5.00");
+    detalhes.push("🛣️ Desvio de rota: R$ 5.00");
   }
 
   const h=new Date().getHours(), m=new Date().getMinutes();
@@ -192,24 +172,18 @@ function calcular(){
   if(min>=5){
     const taxa=Math.floor(min/5)*3;
     total+=taxa;
-    detalhes.push(`🛣️⏳ Espera (${min}min): R$ ${taxa.toFixed(2)}`);
+    detalhes.push(`⏱️ Espera (${min} min): R$ ${taxa.toFixed(2)}`);
   }
 
   App.set("total", total);
-  totalDiv.innerText=`R$ ${total.toFixed(2)}`;
-  detalheDiv.innerHTML=detalhes.join("<br>");
+  totalDiv.innerText = `R$ ${total.toFixed(2)}`;
+  detalheDiv.innerHTML = detalhes.join("<br>");
 }
 
-const tipoViagem=document.getElementById("tipoViagem");
-const excessoPessoas=document.getElementById("excessoPessoas");
-const voltaPraia=document.getElementById("voltaPraia");
-const desvioSimples=document.getElementById("desvioSimples");
-const animalSel=document.getElementById("animal");
-const minutosEspera=document.getElementById("minutosEspera");
-const totalDiv=document.getElementById("total");
-const detalheDiv=document.getElementById("detalhamento");
+document
+  .querySelectorAll("select,input")
+  .forEach(e => e.addEventListener("change", calcular));
 
-document.querySelectorAll("select,input").forEach(e=>e.addEventListener("change",calcular));
 calcular();
 
 function enviarWhats(){
@@ -224,20 +198,21 @@ ${detalheDiv.innerText}
 
 💸 *Total*: R$ ${App.get("total").toFixed(2)}`;
 
-  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+  window.open(
+    "https://wa.me/?text=" + encodeURIComponent(msg),
+    "_blank"
+  );
+}
+
+function voltarDestino(){
+  App.go("destino.html");
 }
 
 function novoPreco(){
-  // limpeza segura (compatível com qualquer App.js)
-  try {
-    localStorage.removeItem("origem");
-    localStorage.removeItem("destino");
-    localStorage.removeItem("valorBase");
-    localStorage.removeItem("total");
-  } catch(e) {}
-
-  // redirecionamento direto
-  window.location.href = "origem.html";
+  try{
+    localStorage.clear();
+  }catch(e){}
+  App.go("origem.html");
 }
 </script>
 
