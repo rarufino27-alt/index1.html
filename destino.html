@@ -8,41 +8,71 @@
 <link rel="stylesheet" href="./theme/theme.css">
 <link rel="stylesheet" href="./theme/layout.css">
 <link rel="stylesheet" href="./theme/components.css">
+
+<style>
+.page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.box{
+  width:100%;
+  max-width:420px;
+}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+}
+.modal-content{
+  width:90%;
+  max-width:420px;
+}
+</style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="card highlight" style="text-align:center">
-  <h2>Selecionar Destino</h2>
-  <p class="muted">Escolha o destino da corrida</p>
-</div>
+<div class="page">
+  <div class="box">
 
-<!-- SELETOR COM BUSCA -->
-<div class="card">
-  <label>Destino</label>
-
-  <div class="select-box" id="destinoSelect">
-    <div class="select-display" id="destinoDisplay">
-      Selecione o destino
+    <div class="card highlight" style="text-align:center">
+      <h1>RF DRIVER</h1>
+      <p class="muted">Selecione o destino</p>
     </div>
 
-    <div class="select-panel" id="destinoPanel">
-      <input
-        type="text"
-        id="destinoBusca"
-        placeholder="Buscar destino..."
-      >
-      <div class="select-options" id="destinoOptions"></div>
+    <div class="card">
+      <div class="select-display" id="destinoBtn">
+        Toque para escolher o destino
+      </div>
     </div>
+
+    <div class="card highlight" style="text-align:center">
+      <button class="btn btn-primary" id="btnContinuar" disabled>
+        Continuar
+      </button>
+    </div>
+
   </div>
 </div>
 
-<!-- AÇÃO -->
-<div class="card highlight" style="text-align:center">
-  <button class="btn btn-primary" id="btnContinuar" disabled>
-    Continuar para resumo →
-  </button>
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content card">
+    <input
+      type="text"
+      id="busca"
+      placeholder="Buscar destino..."
+      autofocus
+    >
+    <div id="lista" style="margin-top:10px;max-height:260px;overflow:auto"></div>
+  </div>
 </div>
 
 <script src="core/global.js"></script>
@@ -52,61 +82,57 @@
 const origem = App.get("origem");
 if (!origem) App.go("index.html");
 
-const display = document.getElementById("destinoDisplay");
-const panel = document.getElementById("destinoPanel");
-const busca = document.getElementById("destinoBusca");
-const options = document.getElementById("destinoOptions");
+const destinoBtn = document.getElementById("destinoBtn");
+const modal = document.getElementById("modal");
+const lista = document.getElementById("lista");
+const busca = document.getElementById("busca");
 const btn = document.getElementById("btnContinuar");
 
 let destinos = [];
 
-display.onclick = () => {
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
-  busca.focus();
+destinoBtn.onclick = () => {
+  modal.style.display = "flex";
+  busca.value = "";
+  render(destinos);
+  setTimeout(() => busca.focus(), 100);
 };
 
-async function carregarDestinos(){
+modal.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
+};
+
+async function carregar(){
   await DataManager.carregar();
   destinos = DataManager.listarDestinos(origem);
-  renderOptions(destinos);
 }
 
-function renderOptions(lista){
-  options.innerHTML = "";
-  lista.forEach(nome => {
-    const valor = DataManager.buscarValor(origem, nome);
+function render(listaItens){
+  lista.innerHTML = "";
+  listaItens.forEach(d => {
+    const valor = DataManager.buscarValor(origem, d);
     const div = document.createElement("div");
-    div.textContent = nome;
-
+    div.textContent = d;
+    div.style.padding = "12px";
+    div.style.cursor = "pointer";
     div.onclick = () => {
-      display.textContent = nome;
-      App.set("destino", nome);
+      destinoBtn.textContent = d;
+      App.set("destino", d);
       App.set("valorBase", valor);
-      panel.style.display = "none";
+      modal.style.display = "none";
       btn.disabled = false;
     };
-
-    options.appendChild(div);
+    lista.appendChild(div);
   });
 }
 
-busca.addEventListener("input", () => {
-  const termo = busca.value.toLowerCase();
-  const filtrados = destinos.filter(d =>
-    d.toLowerCase().includes(termo)
-  );
-  renderOptions(filtrados);
-});
-
-document.addEventListener("click", e => {
-  if (!document.getElementById("destinoSelect").contains(e.target)) {
-    panel.style.display = "none";
-  }
-});
+busca.oninput = () => {
+  const t = busca.value.toLowerCase();
+  render(destinos.filter(d => d.toLowerCase().includes(t)));
+};
 
 btn.onclick = () => App.go("resumo.html");
 
-carregarDestinos();
+carregar();
 </script>
 
 </body>
