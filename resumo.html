@@ -303,36 +303,94 @@ function calcular(){
   let detalhes = [];
   detalhesWhats = [];
 
+  // 1️⃣ VALOR BASE
   detalhes.push(["Viagem base", valorBaseOriginal]);
   detalhesWhats.push(`• Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
 
+  // 2️⃣ TARIFA DINÂMICA (ADMIN)
   if(TARIFA_DINAMICA_ATIVA){
     const novo = total * TARIFA_MULTIPLICADOR;
     const acres = novo - total;
     total = novo;
 
-    detalhes.push([`Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`, acres]);
-    detalhesWhats.push(`• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acres.toFixed(2)}`);
+    detalhes.push([
+      `Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`,
+      acres
+    ]);
+
+    detalhesWhats.push(
+      `• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acres.toFixed(2)}`
+    );
   }
 
-  if(tipoViagem.value==="bate_volta") total*=1.8;
-  if(tipoViagem.value==="ida_volta") total*=2;
-  if(tipoViagem.value==="ida_volta_espera") total=(total*2)*1.1;
+  // 3️⃣ TIPO DE VIAGEM (COM VALOR EXPLÍCITO)
+  if(tipoViagem.value === "bate_volta"){
+    const acres = total * 0.8;
+    total += acres;
+    detalhes.push(["Bate e volta", acres]);
+    detalhesWhats.push(`• Bate e volta: +R$ ${acres.toFixed(2)}`);
+  }
 
-  if(excessoPessoas.checked) total+= total<30?5:total*0.5;
-  if(voltaPraia.checked) total+=10;
-  if(desvioSimples.checked) total+=5;
+  if(tipoViagem.value === "ida_volta"){
+    const acres = total;
+    total += acres;
+    detalhes.push(["Ida e volta", acres]);
+    detalhesWhats.push(`• Ida e volta: +R$ ${acres.toFixed(2)}`);
+  }
 
-  const animal = Number(animalSel.value||0);
-  if(animal>0) total+=animal;
+  if(tipoViagem.value === "ida_volta_espera"){
+    const acres = (total * 2) * 0.1;
+    total = (total * 2) + acres;
+    detalhes.push(["Ida e volta com espera", acres]);
+    detalhesWhats.push(`• Ida e volta com espera: +R$ ${acres.toFixed(2)}`);
+  }
 
-  const min = Number(minutosEspera.value||0);
-  if(min>=5) total+=Math.floor(min/5)*3;
+  // 4️⃣ ADICIONAIS
+  if(excessoPessoas.checked){
+    const t = total < 30 ? 5 : total * 0.5;
+    total += t;
+    detalhes.push(["Excesso de pessoas", t]);
+    detalhesWhats.push(`• Excesso de pessoas: +R$ ${t.toFixed(2)}`);
+  }
 
+  if(voltaPraia.checked){
+    total += 10;
+    detalhes.push(["Volta das praias", 10]);
+    detalhesWhats.push("• Volta das praias: +R$ 10,00");
+  }
+
+  if(desvioSimples.checked){
+    total += 5;
+    detalhes.push(["Desvio de rota", 5]);
+    detalhesWhats.push("• Desvio de rota: +R$ 5,00");
+  }
+
+  // 5️⃣ ANIMAL
+  const animal = Number(animalSel.value || 0);
+  if(animal > 0){
+    total += animal;
+    detalhes.push(["Transporte de animal", animal]);
+    detalhesWhats.push(`• Transporte de animal: +R$ ${animal.toFixed(2)}`);
+  }
+
+  // 6️⃣ ESPERA
+  const min = Number(minutosEspera.value || 0);
+  if(min >= 5){
+    const t = Math.floor(min / 5) * 3;
+    total += t;
+    detalhes.push([`Tempo de espera (${min} min)`, t]);
+    detalhesWhats.push(`• Tempo de espera (${min} min): +R$ ${t.toFixed(2)}`);
+  }
+
+  // 7️⃣ RENDER DETALHAMENTO
   detalheDiv.innerHTML = detalhes.map(d =>
-    `<div><span>${d[0]}</span><strong>R$ ${d[1].toFixed(2)}</strong></div>`
+    `<div>
+      <span>${d[0]}</span>
+      <strong>R$ ${d[1].toFixed(2)}</strong>
+    </div>`
   ).join("");
 
+  // 8️⃣ TOTAL FINAL
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
   App.set("total", total);
 }
