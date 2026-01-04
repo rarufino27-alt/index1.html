@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Resumo – RF Driver</title>
+<title>Resumo da Corrida – RF Driver</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="./theme/theme.css">
@@ -10,28 +10,20 @@
 <link rel="stylesheet" href="./theme/components.css">
 
 <style>
-:root{
-  --gold:#D4AF37;
-  --gold-soft:#E6C97A;
-  --text:#333;
-  --muted:#777;
-  --dark:#111;
-}
-
-/* ===== BASE ===== */
+/* ================= BASE ================= */
 body{
-  background:radial-gradient(circle at top,#ffffff 0%,#f1f1f1 70%);
-  color:var(--text);
+  background:radial-gradient(circle at top,#ffffff 0%,#f2f2f2 70%);
+  color:#222;
 }
 
 .page{
   min-height:100vh;
   display:flex;
   justify-content:center;
-  padding:22px;
+  padding:20px;
 }
 
-.box{
+.container{
   width:100%;
   max-width:420px;
   display:flex;
@@ -39,67 +31,115 @@ body{
   gap:18px;
 }
 
-/* ===== SECTIONS ===== */
-.section{
+/* ================= CARDS ================= */
+.card{
   background:#fff;
-  border-radius:20px;
+  border-radius:18px;
   padding:18px;
-  box-shadow:0 8px 22px rgba(0,0,0,.08);
-  animation:fadeUp .6s ease both;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  animation:fadeUp .4s ease both;
 }
 
-.section:nth-child(1){animation-delay:.05s}
-.section:nth-child(2){animation-delay:.1s}
-.section:nth-child(3){animation-delay:.15s}
-.section:nth-child(4){animation-delay:.2s}
-.section:nth-child(5){animation-delay:.25s}
-.section:nth-child(6){animation-delay:.3s}
-
-/* ===== DETALHAMENTO ===== */
-.detalhamento{
-  font-size:.85rem;
+/* ================= TITULOS ================= */
+h2{
+  font-size:1.2rem;
+  text-align:center;
+  letter-spacing:1px;
+  margin-bottom:4px;
 }
 
-.detalhamento div{
-  display:flex;
-  justify-content:space-between;
+.sub{
+  text-align:center;
+  font-size:.8rem;
+  color:#666;
+}
+
+/* ================= ROTA ================= */
+.route{
+  text-align:center;
+}
+
+.route span{
+  display:block;
+  font-weight:600;
+  margin-top:4px;
+}
+
+/* ================= INPUTS ================= */
+label{
+  font-size:.8rem;
+  display:block;
   margin-bottom:6px;
-  animation:highlight .4s ease;
 }
 
-/* ===== TOTAL ===== */
-.total{
-  font-size:2rem;
-  font-weight:800;
-  animation:pulse .4s ease;
-}
-
-/* ===== INPUTS ===== */
 select,
 input[type="number"]{
   width:100%;
   padding:12px;
-  border-radius:14px;
+  border-radius:12px;
   border:1px solid #ddd;
   background:#fff;
-  color:#000;
   font-size:.95rem;
 }
 
-/* ===== ANIMAÇÕES ===== */
+/* ================= ADICIONAIS ================= */
+.add{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #eee;
+  margin-bottom:8px;
+  transition:.2s;
+}
+
+.add.active{
+  border-color:#d4af37;
+  background:rgba(212,175,55,.08);
+}
+
+/* ================= DETALHAMENTO ================= */
+.details{
+  font-size:.85rem;
+}
+
+.details div{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+
+/* ================= TOTAL ================= */
+.totalBox{
+  text-align:center;
+}
+
+.totalLabel{
+  font-size:.7rem;
+  color:#777;
+}
+
+.total{
+  font-size:2.1rem;
+  font-weight:800;
+  margin-top:4px;
+}
+
+/* ================= BOTÃO ================= */
+.btn-send{
+  padding:16px;
+  border-radius:16px;
+  border:none;
+  background:linear-gradient(180deg,#e6c97a,#d4af37);
+  font-size:1rem;
+  font-weight:700;
+}
+
+/* ================= ANIMAÇÕES ================= */
 @keyframes fadeUp{
-  from{opacity:0;transform:translateY(12px)}
+  from{opacity:0;transform:translateY(10px)}
   to{opacity:1;transform:translateY(0)}
-}
-
-@keyframes pulse{
-  from{transform:scale(1.08);opacity:.6}
-  to{transform:scale(1);opacity:1}
-}
-
-@keyframes highlight{
-  from{background:rgba(212,175,55,.15)}
-  to{background:transparent}
 }
 </style>
 </head>
@@ -107,18 +147,25 @@ input[type="number"]{
 <body>
 
 <div class="page">
-<div class="box">
+<div class="container">
 
-  <!-- ORIGEM / DESTINO -->
-  <div class="section">
-    <strong>ORIGEM</strong><br>
-    <span id="origemTxt"></span><br><br>
-    <strong>DESTINO</strong><br>
+  <!-- HEADER -->
+  <div class="card">
+    <h2>RESUMO DA CORRIDA</h2>
+    <div class="sub">Tabela oficial RF Driver</div>
+  </div>
+
+  <!-- ROTA -->
+  <div class="card route">
+    <strong>Origem</strong>
+    <span id="origemTxt"></span>
+    <br>
+    <strong>Destino</strong>
     <span id="destinoTxt"></span>
   </div>
 
   <!-- TIPO -->
-  <div class="section">
+  <div class="card">
     <label>Tipo de viagem</label>
     <select id="tipoViagem">
       <option value="ida">Somente ida</option>
@@ -129,14 +176,14 @@ input[type="number"]{
   </div>
 
   <!-- ADICIONAIS -->
-  <div class="section">
-    <label><input type="checkbox" id="excessoPessoas"> Excesso de pessoas</label><br>
-    <label><input type="checkbox" id="voltaPraia"> Volta das praias</label><br>
-    <label><input type="checkbox" id="desvioSimples"> Desvio de rota</label>
+  <div class="card">
+    <div class="add"><span>Excesso de pessoas</span><input type="checkbox" id="excessoPessoas"></div>
+    <div class="add"><span>Volta das praias</span><input type="checkbox" id="voltaPraia"></div>
+    <div class="add"><span>Desvio de rota</span><input type="checkbox" id="desvioSimples"></div>
   </div>
 
   <!-- ANIMAL -->
-  <div class="section">
+  <div class="card">
     <label>Transporte de animal</label>
     <select id="animal">
       <option value="0">Não</option>
@@ -148,26 +195,26 @@ input[type="number"]{
   </div>
 
   <!-- ESPERA -->
-  <div class="section">
-    <label>Tempo de espera</label>
-    <input type="number" id="minutosEspera" placeholder="Minutos de espera">
+  <div class="card">
+    <label>Tempo de espera (min)</label>
+    <input type="number" id="minutosEspera">
   </div>
 
   <!-- DETALHAMENTO -->
-  <div class="section">
-    <strong>DETALHAMENTO</strong>
-    <div class="detalhamento" id="detalhamento"></div>
+  <div class="card">
+    <strong>Detalhamento</strong>
+    <div class="details" id="detalhamento"></div>
   </div>
 
   <!-- TOTAL -->
-  <div class="section" style="text-align:center">
-    <strong>TOTAL</strong><br>
-    <span id="total" class="total">R$ 0,00</span>
+  <div class="card totalBox">
+    <div class="totalLabel">VALOR FINAL</div>
+    <div class="total" id="total">R$ 0,00</div>
   </div>
 
   <!-- AÇÃO -->
-  <button onclick="enviarWhats()" class="section">
-    Enviar no WhatsApp
+  <button class="btn-send" onclick="enviarWhats()">
+    Enviar orçamento no WhatsApp
   </button>
 
 </div>
@@ -176,11 +223,11 @@ input[type="number"]{
 <script src="core/global.js"></script>
 
 <script>
-// ================= CONFIG ADMIN =================
+/* ===== CONFIG ADMIN ===== */
 const TARIFA_DINAMICA_ATIVA = true;
 const TARIFA_MULTIPLICADOR = 1.5;
 const TARIFA_MOTIVO = "Alta demanda";
-// ===============================================
+/* ======================= */
 
 const origem = App.get("origem");
 const destino = App.get("destino");
@@ -205,54 +252,52 @@ function calcular(){
   let detalhes = [];
   detalhesWhats = [];
 
-  // VALOR BASE
   detalhes.push(["Viagem base", valorBaseOriginal]);
   detalhesWhats.push(`• Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
 
-  // TARIFA DINÂMICA ADMIN
   if(TARIFA_DINAMICA_ATIVA){
-    const novoValor = total * TARIFA_MULTIPLICADOR;
-    const acrescimo = novoValor - total;
+    const novo = total * TARIFA_MULTIPLICADOR;
+    const acres = novo - total;
+    total = novo;
 
-    detalhes.push([`Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`, acrescimo]);
-    detalhesWhats.push(
-      `• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acrescimo.toFixed(2)}`
-    );
-
-    total = novoValor;
+    detalhes.push([`Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`, acres]);
+    detalhesWhats.push(`• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acres.toFixed(2)}`);
   }
 
-  if(tipoViagem.value==="bate_volta") total *= 1.8;
-  if(tipoViagem.value==="ida_volta") total *= 2;
-  if(tipoViagem.value==="ida_volta_espera") total = (total * 2) * 1.1;
+  if(tipoViagem.value==="bate_volta") total*=1.8;
+  if(tipoViagem.value==="ida_volta") total*=2;
+  if(tipoViagem.value==="ida_volta_espera") total=(total*2)*1.1;
 
-  if(excessoPessoas.checked) total += total < 30 ? 5 : total*0.5;
-  if(voltaPraia.checked) total += 10;
-  if(desvioSimples.checked) total += 5;
+  if(excessoPessoas.checked) total+= total<30?5:total*0.5;
+  if(voltaPraia.checked) total+=10;
+  if(desvioSimples.checked) total+=5;
 
-  const animal = Number(animalSel.value);
-  if(animal > 0) total += animal;
+  const animal = Number(animalSel.value||0);
+  if(animal>0) total+=animal;
 
-  const min = Number(minutosEspera.value || 0);
-  if(min >= 5) total += Math.floor(min/5)*3;
+  const min = Number(minutosEspera.value||0);
+  if(min>=5) total+=Math.floor(min/5)*3;
 
   detalheDiv.innerHTML = detalhes.map(d =>
-    `<div><span>${d[0]}</span><strong>R$ ${Number(d[1]).toFixed(2)}</strong></div>`
+    `<div><span>${d[0]}</span><strong>R$ ${d[1].toFixed(2)}</strong></div>`
   ).join("");
 
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
   App.set("total", total);
 }
 
-document
-  .querySelectorAll("select,input")
-  .forEach(el => el.addEventListener("change", calcular));
+document.querySelectorAll("select,input").forEach(el=>{
+  el.addEventListener("change",()=>{
+    el.closest(".add")?.classList.toggle("active",el.checked);
+    calcular();
+  });
+});
 
 calcular();
 
 function enviarWhats(){
   const msg =
-`🚖 RF Driver – Orçamento
+`🚖 RF Driver – Orçamento de Corrida
 
 Origem: ${origem}
 Destino: ${destino}
