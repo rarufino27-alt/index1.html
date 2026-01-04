@@ -18,6 +18,7 @@
   --dark:#111;
 }
 
+/* ===== BASE ===== */
 body{
   background:radial-gradient(circle at top,#ffffff 0%,#f1f1f1 70%);
   color:var(--text);
@@ -38,13 +39,23 @@ body{
   gap:18px;
 }
 
+/* ===== SECTIONS ===== */
 .section{
   background:#fff;
   border-radius:20px;
   padding:18px;
   box-shadow:0 8px 22px rgba(0,0,0,.08);
+  animation:fadeUp .6s ease both;
 }
 
+.section:nth-child(1){animation-delay:.05s}
+.section:nth-child(2){animation-delay:.1s}
+.section:nth-child(3){animation-delay:.15s}
+.section:nth-child(4){animation-delay:.2s}
+.section:nth-child(5){animation-delay:.25s}
+.section:nth-child(6){animation-delay:.3s}
+
+/* ===== DETALHAMENTO ===== */
 .detalhamento{
   font-size:.85rem;
 }
@@ -53,6 +64,42 @@ body{
   display:flex;
   justify-content:space-between;
   margin-bottom:6px;
+  animation:highlight .4s ease;
+}
+
+/* ===== TOTAL ===== */
+.total{
+  font-size:2rem;
+  font-weight:800;
+  animation:pulse .4s ease;
+}
+
+/* ===== INPUTS ===== */
+select,
+input[type="number"]{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  background:#fff;
+  color:#000;
+  font-size:.95rem;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes pulse{
+  from{transform:scale(1.08);opacity:.6}
+  to{transform:scale(1);opacity:1}
+}
+
+@keyframes highlight{
+  from{background:rgba(212,175,55,.15)}
+  to{background:transparent}
 }
 </style>
 </head>
@@ -62,6 +109,7 @@ body{
 <div class="page">
 <div class="box">
 
+  <!-- ORIGEM / DESTINO -->
   <div class="section">
     <strong>ORIGEM</strong><br>
     <span id="origemTxt"></span><br><br>
@@ -69,6 +117,7 @@ body{
     <span id="destinoTxt"></span>
   </div>
 
+  <!-- TIPO -->
   <div class="section">
     <label>Tipo de viagem</label>
     <select id="tipoViagem">
@@ -79,12 +128,14 @@ body{
     </select>
   </div>
 
+  <!-- ADICIONAIS -->
   <div class="section">
     <label><input type="checkbox" id="excessoPessoas"> Excesso de pessoas</label><br>
     <label><input type="checkbox" id="voltaPraia"> Volta das praias</label><br>
     <label><input type="checkbox" id="desvioSimples"> Desvio de rota</label>
   </div>
 
+  <!-- ANIMAL -->
   <div class="section">
     <label>Transporte de animal</label>
     <select id="animal">
@@ -96,22 +147,28 @@ body{
     </select>
   </div>
 
+  <!-- ESPERA -->
   <div class="section">
     <label>Tempo de espera</label>
     <input type="number" id="minutosEspera" placeholder="Minutos de espera">
   </div>
 
+  <!-- DETALHAMENTO -->
   <div class="section">
     <strong>DETALHAMENTO</strong>
     <div class="detalhamento" id="detalhamento"></div>
   </div>
 
+  <!-- TOTAL -->
   <div class="section" style="text-align:center">
     <strong>TOTAL</strong><br>
-    <span id="total" style="font-size:2rem;font-weight:bold">R$ 0,00</span>
+    <span id="total" class="total">R$ 0,00</span>
   </div>
 
-  <button onclick="enviarWhats()">Enviar no WhatsApp</button>
+  <!-- AÇÃO -->
+  <button onclick="enviarWhats()" class="section">
+    Enviar no WhatsApp
+  </button>
 
 </div>
 </div>
@@ -148,25 +205,26 @@ function calcular(){
   let detalhes = [];
   detalhesWhats = [];
 
-  // ✅ VALOR BASE EXPLÍCITO
+  // VALOR BASE
   detalhes.push(["Viagem base", valorBaseOriginal]);
   detalhesWhats.push(`• Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
 
-  // TARIFA DINÂMICA
+  // TARIFA DINÂMICA ADMIN
   if(TARIFA_DINAMICA_ATIVA){
-    const novo = total * TARIFA_MULTIPLICADOR;
-    const acrescimo = novo - total;
-    total = novo;
+    const novoValor = total * TARIFA_MULTIPLICADOR;
+    const acrescimo = novoValor - total;
 
     detalhes.push([`Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`, acrescimo]);
     detalhesWhats.push(
       `• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acrescimo.toFixed(2)}`
     );
+
+    total = novoValor;
   }
 
-  if(tipoViagem.value==="bate_volta") total*=1.8;
-  if(tipoViagem.value==="ida_volta") total*=2;
-  if(tipoViagem.value==="ida_volta_espera") total=(total*2)*1.1;
+  if(tipoViagem.value==="bate_volta") total *= 1.8;
+  if(tipoViagem.value==="ida_volta") total *= 2;
+  if(tipoViagem.value==="ida_volta_espera") total = (total * 2) * 1.1;
 
   if(excessoPessoas.checked) total += total < 30 ? 5 : total*0.5;
   if(voltaPraia.checked) total += 10;
@@ -179,14 +237,17 @@ function calcular(){
   if(min >= 5) total += Math.floor(min/5)*3;
 
   detalheDiv.innerHTML = detalhes.map(d =>
-    `<div><span>${d[0]}</span><strong>R$ ${d[1].toFixed(2)}</strong></div>`
+    `<div><span>${d[0]}</span><strong>R$ ${Number(d[1]).toFixed(2)}</strong></div>`
   ).join("");
 
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
   App.set("total", total);
 }
 
-document.querySelectorAll("select,input").forEach(e => e.addEventListener("change", calcular));
+document
+  .querySelectorAll("select,input")
+  .forEach(el => el.addEventListener("change", calcular));
+
 calcular();
 
 function enviarWhats(){
