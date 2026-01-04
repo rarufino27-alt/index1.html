@@ -8,14 +8,90 @@
 <link rel="stylesheet" href="theme/theme.css">
 <link rel="stylesheet" href="theme/layout.css">
 <link rel="stylesheet" href="theme/components.css">
+
+<style>
+/* ===== AJUSTES PREMIUM DO RESUMO ===== */
+
+.page{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:20px;
+}
+
+.box{
+  width:100%;
+  max-width:420px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* TOTAL COM PRESENÇA */
+.total{
+  font-size:2.3rem;
+  font-weight:800;
+  color:var(--gold);
+  letter-spacing:1px;
+  margin-bottom:4px;
+}
+.total::after{
+  content:"valor final";
+  display:block;
+  font-size:.7rem;
+  color:var(--text-muted);
+  letter-spacing:2px;
+  margin-top:4px;
+}
+
+/* QUADRANTES DE TAXA */
+.taxa-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:10px;
+  transition:all .25s ease;
+}
+
+.taxa-card label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+}
+
+.taxa-card.active{
+  border-color:var(--gold);
+  background:linear-gradient(
+    180deg,
+    rgba(212,175,55,.18),
+    rgba(23,26,33,.95)
+  );
+  box-shadow:0 8px 22px rgba(212,175,55,.25);
+  transform:scale(1.02);
+}
+
+@keyframes pulseGold{
+  0%{box-shadow:0 0 0 rgba(212,175,55,0)}
+  50%{box-shadow:0 0 22px rgba(212,175,55,.45)}
+  100%{box-shadow:0 0 0 rgba(212,175,55,0)}
+}
+
+.taxa-card.pulse{
+  animation:pulseGold .35s ease;
+}
+</style>
 </head>
 
 <body>
 
+<div class="page">
+<div class="box">
+
 <!-- HEADER -->
 <div class="card highlight" style="text-align:center">
   <h2>Resumo da Corrida</h2>
-  <p class="muted">Confira os detalhes e o valor final</p>
+  <p class="muted">Valor calculado com base nas opções selecionadas</p>
 </div>
 
 <!-- CONTEXTO -->
@@ -27,7 +103,7 @@
   <strong id="destinoTxt"></strong>
 </div>
 
-<!-- COMPOSIÇÃO DO PREÇO -->
+<!-- TIPO DE VIAGEM -->
 <div class="card">
   <h3>Tipo de viagem</h3>
   <select id="tipoViagem">
@@ -38,25 +114,33 @@
   </select>
 </div>
 
+<!-- TAXAS COM ANIMAÇÃO -->
 <div class="card">
   <h3>Adicionais</h3>
 
-  <label>
-    <input type="checkbox" id="excessoPessoas">
-    Excesso de pessoas
-  </label>
+  <div class="taxa-card">
+    <label>
+      <input type="checkbox" id="excessoPessoas">
+      Excesso de pessoas
+    </label>
+  </div>
 
-  <label>
-    <input type="checkbox" id="voltaPraia">
-    Volta das praias
-  </label>
+  <div class="taxa-card">
+    <label>
+      <input type="checkbox" id="voltaPraia">
+      Volta das praias
+    </label>
+  </div>
 
-  <label>
-    <input type="checkbox" id="desvioSimples">
-    Desvio de rota simples
-  </label>
+  <div class="taxa-card">
+    <label>
+      <input type="checkbox" id="desvioSimples">
+      Desvio de rota simples
+    </label>
+  </div>
 </div>
 
+<!-- ANIMAL -->
 <div class="card">
   <h3>Transporte de animal</h3>
   <select id="animal">
@@ -68,6 +152,7 @@
   </select>
 </div>
 
+<!-- ESPERA -->
 <div class="card">
   <h3>Desvio com espera</h3>
   <input
@@ -84,28 +169,25 @@
   <div id="detalhamento" class="muted"></div>
 </div>
 
-<!-- TOTAL E AÇÃO FINAL -->
+<!-- TOTAL -->
 <div class="card highlight" style="text-align:center">
   <div class="total" id="total">R$ 0,00</div>
-
   <button class="btn btn-primary" onclick="enviarWhats()">
     📤 Enviar orçamento no WhatsApp
   </button>
 </div>
 
-<!-- AÇÕES AUXILIARES -->
+<!-- AÇÕES -->
 <div class="grid">
   <div class="card">
-    <button class="btn btn-outline" onclick="voltarDestino()">
-      ◀ Voltar para destino
-    </button>
+    <button class="btn btn-outline" onclick="voltarDestino()">◀ Voltar</button>
   </div>
-
   <div class="card">
-    <button class="btn btn-outline" onclick="novoPreco()">
-      🔄 Novo cálculo
-    </button>
+    <button class="btn btn-outline" onclick="novoPreco()">🔄 Novo cálculo</button>
   </div>
+</div>
+
+</div>
 </div>
 
 <script src="core/global.js"></script>
@@ -127,6 +209,20 @@ const animalSel = document.getElementById("animal");
 const minutosEspera = document.getElementById("minutosEspera");
 const totalDiv = document.getElementById("total");
 const detalheDiv = document.getElementById("detalhamento");
+
+/* ANIMAÇÃO DOS QUADRANTES */
+document.querySelectorAll(".taxa-card input").forEach(input => {
+  const card = input.closest(".taxa-card");
+  input.addEventListener("change", () => {
+    if(input.checked){
+      card.classList.add("active","pulse");
+      setTimeout(()=>card.classList.remove("pulse"),350);
+    }else{
+      card.classList.remove("active");
+    }
+    calcular();
+  });
+});
 
 function calcular(){
   let total = valorBaseOriginal;
@@ -180,9 +276,9 @@ function calcular(){
   detalheDiv.innerHTML = detalhes.join("<br>");
 }
 
-document
-  .querySelectorAll("select,input")
-  .forEach(e => e.addEventListener("change", calcular));
+document.querySelectorAll("select,input").forEach(e=>{
+  if(e.type!=="checkbox") e.addEventListener("change",calcular);
+});
 
 calcular();
 
@@ -198,22 +294,11 @@ ${detalheDiv.innerText}
 
 💸 *Total*: R$ ${App.get("total").toFixed(2)}`;
 
-  window.open(
-    "https://wa.me/?text=" + encodeURIComponent(msg),
-    "_blank"
-  );
+  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
 }
 
-function voltarDestino(){
-  App.go("destino.html");
-}
-
-function novoPreco(){
-  try{
-    localStorage.clear();
-  }catch(e){}
-  App.go("origem.html");
-}
+function voltarDestino(){ App.go("destino.html"); }
+function novoPreco(){ localStorage.clear(); App.go("origem.html"); }
 </script>
 
 </body>
