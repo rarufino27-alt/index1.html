@@ -204,81 +204,108 @@ input[type="number"]{
 <script src="core/global.js"></script>
 
 <script>
-// CONFIG ADMIN
-const TARIFA_DINAMICA_ATIVA = false;
+// ================= CONFIG ADMIN =================
+const TARIFA_DINAMICA_ATIVA = false; // pode desligar sem quebrar nada
 const TARIFA_MULTIPLICADOR = 1.5;
+const TARIFA_MOTIVO = "Alta demanda";
+// ===============================================
 
 const origem = App.get("origem");
 const destino = App.get("destino");
-const valorBaseOriginal = Number(App.get("valorBase") || 0);
+const valorBase = Number(App.get("valorBase") || 0);
 
 document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
 
-const tipoViagem = document.getElementById("tipoViagem");
-const desvioSimples = document.getElementById("desvioSimples");
-const excessoPessoas = document.getElementById("excessoPessoas");
-const voltaPraia = document.getElementById("voltaPraia");
-const minutosEspera = document.getElementById("minutosEspera");
-const totalDiv = document.getElementById("total");
-const detalheDiv = document.getElementById("detalhamento");
+const tipoViagem     = document.getElementById("tipoViagem");
+const desvioSimples  = document.getElementById("desvioSimples");
+const animalSel      = document.getElementById("animal");
+const minutosEspera  = document.getElementById("minutosEspera");
+const totalDiv       = document.getElementById("total");
+const detalheDiv     = document.getElementById("detalhamento");
 
 let detalhesWhats = [];
 
 function calcular(){
-  let total = valorBaseOriginal;
+
+  let total = valorBase;
   let detalhes = [];
   detalhesWhats = [];
 
-  detalhes.push(["🚖 Viagem base", valorBaseOriginal]);
-  detalhesWhats.push(`🚖 *Viagem base*: R$ ${valorBaseOriginal.toFixed(2)}`);
+  // 🚖 VIAGEM BASE
+  detalhes.push(["🚖 Viagem base", valorBase]);
+  detalhesWhats.push(`🚖 *Viagem base*: R$ ${valorBase.toFixed(2)}`);
 
-  if(TARIFA_DINAMICA_ATIVA){
-    const acres = total * (TARIFA_MULTIPLICADOR - 1);
+  // ⚡ TARIFA DINÂMICA (INDEPENDENTE)
+  if (TARIFA_DINAMICA_ATIVA) {
+    const acres = valorBase * (TARIFA_MULTIPLICADOR - 1);
     total += acres;
+
     detalhes.push(["⚡ Tarifa dinâmica", acres]);
-    detalhesWhats.push(`⚡ *Tarifa dinâmica*: +R$ ${acres.toFixed(2)}`);
+    detalhesWhats.push(
+      `⚡ *Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)* — ${TARIFA_MOTIVO}: +R$ ${acres.toFixed(2)}`
+    );
   }
 
-  if(tipoViagem.value==="bate_volta"){
-    const t = total * 0.8;
-    total += t;
-    detalhes.push(["♻️ Bate e volta", t]);
-    detalhesWhats.push(`♻️ *Bate e volta*: +R$ ${t.toFixed(2)}`);
+  // ♻️ TIPO DE VIAGEM
+  if (tipoViagem.value === "bate_volta") {
+    const acres = valorBase * 0.8;
+    total += acres;
+    detalhes.push(["♻️ Bate e volta", acres]);
+    detalhesWhats.push(`♻️ *Bate e volta*: +R$ ${acres.toFixed(2)}`);
   }
 
-  if(tipoViagem.value==="ida_volta"){
-    total *= 2;
-    detalhes.push(["🚕♻️ Ida e volta", total/2]);
-    detalhesWhats.push(`🚕♻️ *Ida e volta*: +R$ ${(total/2).toFixed(2)}`);
+  if (tipoViagem.value === "ida_volta") {
+    const acres = valorBase;
+    total += acres;
+    detalhes.push(["🚕♻️ Ida e volta", acres]);
+    detalhesWhats.push(`🚕♻️ *Ida e volta*: +R$ ${acres.toFixed(2)}`);
   }
 
-  if(desvioSimples.checked){
+  // 🛣️ DESVIO
+  if (desvioSimples.checked) {
     total += 5;
     detalhes.push(["🛣️ Desvio de rota", 5]);
     detalhesWhats.push("🛣️ *Desvio de rota*: +R$ 5,00");
   }
 
-  if(minutosEspera.value >= 5){
-    const t = Math.floor(minutosEspera.value/5)*3;
-    total += t;
-    detalhes.push(["⏱️ Tempo de espera", t]);
-    detalhesWhats.push(`⏱️ *Tempo de espera*: +R$ ${t.toFixed(2)}`);
+  // 🐶 TRANSPORTE DE ANIMAL
+  const animal = Number(animalSel.value || 0);
+  if (animal > 0) {
+    total += animal;
+    detalhes.push(["🐶 Transporte animal", animal]);
+    detalhesWhats.push(`🐶 *Transporte animal*: +R$ ${animal.toFixed(2)}`);
   }
 
-  detalheDiv.innerHTML = detalhes.map(d=>`
-    <div><span><strong>${d[0]}</strong></span><strong>R$ ${d[1].toFixed(2)}</strong></div>
+  // ⏱️ TEMPO DE ESPERA
+  const min = Number(minutosEspera.value || 0);
+  if (min >= 5) {
+    const acres = Math.floor(min / 5) * 3;
+    total += acres;
+    detalhes.push([`⏱️ Tempo de espera (${min} min)`, acres]);
+    detalhesWhats.push(`⏱️ *Tempo de espera (${min} min)*: +R$ ${acres.toFixed(2)}`);
+  }
+
+  // 🧾 RENDER DETALHAMENTO
+  detalheDiv.innerHTML = detalhes.map(d => `
+    <div>
+      <span><strong>${d[0]}</strong></span>
+      <strong>R$ ${d[1].toFixed(2)}</strong>
+    </div>
   `).join("");
 
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
+  App.set("total", total);
 }
 
-document.querySelectorAll("select,input").forEach(el=>{
-  el.addEventListener("change",calcular);
+// EVENTOS
+document.querySelectorAll("select,input").forEach(el => {
+  el.addEventListener("change", calcular);
 });
 
 calcular();
 
+// 📤 WHATSAPP
 function enviarWhats(){
   const msg =
 `🚖 *RF Driver – Orçamento de viagem*
@@ -289,9 +316,9 @@ function enviarWhats(){
 *Detalhamento*
 ${detalhesWhats.join("\n")}
 
-💰 *Total*: ${totalDiv.innerText}`;
+💰 *Total*: R$ ${App.get("total").toFixed(2)}`;
 
-  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+  window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
 }
 </script>
 
