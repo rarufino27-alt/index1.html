@@ -80,18 +80,29 @@ body{
 
 label{
   font-size:.8rem;
-  color:#555;
+  color:#444;
   display:block;
   margin-bottom:6px;
 }
 
+/* ===== INPUTS (CONTRASTE CORRIGIDO) ===== */
 select,
 input[type="number"]{
   width:100%;
   padding:12px;
   border-radius:14px;
-  border:1px solid #ddd;
+  border:1px solid #ccc;
   background:#fff;
+  color:#000;
+  font-size:.95rem;
+}
+
+select option{
+  color:#000;
+}
+
+input::placeholder{
+  color:#666;
 }
 
 /* ================= ADICIONAIS ================= */
@@ -103,11 +114,11 @@ input[type="number"]{
   border-radius:14px;
   border:1px solid #eee;
   margin-bottom:8px;
-  transition:.2s;
+  transition:.25s;
 }
 
 .option.active{
-  background:rgba(212,175,55,.08);
+  background:rgba(212,175,55,.10);
   border-color:#d4af37;
 }
 
@@ -125,22 +136,39 @@ input[type="number"]{
 /* ================= TOTAL ================= */
 .totalBox{
   text-align:center;
-  padding:20px;
+  padding:22px;
   border-radius:22px;
   background:#fff;
   box-shadow:0 10px 26px rgba(0,0,0,.1);
+  position:relative;
 }
 
-.totalBox span{
-  font-size:.75rem;
+/* SELO */
+.badge{
+  position:absolute;
+  top:-10px;
+  right:12px;
+  background:linear-gradient(180deg,#e6c97a,#d4af37);
+  color:#000;
+  font-size:.65rem;
+  padding:6px 10px;
+  border-radius:12px;
+  font-weight:700;
+}
+
+/* VALOR FINAL */
+.totalLabel{
+  font-size:.7rem;
   color:#777;
 }
 
-.totalBox strong{
+.total{
   display:block;
   margin-top:6px;
-  font-size:2.2rem;
+  font-size:2.3rem;
   color:#d4af37;
+  font-weight:800;
+  animation:totalIn .35s ease;
 }
 
 /* ================= BOTÃO ================= */
@@ -152,6 +180,18 @@ input[type="number"]{
   font-size:1rem;
   font-weight:700;
   color:#000;
+}
+
+/* ================= MICRO ANIMAÇÕES ================= */
+@keyframes totalIn{
+  from{
+    opacity:.4;
+    transform:scale(1.08);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
 }
 </style>
 </head>
@@ -207,7 +247,7 @@ input[type="number"]{
   <!-- ESPERA -->
   <div class="block">
     <label>Tempo de espera (min)</label>
-    <input type="number" id="minutosEspera">
+    <input type="number" id="minutosEspera" placeholder="Ex: 10">
   </div>
 
   <!-- DETALHAMENTO -->
@@ -218,8 +258,9 @@ input[type="number"]{
 
   <!-- TOTAL -->
   <div class="totalBox">
-    <span>VALOR FINAL</span>
-    <strong id="total">R$ 0,00</strong>
+    <div class="badge">OFICIAL RF DRIVER</div>
+    <div class="totalLabel">VALOR FINAL</div>
+    <strong id="total" class="total">R$ 0,00</strong>
   </div>
 
   <!-- AÇÃO -->
@@ -299,6 +340,9 @@ function calcular(){
 document.querySelectorAll("select,input").forEach(el=>{
   el.addEventListener("change",()=>{
     el.closest(".option")?.classList.toggle("active",el.checked);
+    totalDiv.classList.remove("total");
+    void totalDiv.offsetWidth; // força reflow
+    totalDiv.classList.add("total");
     calcular();
   });
 });
