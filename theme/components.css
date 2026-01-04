@@ -1,31 +1,137 @@
+/* ===============================
+   COMPONENTS – RF DRIVER
+   Identidade premium / profissional
+   =============================== */
+
 label{
   display:block;
-  margin:6px 0;
+  margin:8px 0 6px;
+  font-size:14px;
+  color:var(--text-muted);
 }
 
+/* Inputs */
+input,
+select,
+textarea{
+  width:100%;
+  padding:12px 14px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  color:var(--text);
+  font-size:15px;
+  outline:none;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#777;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px rgba(212,175,55,.25);
+}
+
+/* Checkbox / Radio */
 input[type="checkbox"],
 input[type="radio"]{
-  accent-color:var(--primary);
+  accent-color:var(--gold);
 }
 
-button, .btn{
+/* ===============================
+   BOTÕES
+   =============================== */
+
+button,
+.btn{
   width:100%;
   padding:14px;
   border-radius:var(--radius);
   border:none;
-  font-size:16px;
+  font-size:15px;
+  font-weight:600;
   cursor:pointer;
+  transition:all .25s ease;
 }
 
+/* Botão principal – ação importante */
 .btn-primary{
-  background:var(--primary);
+  background:linear-gradient(145deg, var(--gold), var(--gold-dark));
   color:#000;
+  box-shadow:0 6px 14px rgba(212,175,55,.25);
 }
 
+.btn-primary:hover{
+  filter:brightness(1.08);
+}
+
+/* Botão secundário */
+.btn-outline{
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold);
+}
+
+.btn-outline:hover{
+  background:rgba(212,175,55,.1);
+}
+
+/* Botão neutro */
+.btn-muted{
+  background:var(--card-soft);
+  color:var(--text);
+}
+
+/* WhatsApp */
 .btn-whatsapp{
-  background:var(--whatsapp);
+  background:#1DB954;
   color:#fff;
   text-align:center;
   text-decoration:none;
   display:block;
+  box-shadow:0 4px 12px rgba(29,185,84,.35);
+}
+
+.btn-whatsapp:hover{
+  filter:brightness(1.1);
+}
+
+/* ===============================
+   CARDS
+   =============================== */
+
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:16px;
+  border:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(0,0,0,.45);
+}
+
+.card-title{
+  font-size:14px;
+  color:var(--text-muted);
+  margin-bottom:6px;
+}
+
+.card-value{
+  font-size:22px;
+  font-weight:700;
+  color:var(--gold);
+}
+
+/* ===============================
+   FEEDBACK VISUAL
+   =============================== */
+
+.success{
+  color:var(--success);
+}
+
+.error{
+  color:var(--danger);
 }
