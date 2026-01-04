@@ -19,7 +19,7 @@
   --dark:#111;
 }
 
-/* ================= BASE ================= */
+/* BASE */
 body{
   background:radial-gradient(circle at top,#ffffff 0%,#f1f1f1 70%);
   color:var(--text);
@@ -40,7 +40,7 @@ body{
   gap:18px;
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 .header{
   padding:26px 22px;
   border-radius:24px;
@@ -63,7 +63,7 @@ body{
   color:var(--muted);
 }
 
-/* ================= TRAJETO ================= */
+/* TRAJETO */
 .route{
   background:#fff;
   border-radius:20px;
@@ -86,7 +86,7 @@ body{
   font-size:.95rem;
 }
 
-/* ================= SEÇÕES ================= */
+/* SECTIONS */
 .section{
   background:#fff;
   border-radius:20px;
@@ -102,15 +102,15 @@ body{
   gap:8px;
 }
 
-/* ================= INPUTS BRANCOS ================= */
+/* INPUTS */
 select,
 input[type="number"]{
   width:100%;
   padding:14px;
   border-radius:14px;
   border:1px solid #ddd;
-  background:#ffffff;          /* ✔ BRANCO */
-  color:#000;                  /* ✔ TEXTO PRETO */
+  background:#fff;
+  color:#000;
   font-size:.95rem;
 }
 
@@ -121,7 +121,7 @@ input[type="number"]:focus{
   box-shadow:0 0 0 2px rgba(212,175,55,.15);
 }
 
-/* ================= ADICIONAIS ================= */
+/* ADICIONAIS */
 .extra{
   display:flex;
   align-items:center;
@@ -135,14 +135,10 @@ input[type="number"]:focus{
 
 .extra.active{
   border-color:var(--gold);
-  background:linear-gradient(
-    180deg,
-    rgba(212,175,55,.12),
-    #fff
-  );
+  background:linear-gradient(180deg,rgba(212,175,55,.12),#fff);
 }
 
-/* ================= DETALHAMENTO ================= */
+/* DETALHAMENTO */
 .detalhamento{
   font-size:.85rem;
 }
@@ -153,7 +149,7 @@ input[type="number"]:focus{
   margin-bottom:6px;
 }
 
-/* ================= TOTAL ================= */
+/* TOTAL */
 .total-box{
   background:linear-gradient(180deg,#ffffff,#f4f4f4);
   border-radius:26px;
@@ -173,10 +169,9 @@ input[type="number"]:focus{
   font-size:2.3rem;
   font-weight:900;
   color:var(--dark);
-  margin-top:4px;
 }
 
-/* ================= BOTÕES ================= */
+/* BOTÕES */
 .primary{
   background:linear-gradient(180deg,var(--gold-soft),var(--gold));
   border:none;
@@ -295,6 +290,17 @@ input[type="number"]:focus{
 <script src="core/global.js"></script>
 
 <script>
+// ===================================================
+// CONFIGURAÇÃO ADMINISTRATIVA – TARIFA DINÂMICA
+// ===================================================
+
+// 🔒 CONTROLE TOTAL (EDITE SOMENTE AQUI)
+const TARIFA_DINAMICA_ATIVA = true;      // true = ativa | false = desligada
+const TARIFA_MULTIPLICADOR = 1.5;        // 1.1 até 2.0
+const TARIFA_MOTIVO = "Alta demanda";    // opcional
+
+// ===================================================
+
 const origem = App.get("origem");
 const destino = App.get("destino");
 const valorBaseOriginal = Number(App.get("valorBase") || 0);
@@ -318,9 +324,20 @@ function calcular(){
   let detalhes = [];
   detalhesWhats = [];
 
-  detalhes.push(["Viagem base", valorBaseOriginal]);
-  detalhesWhats.push(`• Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
+  // ===== TARIFA DINÂMICA ADMINISTRATIVA =====
+  if(TARIFA_DINAMICA_ATIVA){
+    const novoValor = total * TARIFA_MULTIPLICADOR;
+    const acrescimo = novoValor - total;
 
+    detalhes.push(["Tarifa dinâmica (" + TARIFA_MULTIPLICADOR + "x)", acrescimo]);
+    detalhesWhats.push(
+      `• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acrescimo.toFixed(2)}`
+    );
+
+    total = novoValor;
+  }
+
+  // ===== LÓGICA ORIGINAL (INALTERADA) =====
   if(tipoViagem.value==="bate_volta"){ total*=1.8; detalhesWhats.push("• Bate e volta"); }
   if(tipoViagem.value==="ida_volta"){ total*=2; detalhesWhats.push("• Ida e volta"); }
   if(tipoViagem.value==="ida_volta_espera"){ total=(total*2)*1.1; detalhesWhats.push("• Ida e volta com espera"); }
