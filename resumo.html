@@ -85,7 +85,7 @@ label{
   margin-bottom:6px;
 }
 
-/* ===== INPUTS (CONTRASTE CORRIGIDO) ===== */
+/* ===== INPUTS ===== */
 select,
 input[type="number"]{
   width:100%;
@@ -97,13 +97,8 @@ input[type="number"]{
   font-size:.95rem;
 }
 
-select option{
-  color:#000;
-}
-
-input::placeholder{
-  color:#666;
-}
+select option{ color:#000; }
+input::placeholder{ color:#666; }
 
 /* ================= ADICIONAIS ================= */
 .option{
@@ -143,7 +138,6 @@ input::placeholder{
   position:relative;
 }
 
-/* SELO */
 .badge{
   position:absolute;
   top:-10px;
@@ -156,7 +150,6 @@ input::placeholder{
   font-weight:700;
 }
 
-/* VALOR FINAL */
 .totalLabel{
   font-size:.7rem;
   color:#777;
@@ -182,16 +175,10 @@ input::placeholder{
   color:#000;
 }
 
-/* ================= MICRO ANIMAÇÕES ================= */
+/* ================= ANIMAÇÃO ================= */
 @keyframes totalIn{
-  from{
-    opacity:.4;
-    transform:scale(1.08);
-  }
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
+  from{opacity:.4;transform:scale(1.08)}
+  to{opacity:1;transform:scale(1)}
 }
 </style>
 </head>
@@ -303,49 +290,42 @@ function calcular(){
   let detalhes = [];
   detalhesWhats = [];
 
-  // 1️⃣ VALOR BASE
+  // VALOR BASE
   detalhes.push(["Viagem base", valorBaseOriginal]);
   detalhesWhats.push(`• Viagem base: R$ ${valorBaseOriginal.toFixed(2)}`);
 
-  // 2️⃣ TARIFA DINÂMICA (ADMIN)
+  // TARIFA DINÂMICA
   if(TARIFA_DINAMICA_ATIVA){
     const novo = total * TARIFA_MULTIPLICADOR;
     const acres = novo - total;
     total = novo;
-
-    detalhes.push([
-      `Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`,
-      acres
-    ]);
-
-    detalhesWhats.push(
-      `• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acres.toFixed(2)}`
-    );
+    detalhes.push([`Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x)`, acres]);
+    detalhesWhats.push(`• Tarifa dinâmica (${TARIFA_MULTIPLICADOR}x) — ${TARIFA_MOTIVO}: +R$ ${acres.toFixed(2)}`);
   }
 
-  // 3️⃣ TIPO DE VIAGEM (COM VALOR EXPLÍCITO)
-  if(tipoViagem.value === "bate_volta"){
+  // TIPO DE VIAGEM
+  if(tipoViagem.value==="bate_volta"){
     const acres = total * 0.8;
     total += acres;
     detalhes.push(["Bate e volta", acres]);
     detalhesWhats.push(`• Bate e volta: +R$ ${acres.toFixed(2)}`);
   }
 
-  if(tipoViagem.value === "ida_volta"){
+  if(tipoViagem.value==="ida_volta"){
     const acres = total;
     total += acres;
     detalhes.push(["Ida e volta", acres]);
     detalhesWhats.push(`• Ida e volta: +R$ ${acres.toFixed(2)}`);
   }
 
-  if(tipoViagem.value === "ida_volta_espera"){
+  if(tipoViagem.value==="ida_volta_espera"){
     const acres = (total * 2) * 0.1;
     total = (total * 2) + acres;
     detalhes.push(["Ida e volta com espera", acres]);
     detalhesWhats.push(`• Ida e volta com espera: +R$ ${acres.toFixed(2)}`);
   }
 
-  // 4️⃣ ADICIONAIS
+  // ADICIONAIS
   if(excessoPessoas.checked){
     const t = total < 30 ? 5 : total * 0.5;
     total += t;
@@ -365,7 +345,7 @@ function calcular(){
     detalhesWhats.push("• Desvio de rota: +R$ 5,00");
   }
 
-  // 5️⃣ ANIMAL
+  // ANIMAL
   const animal = Number(animalSel.value || 0);
   if(animal > 0){
     total += animal;
@@ -373,7 +353,7 @@ function calcular(){
     detalhesWhats.push(`• Transporte de animal: +R$ ${animal.toFixed(2)}`);
   }
 
-  // 6️⃣ ESPERA
+  // ESPERA
   const min = Number(minutosEspera.value || 0);
   if(min >= 5){
     const t = Math.floor(min / 5) * 3;
@@ -382,28 +362,39 @@ function calcular(){
     detalhesWhats.push(`• Tempo de espera (${min} min): +R$ ${t.toFixed(2)}`);
   }
 
-  // 7️⃣ RENDER DETALHAMENTO
-  detalheDiv.innerHTML = detalhes.map(d =>
+  detalheDiv.innerHTML = detalhes.map((d,i)=>
     `<div>
       <span>${d[0]}</span>
-      <strong>R$ ${d[1].toFixed(2)}</strong>
+      <strong style="color:${i===0?'#333':'#d4af37'}">
+        R$ ${d[1].toFixed(2)}
+      </strong>
     </div>`
   ).join("");
 
-  // 8️⃣ TOTAL FINAL
   totalDiv.innerText = `R$ ${total.toFixed(2)}`;
   App.set("total", total);
 }
 
-document.querySelectorAll("select,input").forEach(el=>{
-  el.addEventListener("change",()=>{
-    el.closest(".option")?.classList.toggle("active",el.checked);
-    totalDiv.classList.remove("total");
-    void totalDiv.offsetWidth; // força reflow
-    totalDiv.classList.add("total");
+document.querySelectorAll("input[type=checkbox]").forEach(chk=>{
+  chk.addEventListener("change",()=>{
+    chk.closest(".option")?.classList.toggle("active", chk.checked);
+    animarTotal();
     calcular();
   });
 });
+
+document.querySelectorAll("select,input[type=number]").forEach(el=>{
+  el.addEventListener("change",()=>{
+    animarTotal();
+    calcular();
+  });
+});
+
+function animarTotal(){
+  totalDiv.classList.remove("total");
+  void totalDiv.offsetWidth;
+  totalDiv.classList.add("total");
+}
 
 calcular();
 
