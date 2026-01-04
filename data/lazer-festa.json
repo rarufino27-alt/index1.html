@@ -14,9 +14,7 @@
   { "origem": "Centro do Cabo", "destino": "Restaurante Sal e brasa (Av Recife)", "valor": 70, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Churrascaria Boi Brasa (Cajueiro Seco)", "valor": 40, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Churrascaria Leitão (Nossa Sra do Ó)", "valor": 60, "regiao": "Cabo" }
- ],
 
- [
   { "origem": "Cohab", "destino": "Castelo Recepções", "valor": 35, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "Fazenda casa Branca - Pirapama", "valor": 23, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "Granja Pajeú", "valor": 30, "regiao": "Cabo" },
@@ -33,6 +31,7 @@
   { "origem": "Cohab", "destino": "Churrascaria Boi Brasa (Cajueiro Seco)", "valor": 40, "regiao": "Cabo" },
   { "origem": "Cohab", "destino": "Churrascaria Leitão (Nossa Sra do Ó)", "valor": 60, "regiao": "Cabo" }
  ]
+
 
 
 
