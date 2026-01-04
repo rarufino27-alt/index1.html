@@ -10,9 +10,7 @@
   { "origem": "Centro do Cabo", "destino": "Ponte dos Carvalhos Santo Estevão", "valor": 25, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Pontezinha até linha do trem", "valor": 30, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Pontezinha após linha do trem", "valor": 33, "regiao": "Cabo" }
-],
 
-[
   { "origem": "Centro do Cabo", "destino": "Massangana", "valor": 30, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Agodoais Sentido Ipojuca", "valor": 30, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Agodoais Sentido Praia", "valor": 30, "regiao": "Cabo" },
@@ -25,3 +23,4 @@
   { "origem": "Centro do Cabo", "destino": "Pontezinha até linha do trem", "valor": 30, "regiao": "Cabo" },
   { "origem": "Centro do Cabo", "destino": "Pontezinha após linha do trem", "valor": 33, "regiao": "Cabo" }
 ]
+
