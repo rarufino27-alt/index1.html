@@ -135,3 +135,61 @@ button,
 .error{
   color:var(--danger);
 }
+
+/* ===== ADICIONAIS PREMIUM ===== */
+
+.taxas-grid{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.taxa-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  transition:all .25s ease;
+}
+
+.taxa-card label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  cursor:pointer;
+}
+
+.taxa-icon{
+  font-size:1.2rem;
+}
+
+.taxa-text{
+  flex:1;
+  font-size:.95rem;
+}
+
+.taxa-card input{
+  transform:scale(1.2);
+}
+
+/* ATIVO */
+.taxa-card.active{
+  border-color:var(--gold);
+  background:linear-gradient(
+    180deg,
+    rgba(212,175,55,.18),
+    rgba(23,26,33,.95)
+  );
+  box-shadow:0 6px 18px rgba(212,175,55,.22);
+}
+
+/* ANIMAÇÃO */
+@keyframes pulseGold{
+  0%{box-shadow:0 0 0 rgba(212,175,55,0)}
+  50%{box-shadow:0 0 22px rgba(212,175,55,.45)}
+  100%{box-shadow:0 0 0 rgba(212,175,55,0)}
+}
+
+.taxa-card.pulse{
+  animation:pulseGold .35s ease;
+}
