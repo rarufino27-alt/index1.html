@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Origem – RF Driver</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="./theme/theme.css">
 <link rel="stylesheet" href="./theme/layout.css">
@@ -12,13 +12,13 @@
 
 <body>
 
-<!-- HEADER -->
+<!-- HEADER / MARCA -->
 <div class="card highlight" style="text-align:center">
-  <h2>Selecionar Origem</h2>
-  <p class="muted">Escolha o ponto inicial da corrida</p>
+  <h1 style="letter-spacing:2px">RF DRIVER</h1>
+  <p class="muted">Selecionar origem da corrida</p>
 </div>
 
-<!-- FORMULÁRIO -->
+<!-- SELETOR -->
 <div class="card">
   <label for="origem">Origem</label>
   <select id="origem">
@@ -33,20 +33,31 @@
   </button>
 </div>
 
-<script src="core/datamanager.js"></script>
 <script src="core/global.js"></script>
+<script src="core/datamanager.js"></script>
 
 <script>
 async function carregarOrigens(){
-  await DataManager.carregar();
-  const select = document.getElementById("origem");
+  try{
+    await DataManager.carregar();
 
-  DataManager.getOrigens().forEach(o => {
-    const opt = document.createElement("option");
-    opt.value = o;
-    opt.textContent = o;
-    select.appendChild(opt);
-  });
+    // 🔑 FUNÇÃO CORRETA PARA SEU PROJETO
+    const origens = DataManager.listarOrigens();
+
+    const select = document.getElementById("origem");
+    origens.forEach(o => {
+      const opt = document.createElement("option");
+      opt.value = o;
+      opt.textContent = o;
+      select.appendChild(opt);
+    });
+
+    console.log("✅ Origens carregadas:", origens);
+
+  }catch(e){
+    console.error("❌ Erro ao carregar origens", e);
+    alert("Erro ao carregar as origens. Verifique os dados.");
+  }
 }
 
 document.getElementById("btnAvancar").addEventListener("click", () => {
@@ -55,7 +66,7 @@ document.getElementById("btnAvancar").addEventListener("click", () => {
     alert("Selecione a origem");
     return;
   }
-  App.setOrigem(origem);
+  App.set("origem", origem);
   App.go("destino.html");
 });
 
