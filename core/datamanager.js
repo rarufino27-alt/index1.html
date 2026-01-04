@@ -2,18 +2,18 @@ const DataManager = {
   rotas: [],
 
   arquivos: [
-    "data/locais.json",
-    "data/praias.json",
-    "data/empresas.json",
-    "data/engenhos.json",
-    "data/interurbanas.json",
-    "data/interestaduais.json",
-    "data/lazer-festa.json",
-    "data/hospitais-clinicas.json",
-    "data/longas-locais.json",
-    "data/mercado.json",
-    "data/shoppings.json"
-  ],
+  "./data/locais.json",
+  "./data/praias.json",
+  "./data/empresas.json",
+  "./data/engenhos.json",
+  "./data/interurbanas.json",
+  "./data/interestaduais.json",
+  "./data/lazer-festa.json",
+  "./data/hospitais-clinicas.json",
+  "./data/longas-locais.json",
+  "./data/mercado.json",
+  "./data/shoppings.json"
+],
 
   async carregar() {
     try {
