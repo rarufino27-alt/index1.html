@@ -13,7 +13,6 @@
 body{
   background:linear-gradient(180deg,#fafafa,#f1f1f1);
   color:#222;
-  font-family:Arial, Helvetica, sans-serif;
 }
 
 .page{
@@ -31,19 +30,17 @@ body{
   gap:16px;
 }
 
-.header,.route,.block,.totalBox{
-  background:#fff;
-  border-radius:22px;
-  padding:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-
 .header{
   text-align:center;
+  padding:20px;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
 }
 
 .header h1{
   font-size:1.15rem;
+  letter-spacing:1px;
   color:#d4af37;
   font-weight:800;
 }
@@ -53,6 +50,13 @@ body{
   color:#666;
 }
 
+.route{
+  background:#fff;
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+}
+
 .route .item{
   text-align:center;
   font-weight:700;
@@ -60,19 +64,53 @@ body{
 
 .route .arrow{
   text-align:center;
-  font-size:1.3rem;
   color:#d4af37;
+  font-size:1.3rem;
+}
+
+.block{
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,.06);
+}
+
+.option{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid #eee;
+  margin-bottom:8px;
 }
 
 .details div{
   display:flex;
   justify-content:space-between;
   margin-bottom:6px;
-  font-size:.85rem;
+  font-size:.9rem;
 }
 
 .totalBox{
   text-align:center;
+  padding:22px;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 10px 26px rgba(0,0,0,.1);
+  position:relative;
+}
+
+.badge{
+  position:absolute;
+  top:-10px;
+  right:12px;
+  background:linear-gradient(180deg,#e6c97a,#d4af37);
+  color:#000;
+  font-size:.65rem;
+  padding:6px 10px;
+  border-radius:12px;
+  font-weight:700;
 }
 
 .total{
@@ -81,7 +119,7 @@ body{
   color:#d4af37;
 }
 
-.btn{
+.btn-final{
   padding:16px;
   border-radius:18px;
   border:none;
@@ -89,24 +127,13 @@ body{
   font-size:1rem;
   font-weight:800;
   color:#000;
-  cursor:pointer;
-}
-
-/* ================= RECIBO PDF ================= */
-@media print{
-  body{
-    background:#fff;
-  }
-  .no-print{
-    display:none;
-  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="page no-print">
+<div class="page">
 <div class="container">
 
   <div class="header">
@@ -115,9 +142,9 @@ body{
   </div>
 
   <div class="route">
-    <div class="item"><strong>Origem</strong><br><span id="origemTxt"></span></div>
+    <div class="item">📌 <strong>Origem</strong><br><span id="origemTxt"></span></div>
     <div class="arrow">⬇</div>
-    <div class="item"><strong>Destino</strong><br><span id="destinoTxt"></span></div>
+    <div class="item">🏁 <strong>Destino</strong><br><span id="destinoTxt"></span></div>
   </div>
 
   <div class="block">
@@ -126,36 +153,15 @@ body{
   </div>
 
   <div class="totalBox">
-    <strong>Total</strong>
+    <div class="badge">OFICIAL</div>
+    <div><strong>Total</strong></div>
     <div id="total" class="total">R$ 0,00</div>
   </div>
 
-  <button class="btn" onclick="enviarWhats()">Enviar no WhatsApp</button>
-  <button class="btn" onclick="gerarPDF()">Gerar Recibo (PDF)</button>
+  <button class="btn-final" onclick="enviarWhats()">Enviar no WhatsApp</button>
+  <button class="btn-final" onclick="gerarPDF()">Gerar Recibo (PDF)</button>
 
 </div>
-</div>
-
-<!-- ================= RECIBO ================= -->
-<div id="recibo" style="display:none;text-align:center;padding:30px">
-
-  <h2>Passageiro 5 Estrelas – Recibo de viagem</h2>
-
-  <p><strong>Origem:</strong><br><span id="rOrigem"></span></p>
-  <p><strong>Destino:</strong><br><span id="rDestino"></span></p>
-
-  <hr>
-
-  <div id="rDetalhamento" style="text-align:left;margin:20px auto;max-width:320px"></div>
-
-  <hr>
-
-  <h3>Total: <span id="rTotal"></span></h3>
-
-  <p style="margin-top:30px">
-    Conforto, segurança e transparência.
-  </p>
-
 </div>
 
 <script src="core/global.js"></script>
@@ -170,55 +176,82 @@ const valorBase = Number(App.get("valorBase") || 0);
 document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
 
-let detalhesHTML = "";
-let totalFinal = 0;
+let TOTAL_FINAL = 0;
+let TEXTO_DETALHES = "";
 
 function calcular(){
   let total = valorBase;
-  detalhesHTML = "";
+  let detalhes = [];
 
-  detalhesHTML += `<div><strong>🚖 Viagem base</strong><span>R$ ${valorBase.toFixed(2)}</span></div>`;
+  detalhes.push(`🚖 <strong>Viagem base</strong>: R$ ${valorBase.toFixed(2)}`);
 
-  if(Dinamico?.ativo){
+  if(Dinamico.ativo){
     const acres = valorBase * (Dinamico.multiplicador - 1);
     total += acres;
-    detalhesHTML += `<div><strong>⚡ Tarifa dinâmica</strong><span>R$ ${acres.toFixed(2)}</span></div>`;
+    detalhes.push(`⚡ <strong>Tarifa dinâmica</strong>: +R$ ${acres.toFixed(2)}`);
   }
 
-  document.getElementById("detalhamento").innerHTML = detalhesHTML;
-  document.getElementById("total").innerText = `R$ ${total.toFixed(2)}`;
+  TOTAL_FINAL = total;
+  TEXTO_DETALHES = detalhes.join("<br>");
 
-  totalFinal = total;
-  App.set("total", total);
+  document.getElementById("detalhamento").innerHTML = TEXTO_DETALHES;
+  document.getElementById("total").innerText = `R$ ${TOTAL_FINAL.toFixed(2)}`;
 }
 
 calcular();
 
 function enviarWhats(){
   const msg =
-`RF Driver - Orçamento de viagem
+`🚖 *RF Driver – Orçamento de viagem*
 
-Origem: ${origem}
-Destino: ${destino}
+📌 *Origem*: ${origem}
+🏁 *Destino*: ${destino}
 
-Total: R$ ${totalFinal.toFixed(2)}`;
+*Detalhamento*
+${TEXTO_DETALHES.replace(/<br>/g,"\n").replace(/<[^>]*>/g,"")}
+
+💰 *Total*: R$ ${TOTAL_FINAL.toFixed(2)}`;
 
   window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
 }
 
 function gerarPDF(){
-  document.getElementById("rOrigem").innerText = origem;
-  document.getElementById("rDestino").innerText = destino;
-  document.getElementById("rDetalhamento").innerHTML = detalhesHTML;
-  document.getElementById("rTotal").innerText = `R$ ${totalFinal.toFixed(2)}`;
+  const win = window.open("", "_blank");
 
-  document.querySelector(".page").style.display="none";
-  document.getElementById("recibo").style.display="block";
+  win.document.write(`
+    <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Recibo RF Driver</title>
+      <style>
+        body{
+          font-family:Arial;
+          padding:30px;
+          text-align:center;
+        }
+        .box{
+          border:1px solid #ccc;
+          padding:20px;
+          border-radius:16px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="box">
+        <h2>RF Driver – Recibo de viagem</h2>
+        <p><strong>Origem:</strong> ${origem}</p>
+        <p><strong>Destino:</strong> ${destino}</p>
+        <hr>
+        <p>${TEXTO_DETALHES.replace(/<br>/g,"<br>")}</p>
+        <hr>
+        <h3>Total: R$ ${TOTAL_FINAL.toFixed(2)}</h3>
+      </div>
+      <script>window.print()</script>
+    </body>
+    </html>
+  `);
 
-  window.print();
-
-  document.getElementById("recibo").style.display="none";
-  document.querySelector(".page").style.display="flex";
+  win.document.close();
 }
 </script>
 
