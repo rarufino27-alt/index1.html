@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Resumo da Corrida – RF Driver</title>
+<title>Resumo – Passageiro 5 Estrelas</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="./theme/theme.css">
@@ -10,9 +10,17 @@
 <link rel="stylesheet" href="./theme/components.css">
 
 <style>
+:root{
+  --wine-dark:#2B0F14;
+  --wine:#4A1A22;
+  --gold:#C9A24D;
+  --bg:#FAFAFA;
+  --text:#333;
+}
+
 body{
-  background:linear-gradient(180deg,#fafafa,#f1f1f1);
-  color:#222;
+  background:linear-gradient(180deg,#ffffff,#f3f3f3);
+  color:var(--text);
 }
 
 .page{
@@ -30,65 +38,144 @@ body{
   gap:16px;
 }
 
+/* HEADER */
 .header{
-  text-align:center;
-  padding:20px;
+  padding:26px 20px;
   border-radius:22px;
-  background:#fff;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  background:linear-gradient(135deg,var(--wine-dark),var(--wine));
+  color:#fff;
+  text-align:center;
+  box-shadow:0 10px 28px rgba(0,0,0,.25);
 }
 
 .header h1{
-  font-size:1.15rem;
-  color:#d4af37;
+  font-size:1.3rem;
+  letter-spacing:2px;
   font-weight:800;
 }
 
-.route, .block, .totalBox{
+.header span{
+  font-size:.75rem;
+  opacity:.85;
+}
+
+/* ROTA */
+.route{
+  background:#fff;
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  text-align:center;
+}
+
+.route .arrow{
+  margin:6px 0;
+  color:var(--gold);
+  font-size:1.4rem;
+}
+
+/* BLOCOS */
+.block{
   background:#fff;
   border-radius:18px;
   padding:16px;
-  box-shadow:0 6px 18px rgba(0,0,0,.06);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
 }
 
-.route{
-  text-align:center;
+label{
+  font-size:.8rem;
   font-weight:700;
+  margin-bottom:6px;
+  display:block;
+}
+
+/* INPUTS */
+select,
+input[type="number"]{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid #ccc;
+  background:#fff;
+  color:#000;
+  font-size:.95rem;
+}
+
+input::placeholder{color:#777}
+
+/* EXTRAS */
+.extra{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #eee;
+  margin-bottom:8px;
+  transition:.25s;
+}
+
+.extra.active{
+  background:linear-gradient(180deg,rgba(201,162,77,.15),#fff);
+  border-color:var(--gold);
+}
+
+/* DETALHAMENTO */
+.details{
+  font-size:.85rem;
 }
 
 .details div{
   display:flex;
   justify-content:space-between;
   margin-bottom:6px;
-  font-size:.85rem;
 }
 
+/* TOTAL */
 .totalBox{
+  background:linear-gradient(135deg,var(--wine-dark),var(--wine));
+  border-radius:22px;
+  padding:22px;
+  color:#fff;
   text-align:center;
+  box-shadow:0 12px 30px rgba(0,0,0,.3);
+  position:relative;
+}
+
+.badge{
+  position:absolute;
+  top:-10px;
+  right:14px;
+  background:linear-gradient(180deg,#e6c97a,var(--gold));
+  color:#000;
+  font-size:.65rem;
+  padding:6px 10px;
+  border-radius:12px;
+  font-weight:700;
 }
 
 .total{
-  font-size:2.4rem;
+  font-size:2.3rem;
   font-weight:800;
-  color:#d4af37;
+  color:var(--gold);
 }
 
-button{
-  padding:16px;
+/* BOTÕES */
+.btn-primary{
+  padding:18px;
   border-radius:18px;
   border:none;
-  font-size:1rem;
+  background:linear-gradient(180deg,#e6c97a,var(--gold));
+  font-size:1.05rem;
   font-weight:800;
-}
-
-.btn-whats{
-  background:linear-gradient(180deg,#e6c97a,#d4af37);
   color:#000;
 }
 
-.btn-back{
-  background:#fff;
+.btn-secondary{
+  padding:14px;
+  border-radius:16px;
   border:1px solid #ccc;
+  background:#fff;
 }
 </style>
 </head>
@@ -99,37 +186,36 @@ button{
 <div class="container">
 
   <div class="header">
-    <h1>RF Driver – Orçamento de viagem</h1>
-    <span>Tabela oficial</span>
+    <h1>RF Driver</h1>
+    <span>Orçamento de viagem</span>
   </div>
 
   <div class="route">
-    📌 🏁<strong>Origem ou Destino</strong><br>
+    <strong>📌🏁 Origem ou Destino</strong><br>
     <span id="origemTxt"></span>
-    <br><br>⬇<br><br>
-    🏁 📌<strong>Destino ou Origem</strong><br>
+    <div class="arrow">⬇</div>
+    <strong>🏁📌 Destino ou Origem</strong><br>
     <span id="destinoTxt"></span>
   </div>
 
   <div class="block">
-    <label><strong>🚖Tipo de viagem</strong></label>
+    <label>🚖 Tipo de viagem</label>
     <select id="tipoViagem">
-      <option value="ida">🚕Ida</option>
-      <option value="bateVolta">♻️Bate e volta</option>
-      <option value="idaVolta">🚕♻️Ida e volta (até 1h)</option>
-      <option value="idaVoltaEspera">♻️⏳Ida e volta (acima de 1h)</option>
+      <option value="ida">🚕 Ida</option>
+      <option value="bate_volta">♻️ Bate e volta</option>
+      <option value="ida_volta">🚕♻️ Ida e volta (até 1h)</option>
+      <option value="ida_volta_espera">🚕♻️ Ida e volta (a partir de 1h)</option>
     </select>
   </div>
 
   <div class="block">
-    <label><strong>Adicionais</strong></label>
-    <div><input type="checkbox" id="desvioSimples">🛣️Desvio simples</div>
-    <div><input type="checkbox" id="voltaPraia">⛱️Volta da praia</div>
-    <div><input type="checkbox" id="taxaFeira">🧺Taxa de feira</div>
+    <div class="extra"><span>🛣️ Desvio de rota simples</span><input type="checkbox" id="desvioSimples"></div>
+    <div class="extra"><span>🏖️ Volta da praia</span><input type="checkbox" id="voltaPraia"></div>
+    <div class="extra"><span>🧺 Taxa de feira</span><input type="checkbox" id="taxaFeira"></div>
   </div>
 
   <div class="block">
-    <label><strong>🐶Transporte animal</strong></label>
+    <label>🐶 Transporte de animal</label>
     <select id="animal">
       <option value="0">Não</option>
       <option value="5">Pequeno – R$ 5</option>
@@ -140,21 +226,22 @@ button{
   </div>
 
   <div class="block">
-    <label><strong>⏳Tempo de espera (min)</strong></label>
+    <label>⏱️ Tempo de espera (min)</label>
     <input type="number" id="minutosEspera" placeholder="Ex: 10">
   </div>
 
   <div class="block">
-    <strong>✍🏽Detalhamento</strong>
+    <strong>Detalhamento</strong>
     <div class="details" id="detalhamento"></div>
   </div>
 
   <div class="totalBox">
+    <div class="badge">OFICIAL RF Driver 🚖</div>
     <div class="total" id="total">R$ 0,00</div>
   </div>
 
-  <button class="btn-whats" onclick="enviarWhats()">📲 Enviar no WhatsApp</button>
-  <button class="btn-back" onclick="history.back()">⬅ Voltar</button>
+  <button class="btn-primary" onclick="enviarWhats()">📲 Solicitar corrida no WhatsApp</button>
+  <button class="btn-secondary" onclick="App.go('destino.html')">⬅ Voltar</button>
 
 </div>
 </div>
@@ -166,61 +253,107 @@ button{
 <script>
 const origem = App.get("origem");
 const destino = App.get("destino");
-const valorBase = Number(App.get("valorBase")) || 0;
+const valorBase = Number(App.get("valorBase") || 0);
 
 document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
 
-let totalFinal = 0;
-let linhasWhats = [];
+const tipoViagem = document.getElementById("tipoViagem");
+const desvioSimples = document.getElementById("desvioSimples");
+const voltaPraia = document.getElementById("voltaPraia");
+const taxaFeira = document.getElementById("taxaFeira");
+const animalSel = document.getElementById("animal");
+const minutosEspera = document.getElementById("minutosEspera");
+const detalheDiv = document.getElementById("detalhamento");
+const totalDiv = document.getElementById("total");
+
+let detalhesWhats = [];
 
 function calcular(){
   let total = valorBase;
   let detalhes = [];
-  linhasWhats = [];
+  detalhesWhats = [];
 
   detalhes.push(["🚖 Viagem base", valorBase]);
-  linhasWhats.push(`🚖 *Viagem base*: R$ ${valorBase.toFixed(2)}`);
+  detalhesWhats.push(`🚖 *Viagem base*: R$ ${valorBase.toFixed(2)}`);
 
-  if(Dinamico?.ativo){
+  if (Dinamico?.ativo) {
     const acres = valorBase * (Dinamico.multiplicador - 1);
     total += acres;
     detalhes.push(["⚡ Tarifa dinâmica", acres]);
-    linhasWhats.push(`⚡ *Tarifa dinâmica*: +R$ ${acres.toFixed(2)}`);
+    detalhesWhats.push(`⚡ *Tarifa dinâmica*: +R$ ${acres.toFixed(2)}`);
   }
 
-  const tipo = document.getElementById("tipoViagem").value;
-  if(tipo !== "ida"){
+  const tipo = tipoViagem.value;
+
+  if (tipo === "bate_volta" || tipo === "ida_volta") {
     const acres = valorBase * Taxas.tipoViagem[tipo];
     total += acres;
     detalhes.push(["♻️ Tipo de viagem", acres]);
-    linhasWhats.push(`♻️ *Tipo de viagem*: +R$ ${acres.toFixed(2)}`);
+    detalhesWhats.push(`♻️ *Tipo de viagem*: +R$ ${acres.toFixed(2)}`);
   }
 
-  if(desvioSimples.checked){ total+=5; detalhes.push(["🛣️ Desvio simples",5]); linhasWhats.push("🛣️ *Desvio simples*: +R$ 5,00"); }
-  if(voltaPraia.checked){ total+=10; detalhes.push(["🏖️ Volta da praia",10]); linhasWhats.push("🏖️ *Volta da praia*: +R$ 10,00"); }
-  if(taxaFeira.checked){ total+=5; detalhes.push(["🧺 Taxa de feira",5]); linhasWhats.push("🧺 *Taxa de feira*: +R$ 5,00"); }
+  if (tipo === "ida_volta_espera") {
+    const subtotal = valorBase * 2;
+    const acres = subtotal * 0.10;
+    total += subtotal + acres;
 
-  const animal = Number(document.getElementById("animal").value);
-  if(animal>0){ total+=animal; detalhes.push(["🐶 Transporte animal",animal]); linhasWhats.push(`🐶 *Transporte animal*: +R$ ${animal.toFixed(2)}`); }
+    detalhes.push(["🚕 Ida e volta", subtotal]);
+    detalhes.push(["⏳ Acréscimo de espera (10%)", acres]);
 
-  const min = Number(document.getElementById("minutosEspera").value);
-  if(min>=5){
-    const acres = Math.floor(min/5)*3;
-    total+=acres;
-    detalhes.push([`⏱️ Tempo de espera`, acres]);
-    linhasWhats.push(`⏱️ *Tempo de espera*: +R$ ${acres.toFixed(2)}`);
+    detalhesWhats.push(`🚕 *Ida e volta*: R$ ${subtotal.toFixed(2)}`);
+    detalhesWhats.push(`⏳ *Acréscimo de espera (10%)*: +R$ ${acres.toFixed(2)}`);
   }
 
-  document.getElementById("detalhamento").innerHTML =
-    detalhes.map(d=>`<div><span>${d[0]}</span><strong>R$ ${d[1].toFixed(2)}</strong></div>`).join("");
+  if (desvioSimples.checked) {
+    total += Taxas.desvioRotaSimples;
+    detalhes.push(["🛣️ Desvio simples", Taxas.desvioRotaSimples]);
+    detalhesWhats.push("🛣️ *Desvio simples*: +R$ 5,00");
+  }
 
-  totalFinal = total;
-  document.getElementById("total").innerText = `R$ ${total.toFixed(2)}`;
+  if (voltaPraia.checked) {
+    total += Taxas.voltaPraia;
+    detalhes.push(["🏖️ Volta da praia", Taxas.voltaPraia]);
+    detalhesWhats.push("🏖️ *Volta da praia*: +R$ 10,00");
+  }
+
+  if (taxaFeira.checked) {
+    total += Taxas.feira;
+    detalhes.push(["🧺 Taxa de feira", Taxas.feira]);
+    detalhesWhats.push("🧺 *Taxa de feira*: +R$ 5,00");
+  }
+
+  const animal = Number(animalSel.value || 0);
+  if (animal > 0) {
+    total += animal;
+    detalhes.push(["🐶 Transporte animal", animal]);
+    detalhesWhats.push(`🐶 *Transporte animal*: +R$ ${animal.toFixed(2)}`);
+  }
+
+  const min = Number(minutosEspera.value || 0);
+  if (min >= Taxas.espera.blocoMinutos) {
+    const acres = Math.floor(min / Taxas.espera.blocoMinutos) * Taxas.espera.valorPorBloco;
+    total += acres;
+    detalhes.push([`⏱️ Tempo de espera (${min} min)`, acres]);
+    detalhesWhats.push(`⏱️ *Tempo de espera*: +R$ ${acres.toFixed(2)}`);
+  }
+
+  detalheDiv.innerHTML = detalhes.map(d => `
+    <div>
+      <span><strong>${d[0]}</strong></span>
+      <strong>R$ ${d[1].toFixed(2)}</strong>
+    </div>
+  `).join("");
+
+  totalDiv.innerText = `R$ ${total.toFixed(2)}`;
+  App.set("total", total);
 }
 
 document.querySelectorAll("select,input").forEach(el=>{
-  el.addEventListener("change",calcular);
+  el.addEventListener("change", () => {
+    el.closest(".extra")?.classList.toggle("active", el.checked);
+    calcular();
+  });
 });
 
 calcular();
@@ -233,11 +366,13 @@ function enviarWhats(){
 🏁 *Destino*: ${destino}
 
 *Detalhamento*
-${linhasWhats.join("\n")}
+${detalhesWhats.join("\n")}
 
-💰 *Total*: R$ ${totalFinal.toFixed(2)}`;
+💰 *Total*: R$ ${App.get("total").toFixed(2)}
 
-  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+Conforto, segurança e transparência.`;
+
+  window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
 }
 </script>
 
