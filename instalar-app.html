@@ -10,146 +10,187 @@
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
+/* ===== BASE RF DRIVER ===== */
 body{
   min-height:100vh;
-  background:radial-gradient(circle at top, #1a1a1a 0%, #000 65%);
+  margin:0;
+  background:radial-gradient(circle at top,#1a1a1a 0%, #000 70%);
   display:flex;
   justify-content:center;
-  align-items:center;
+  padding:20px;
   color:#fff;
 }
 
-.container{
+.page{
   width:100%;
-  max-width:720px;
-  padding:36px 28px;
-  background:linear-gradient(145deg, rgba(20,20,20,.95), rgba(0,0,0,.9));
-  border-radius:24px;
-  box-shadow:0 0 40px rgba(245,197,66,.25);
+  max-width:420px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
 }
 
-h1{
+/* ===== MARCA ===== */
+.brand{
   text-align:center;
-  font-size:2rem;
-  letter-spacing:2px;
+  padding:26px 20px;
+  border-radius:22px;
+  background:linear-gradient(
+    180deg,
+    rgba(245,197,66,.18),
+    rgba(0,0,0,.85)
+  );
+  border:1px solid rgba(245,197,66,.35);
+  box-shadow:
+    0 0 35px rgba(245,197,66,.25),
+    inset 0 0 18px rgba(255,255,255,.04);
+}
+
+.brand h1{
+  font-size:1.6rem;
+  letter-spacing:3px;
+  font-weight:800;
   background:linear-gradient(90deg,#d4af37,#f5e28c,#c9a227);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  margin-bottom:10px;
 }
 
-.subtitle{
-  text-align:center;
-  font-size:.95rem;
+.brand span{
+  font-size:.8rem;
   color:#ccc;
-  margin-bottom:25px;
 }
 
+/* ===== SEÇÕES ===== */
 .section{
-  margin-bottom:30px;
+  background:linear-gradient(
+    145deg,
+    rgba(20,20,20,.95),
+    rgba(0,0,0,.85)
+  );
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 0 30px rgba(0,0,0,.6);
 }
 
 .section h2{
-  font-size:1.2rem;
-  margin-bottom:12px;
+  font-size:1.05rem;
   color:#f5c542;
+  margin-bottom:12px;
 }
 
+/* ===== PASSOS ===== */
 .steps{
-  font-size:.95rem;
+  list-style:none;
+  padding:0;
+  margin:0;
+  font-size:.9rem;
   line-height:1.6;
   color:#e0e0e0;
 }
 
 .steps li{
-  margin-bottom:8px;
-}
-
-.download-btn{
   display:flex;
-  justify-content:center;
-  margin:18px 0;
+  gap:10px;
+  margin-bottom:10px;
 }
 
-.download-btn a{
-  padding:14px 22px;
-  border-radius:14px;
-  background:#f5c542;
+.steps li span{
+  color:#f5c542;
+  font-weight:700;
+}
+
+/* ===== BOTÃO ===== */
+.download{
+  margin:14px 0 18px;
+}
+
+.download a{
+  display:block;
+  width:100%;
+  text-align:center;
+  padding:16px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#f5e28c,#f5c542);
   color:#000;
-  font-weight:600;
+  font-weight:800;
+  font-size:1rem;
   text-decoration:none;
-  transition:.2s;
+  transition:.25s;
 }
 
-.download-btn a:hover{
+.download a:hover{
   transform:translateY(-1px);
-  box-shadow:0 0 18px rgba(245,197,66,.45);
+  box-shadow:0 0 22px rgba(245,197,66,.5);
 }
 
+/* ===== ALERTA ===== */
 .alert{
+  margin-top:14px;
   background:rgba(255,80,80,.12);
   border:1px solid rgba(255,80,80,.35);
   padding:14px;
   border-radius:14px;
-  font-size:.9rem;
+  font-size:.85rem;
   color:#ffdede;
 }
 
+/* ===== FOOTER ===== */
 .footer{
   text-align:center;
-  font-size:.8rem;
+  font-size:.75rem;
   color:#aaa;
-  margin-top:25px;
+  margin-top:8px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="page">
 
-  <h1>RF DRIVER</h1>
-  <div class="subtitle">
-    Instalação oficial do aplicativo
+  <!-- MARCA -->
+  <div class="brand">
+    <h1>RF DRIVER</h1>
+    <span>Instalação oficial do aplicativo</span>
   </div>
 
   <!-- ANDROID -->
   <div class="section">
-    <h2>📱 Android – Instalação do APK</h2>
+    <h2>📱 Android — Instalação do aplicativo</h2>
 
-    <div class="download-btn">
+    <div class="download">
       <a href="https://github.com/rarufino27-alt/index1.html/releases/download/V1.0.0/_Tabela_de_Precos_19386060.apk">
         ⬇️ Baixar RF Driver (APK)
       </a>
     </div>
 
-    <ol class="steps">
-      <li>Toque no botão acima para baixar o aplicativo.</li>
-      <li>Se aparecer um aviso de segurança, toque em <b>“Baixar mesmo assim”</b>.</li>
-      <li>Após o download, abra o arquivo APK.</li>
-      <li>Permita a instalação de apps desta fonte, se solicitado.</li>
-      <li>Conclua a instalação normalmente.</li>
-    </ol>
+    <ul class="steps">
+      <li><span>1.</span> Toque no botão acima para baixar o aplicativo.</li>
+      <li><span>2.</span> Se aparecer um aviso, toque em <b>“Baixar mesmo assim”</b>.</li>
+      <li><span>3.</span> Após o download, abra o arquivo APK.</li>
+      <li><span>4.</span> Permita a instalação desta fonte, se solicitado.</li>
+      <li><span>5.</span> Conclua a instalação normalmente.</li>
+    </ul>
   </div>
 
-  <!-- IPHONE -->
+  <!-- IOS -->
   <div class="section">
-    <h2>🍎 iPhone – Instalar como App (Safari)</h2>
+    <h2>🍎 iPhone — Instalar como aplicativo</h2>
 
-    <ol class="steps">
-      <li>Abra o site do RF Driver no <b>Safari</b>.</li>
-      <li>Toque no botão <b>Compartilhar</b> (ícone ⬆️).</li>
-      <li>Selecione <b>“Adicionar à Tela de Início”</b>.</li>
-      <li>Confirme tocando em <b>Adicionar</b>.</li>
-      <li>O app aparecerá como um aplicativo normal no iPhone.</li>
-    </ol>
+    <ul class="steps">
+      <li><span>1.</span> Abra o site do RF Driver no <b>Safari</b>.</li>
+      <li><span>2.</span> Toque em <b>Compartilhar</b> (ícone ⬆️).</li>
+      <li><span>3.</span> Selecione <b>“Adicionar à Tela de Início”</b>.</li>
+      <li><span>4.</span> Confirme tocando em <b>Adicionar</b>.</li>
+      <li><span>5.</span> O app aparecerá como um aplicativo normal.</li>
+    </ul>
 
     <div class="alert">
       ⚠️ O iPhone não permite instalação de APK.<br>
-      O método acima é o formato oficial e seguro no iOS.
+      Este é o método oficial, seguro e recomendado.
     </div>
   </div>
 
+  <!-- FOOTER -->
   <div class="footer">
     RF Driver • Mobilidade com excelência
   </div>
