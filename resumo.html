@@ -9,11 +9,7 @@
 <link rel="stylesheet" href="./theme/layout.css">
 <link rel="stylesheet" href="./theme/components.css">
 
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <style>
-/* ======= ESTILO ORIGINAL (INALTERADO) ======= */
 body{
   background:linear-gradient(180deg,#fafafa,#f1f1f1);
   color:#222;
@@ -34,7 +30,6 @@ body{
   gap:16px;
 }
 
-/* HEADER */
 .header{
   text-align:center;
   padding:20px;
@@ -45,7 +40,6 @@ body{
 
 .header h1{
   font-size:1.15rem;
-  letter-spacing:1px;
   color:#d4af37;
   font-weight:800;
 }
@@ -55,55 +49,27 @@ body{
   color:#666;
 }
 
-/* ROTA */
-.route{
+.route,.block,.totalBox{
   background:#fff;
   border-radius:20px;
   padding:18px;
   box-shadow:0 6px 18px rgba(0,0,0,.06);
 }
 
-.route .item{
-  text-align:center;
-  font-weight:700;
-}
+.route .item{text-align:center;font-weight:700}
+.route .arrow{text-align:center;color:#d4af37;font-size:1.3rem}
 
-.route .arrow{
-  text-align:center;
-  color:#d4af37;
-  font-size:1.3rem;
-}
+label{font-weight:700;font-size:.8rem;margin-bottom:6px;display:block}
 
-/* BLOCOS */
-.block{
-  background:#fff;
-  border-radius:18px;
-  padding:16px;
-  box-shadow:0 6px 18px rgba(0,0,0,.06);
-}
-
-label{
-  font-size:.8rem;
-  font-weight:700;
-  display:block;
-  margin-bottom:6px;
-}
-
-/* INPUTS */
-select,
-input[type="number"]{
+select,input[type="number"]{
   width:100%;
   padding:12px;
   border-radius:14px;
   border:1px solid #ccc;
   background:#fff;
   color:#000;
-  font-size:.95rem;
 }
 
-input::placeholder{ color:#777; }
-
-/* OPÇÕES */
 .option{
   display:flex;
   justify-content:space-between;
@@ -112,7 +78,6 @@ input::placeholder{ color:#777; }
   border-radius:14px;
   border:1px solid #eee;
   margin-bottom:8px;
-  transition:.25s;
 }
 
 .option.active{
@@ -120,24 +85,15 @@ input::placeholder{ color:#777; }
   border-color:#d4af37;
 }
 
-/* DETALHAMENTO */
-.details{
-  font-size:.85rem;
-}
-
 .details div{
   display:flex;
   justify-content:space-between;
   margin-bottom:6px;
+  font-size:.85rem;
 }
 
-/* TOTAL */
 .totalBox{
   text-align:center;
-  padding:22px;
-  border-radius:22px;
-  background:#fff;
-  box-shadow:0 10px 26px rgba(0,0,0,.1);
   position:relative;
 }
 
@@ -146,16 +102,10 @@ input::placeholder{ color:#777; }
   top:-10px;
   right:12px;
   background:linear-gradient(180deg,#e6c97a,#d4af37);
-  color:#000;
   font-size:.65rem;
   padding:6px 10px;
   border-radius:12px;
   font-weight:700;
-}
-
-.totalLabel{
-  font-size:.7rem;
-  color:#777;
 }
 
 .total{
@@ -164,16 +114,12 @@ input::placeholder{ color:#777; }
   color:#d4af37;
 }
 
-/* BOTÕES */
 .btn-final{
   padding:16px;
   border-radius:18px;
   border:none;
   background:linear-gradient(180deg,#e6c97a,#d4af37);
-  font-size:1rem;
   font-weight:800;
-  color:#000;
-  margin-top:8px;
 }
 </style>
 </head>
@@ -183,35 +129,61 @@ input::placeholder{ color:#777; }
 <div class="page">
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header">
-    <h1>RF Driver – Orçamento de viagem</h1>
-    <span>Tabela oficial</span>
-  </div>
+<div class="header">
+  <h1>RF Driver – Orçamento de viagem</h1>
+  <span>Tabela oficial</span>
+</div>
 
-  <!-- ROTA -->
-  <div class="route">
-    <div class="item">📌 <strong>Origem</strong><br><span id="origemTxt"></span></div>
-    <div class="arrow">⬇</div>
-    <div class="item">🏁 <strong>Destino</strong><br><span id="destinoTxt"></span></div>
-  </div>
+<div class="route">
+  <div class="item">📌 <strong>Origem</strong><br><span id="origemTxt"></span></div>
+  <div class="arrow">⬇</div>
+  <div class="item">🏁 <strong>Destino</strong><br><span id="destinoTxt"></span></div>
+</div>
 
-  <!-- DETALHAMENTO -->
-  <div class="block">
-    <strong>Detalhamento</strong>
-    <div class="details" id="detalhamento"></div>
-  </div>
+<div class="block">
+<label>🚖 <strong>Tipo de viagem</strong></label>
+<select id="tipoViagem">
+  <option value="ida">🚕 Ida</option>
+  <option value="bate">♻️ Bate e volta</option>
+  <option value="idaVolta">🚕♻️ Ida e volta</option>
+  <option value="idaVoltaEspera">🚕♻️ Ida e volta + espera</option>
+</select>
+</div>
 
-  <!-- TOTAL -->
-  <div class="totalBox">
-    <div class="badge">OFICIAL</div>
-    <div class="totalLabel">💰 Total</div>
-    <div id="total" class="total">R$ 0,00</div>
-  </div>
+<div class="block">
+<div class="option"><span>🛣️ <strong>Desvio simples</strong></span><input type="checkbox" id="desvio"></div>
+<div class="option"><span>🏖️ <strong>Volta da praia</strong></span><input type="checkbox" id="praia"></div>
+<div class="option"><span>🧺 <strong>Taxa de feira</strong></span><input type="checkbox" id="feira"></div>
+</div>
 
-  <!-- BOTÕES -->
-  <button class="btn-final" onclick="enviarWhats()">Enviar no WhatsApp</button>
-  <button class="btn-final" onclick="gerarRecibo()">📄 Gerar Recibo (PDF)</button>
+<div class="block">
+<label>🐶 <strong>Transporte animal</strong></label>
+<select id="animal">
+  <option value="0">Não</option>
+  <option value="5">Pequeno</option>
+  <option value="7">Médio</option>
+  <option value="10">Grande</option>
+  <option value="20">Viagem longa</option>
+</select>
+</div>
+
+<div class="block">
+<label>⏱️ <strong>Tempo de espera (min)</strong></label>
+<input type="number" id="espera" placeholder="Ex: 10">
+</div>
+
+<div class="block">
+<strong>Detalhamento</strong>
+<div class="details" id="detalhamento"></div>
+</div>
+
+<div class="totalBox">
+<div class="badge">OFICIAL</div>
+<div class="total" id="total">R$ 0,00</div>
+</div>
+
+<button class="btn-final" onclick="enviarWhats()">Enviar no WhatsApp</button>
+<button class="btn-final" onclick="gerarPDF()">Gerar Recibo (PDF)</button>
 
 </div>
 </div>
@@ -219,77 +191,56 @@ input::placeholder{ color:#777; }
 <script src="core/global.js"></script>
 
 <script>
-const { jsPDF } = window.jspdf;
-
 const origem = App.get("origem");
 const destino = App.get("destino");
-const total = Number(App.get("total") || 0);
-const detalhesWhats = App.get("detalhesWhats") || [];
+const base = Number(App.get("valorBase")||0);
 
-document.getElementById("origemTxt").innerText = origem;
-document.getElementById("destinoTxt").innerText = destino;
+origemTxt.innerText = origem;
+destinoTxt.innerText = destino;
 
-document.getElementById("detalhamento").innerHTML =
-  detalhesWhats.map(l => `<div>${l.replace(/\*/g,'')}</div>`).join("");
+function calcular(){
+let total = base;
+let det = [];
 
-document.getElementById("total").innerText = `R$ ${total.toFixed(2)}`;
+det.push(["🚖 Viagem base",base]);
 
-/* ===== WHATSAPP (INALTERADO) ===== */
+switch(tipoViagem.value){
+ case "bate": total*=1.8; det.push(["♻️ Bate e volta",total-base]); break;
+ case "idaVolta": total*=2; det.push(["🚕♻️ Ida e volta",total-base]); break;
+ case "idaVoltaEspera": total=total*2*1.1; det.push(["🚕♻️ Ida e volta + espera",total-base]); break;
+}
+
+if(desvio.checked){ total+=5; det.push(["🛣️ Desvio",5]); }
+if(praia.checked){ total+=10; det.push(["🏖️ Praia",10]); }
+if(feira.checked){ total+=5; det.push(["🧺 Feira",5]); }
+
+const ani=Number(animal.value); if(ani){ total+=ani; det.push(["🐶 Animal",ani]); }
+
+const min=Number(espera.value||0);
+if(min>=5){ const t=Math.floor(min/5)*3; total+=t; det.push(["⏱️ Espera",t]); }
+
+detalhamento.innerHTML = det.map(d=>`<div><strong>${d[0]}</strong><strong>R$ ${d[1].toFixed(2)}</strong></div>`).join("");
+totalDiv.innerText=`R$ ${total.toFixed(2)}`;
+App.set("total",total);
+}
+
+document.querySelectorAll("select,input").forEach(e=>e.addEventListener("change",calcular));
+calcular();
+
 function enviarWhats(){
-  const msg =
+window.open("https://wa.me/?text="+encodeURIComponent(
 `🚖 *RF Driver – Orçamento de viagem*
 
 📌 *Origem*: ${origem}
 🏁 *Destino*: ${destino}
 
-*Detalhamento*
-${detalhesWhats.join("\n")}
+${detalhamento.innerText}
 
-💰 *Total*: R$ ${total.toFixed(2)}`;
-
-  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+💰 *Total*: R$ ${App.get("total").toFixed(2)}`
+));
 }
 
-/* ===== RECIBO PDF (NOVO) ===== */
-function gerarRecibo(){
-  const doc = new jsPDF();
-
-  let y = 30;
-
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(16);
-  doc.text("RF Driver – Recibo de Viagem",105,y,{align:"center"});
-
-  y += 12;
-  doc.setFontSize(11);
-  doc.setFont("helvetica","normal");
-  doc.text(`Origem: ${origem}`,105,y,{align:"center"});
-  y += 7;
-  doc.text(`Destino: ${destino}`,105,y,{align:"center"});
-
-  y += 12;
-  doc.setFont("helvetica","bold");
-  doc.text("Detalhamento",105,y,{align:"center"});
-
-  y += 8;
-  doc.setFont("helvetica","normal");
-  detalhesWhats.forEach(l=>{
-    doc.text(l.replace(/\*/g,''),105,y,{align:"center"});
-    y += 6;
-  });
-
-  y += 10;
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(14);
-  doc.text(`Total: R$ ${total.toFixed(2)}`,105,y,{align:"center"});
-
-  y += 12;
-  doc.setFontSize(10);
-  doc.setFont("helvetica","normal");
-  doc.text("Conforto, segurança e transparência.",105,y,{align:"center"});
-
-  doc.save("Recibo_RF_Driver.pdf");
-}
+function gerarPDF(){ alert("PDF será implementado na próxima etapa"); }
 </script>
 
 </body>
