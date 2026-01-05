@@ -292,16 +292,11 @@ function calcular(){
   let detalhes = [];
   detalhesWhats = [];
 
+  // 1️⃣ Viagem base
   detalhes.push(["🚖 Viagem base", valorBase]);
   detalhesWhats.push(`🚖 *Viagem base*: R$ ${valorBase.toFixed(2)}`);
 
-  if(window.Dinamico && Dinamico.ativo){
-    const acres = valorBase * (Dinamico.multiplicador - 1);
-    total += acres;
-    detalhes.push([`⚡ Tarifa dinâmica (${Dinamico.multiplicador}x)`, acres]);
-    detalhesWhats.push(`⚡ *Tarifa dinâmica*: +R$ ${acres.toFixed(2)}`);
-  }
-
+  // 2️⃣ Tipo de viagem
   if(tipoViagem.value !== "ida"){
     const acres = valorBase * Taxas.tipoViagem[tipoViagem.value];
     total += acres;
@@ -309,6 +304,17 @@ function calcular(){
     detalhesWhats.push(`♻️ *Tipo de viagem*: +R$ ${acres.toFixed(2)}`);
   }
 
+  // 3️⃣ TARIFA DINÂMICA (AGORA CORRETA)
+  if(window.Dinamico && Dinamico.ativo){
+    const valorAntes = total;
+    total = total * Dinamico.multiplicador;
+    const acres = total - valorAntes;
+
+    detalhes.push([`⚡ Tarifa dinâmica (${Dinamico.multiplicador}x)`, acres]);
+    detalhesWhats.push(`⚡ *Tarifa dinâmica*: +R$ ${acres.toFixed(2)}`);
+  }
+
+  // 4️⃣ Taxas fixas
   if(desvioSimples.checked){
     total += Taxas.desvioRotaSimples;
     detalhes.push(["🛣️ Desvio simples", Taxas.desvioRotaSimples]);
@@ -351,7 +357,8 @@ function calcular(){
     detalhesWhats.push(`⏱️ *Tempo de espera*: +R$ ${acres.toFixed(2)}`);
   }
 
-  detalheDiv.innerHTML = detalhes.map(d=>`
+  // Render
+  detalheDiv.innerHTML = detalhes.map(d => `
     <div>
       <span><strong>${d[0]}</strong></span>
       <strong>R$ ${d[1].toFixed(2)}</strong>
