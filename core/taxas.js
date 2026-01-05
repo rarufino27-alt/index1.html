@@ -10,7 +10,7 @@ const Taxas = {
     ida: 0,                 // sem acréscimo
     bateVolta: 0.8,         // +80% do valor base
     idaVolta: 1,            // +100% do valor base
-    idaVoltaEspera: 2.1     // 2x + 10%
+    idaVoltaEspera: 1.2     // 2x + 10%
   },
 
   /* ================= TAXAS FIXAS ================= */
