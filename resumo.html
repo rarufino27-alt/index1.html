@@ -40,7 +40,6 @@ body{
 
 .header h1{
   font-size:1.15rem;
-  letter-spacing:1px;
   color:#d4af37;
   font-weight:800;
 }
@@ -50,7 +49,7 @@ body{
   color:#666;
 }
 
-.route, .block, .totalBox{
+.route,.block,.totalBox{
   background:#fff;
   border-radius:20px;
   padding:18px;
@@ -64,33 +63,8 @@ body{
 
 .route .arrow{
   text-align:center;
-  color:#d4af37;
   font-size:1.3rem;
-}
-
-label{
-  font-size:.8rem;
-  font-weight:700;
-  margin-bottom:6px;
-  display:block;
-}
-
-select,input{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid #ccc;
-  font-size:.95rem;
-}
-
-.option{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid #eee;
-  margin-bottom:8px;
+  color:#d4af37;
 }
 
 .details div{
@@ -154,9 +128,9 @@ select,input{
 </div>
 </div>
 
-<!-- ================= RECIBO PDF (OCULTO) ================= -->
+<!-- RECIBO PDF -->
 <div id="recibo" style="display:none">
-  <div style="font-family:Arial; padding:30px; text-align:center">
+  <div style="font-family:Arial;padding:30px;text-align:center">
     <h2>Passageiro 5 Estrelas – Recibo de viagem</h2>
 
     <p><strong>Origem:</strong> <span id="rOrigem"></span></p>
@@ -164,7 +138,7 @@ select,input{
 
     <hr>
 
-    <div id="rDetalhamento" style="text-align:left; margin-top:20px"></div>
+    <div id="rDetalhamento" style="text-align:left"></div>
 
     <hr>
 
@@ -183,12 +157,37 @@ select,input{
 <script>
 const origem = App.get("origem");
 const destino = App.get("destino");
-const total = App.get("total") || 0;
+const valorBase = Number(App.get("valorBase") || 0);
 
 document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
 
+function calcular(){
+  let total = valorBase;
+  let detalhes = [];
+
+  detalhes.push(["🚖 Viagem base", valorBase]);
+
+  if(Dinamico?.ativo){
+    const acres = valorBase * (Dinamico.multiplicador - 1);
+    total += acres;
+    detalhes.push(["⚡ Tarifa dinâmica", acres]);
+  }
+
+  detalhes.forEach(d => {
+    document.getElementById("detalhamento").innerHTML +=
+      `<div><span><strong>${d[0]}</strong></span><strong>R$ ${d[1].toFixed(2)}</strong></div>`;
+  });
+
+  document.getElementById("total").innerText = `R$ ${total.toFixed(2)}`;
+  App.set("total", total);
+}
+
+// 🚀 ESSENCIAL
+calcular();
+
 function enviarWhats(){
+  const total = App.get("total") || 0;
   const msg =
 `RF Driver - Orçamento de viagem
 
@@ -203,16 +202,12 @@ Total: R$ ${total.toFixed(2)}`;
 function gerarPDF(){
   document.getElementById("rOrigem").innerText = origem;
   document.getElementById("rDestino").innerText = destino;
-  document.getElementById("rTotal").innerText = `R$ ${total.toFixed(2)}`;
-
-  document.getElementById("rDetalhamento").innerHTML =
-    document.getElementById("detalhamento").innerHTML;
+  document.getElementById("rTotal").innerText = document.getElementById("total").innerText;
+  document.getElementById("rDetalhamento").innerHTML = document.getElementById("detalhamento").innerHTML;
 
   const original = document.body.innerHTML;
   document.body.innerHTML = document.getElementById("recibo").innerHTML;
-
   window.print();
-
   document.body.innerHTML = original;
   location.reload();
 }
