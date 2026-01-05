@@ -13,6 +13,7 @@
 body{
   background:linear-gradient(180deg,#fafafa,#f1f1f1);
   color:#222;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
 .page{
@@ -30,12 +31,15 @@ body{
   gap:16px;
 }
 
+.header,.route,.block,.totalBox{
+  background:#fff;
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
 .header{
   text-align:center;
-  padding:20px;
-  border-radius:22px;
-  background:#fff;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
 }
 
 .header h1{
@@ -47,13 +51,6 @@ body{
 .header span{
   font-size:.75rem;
   color:#666;
-}
-
-.route,.block,.totalBox{
-  background:#fff;
-  border-radius:20px;
-  padding:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,.06);
 }
 
 .route .item{
@@ -92,13 +89,24 @@ body{
   font-size:1rem;
   font-weight:800;
   color:#000;
+  cursor:pointer;
+}
+
+/* ================= RECIBO PDF ================= */
+@media print{
+  body{
+    background:#fff;
+  }
+  .no-print{
+    display:none;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="page">
+<div class="page no-print">
 <div class="container">
 
   <div class="header">
@@ -118,7 +126,7 @@ body{
   </div>
 
   <div class="totalBox">
-    <div><strong>Total</strong></div>
+    <strong>Total</strong>
     <div id="total" class="total">R$ 0,00</div>
   </div>
 
@@ -128,26 +136,26 @@ body{
 </div>
 </div>
 
-<!-- RECIBO PDF -->
-<div id="recibo" style="display:none">
-  <div style="font-family:Arial;padding:30px;text-align:center">
-    <h2>Passageiro 5 Estrelas – Recibo de viagem</h2>
+<!-- ================= RECIBO ================= -->
+<div id="recibo" style="display:none;text-align:center;padding:30px">
 
-    <p><strong>Origem:</strong> <span id="rOrigem"></span></p>
-    <p><strong>Destino:</strong> <span id="rDestino"></span></p>
+  <h2>Passageiro 5 Estrelas – Recibo de viagem</h2>
 
-    <hr>
+  <p><strong>Origem:</strong><br><span id="rOrigem"></span></p>
+  <p><strong>Destino:</strong><br><span id="rDestino"></span></p>
 
-    <div id="rDetalhamento" style="text-align:left"></div>
+  <hr>
 
-    <hr>
+  <div id="rDetalhamento" style="text-align:left;margin:20px auto;max-width:320px"></div>
 
-    <h3>Total: <span id="rTotal"></span></h3>
+  <hr>
 
-    <p style="margin-top:30px">
-      Conforto, segurança e transparência.
-    </p>
-  </div>
+  <h3>Total: <span id="rTotal"></span></h3>
+
+  <p style="margin-top:30px">
+    Conforto, segurança e transparência.
+  </p>
+
 </div>
 
 <script src="core/global.js"></script>
@@ -162,39 +170,38 @@ const valorBase = Number(App.get("valorBase") || 0);
 document.getElementById("origemTxt").innerText = origem;
 document.getElementById("destinoTxt").innerText = destino;
 
+let detalhesHTML = "";
+let totalFinal = 0;
+
 function calcular(){
   let total = valorBase;
-  let detalhes = [];
+  detalhesHTML = "";
 
-  detalhes.push(["🚖 Viagem base", valorBase]);
+  detalhesHTML += `<div><strong>🚖 Viagem base</strong><span>R$ ${valorBase.toFixed(2)}</span></div>`;
 
   if(Dinamico?.ativo){
     const acres = valorBase * (Dinamico.multiplicador - 1);
     total += acres;
-    detalhes.push(["⚡ Tarifa dinâmica", acres]);
+    detalhesHTML += `<div><strong>⚡ Tarifa dinâmica</strong><span>R$ ${acres.toFixed(2)}</span></div>`;
   }
 
-  detalhes.forEach(d => {
-    document.getElementById("detalhamento").innerHTML +=
-      `<div><span><strong>${d[0]}</strong></span><strong>R$ ${d[1].toFixed(2)}</strong></div>`;
-  });
-
+  document.getElementById("detalhamento").innerHTML = detalhesHTML;
   document.getElementById("total").innerText = `R$ ${total.toFixed(2)}`;
+
+  totalFinal = total;
   App.set("total", total);
 }
 
-// 🚀 ESSENCIAL
 calcular();
 
 function enviarWhats(){
-  const total = App.get("total") || 0;
   const msg =
 `RF Driver - Orçamento de viagem
 
 Origem: ${origem}
 Destino: ${destino}
 
-Total: R$ ${total.toFixed(2)}`;
+Total: R$ ${totalFinal.toFixed(2)}`;
 
   window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
 }
@@ -202,14 +209,16 @@ Total: R$ ${total.toFixed(2)}`;
 function gerarPDF(){
   document.getElementById("rOrigem").innerText = origem;
   document.getElementById("rDestino").innerText = destino;
-  document.getElementById("rTotal").innerText = document.getElementById("total").innerText;
-  document.getElementById("rDetalhamento").innerHTML = document.getElementById("detalhamento").innerHTML;
+  document.getElementById("rDetalhamento").innerHTML = detalhesHTML;
+  document.getElementById("rTotal").innerText = `R$ ${totalFinal.toFixed(2)}`;
 
-  const original = document.body.innerHTML;
-  document.body.innerHTML = document.getElementById("recibo").innerHTML;
+  document.querySelector(".page").style.display="none";
+  document.getElementById("recibo").style.display="block";
+
   window.print();
-  document.body.innerHTML = original;
-  location.reload();
+
+  document.getElementById("recibo").style.display="none";
+  document.querySelector(".page").style.display="flex";
 }
 </script>
 
