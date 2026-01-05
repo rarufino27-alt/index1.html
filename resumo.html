@@ -197,7 +197,7 @@ input::placeholder{ color:#777; }
     <div class="item">🏁 <strong>Destino</strong><br><span id="destinoTxt"></span></div>
   </div>
 
-  <!-- TIPO DE VIAGEM (CORRIGIDO) -->
+  <!-- TIPO DE VIAGEM -->
   <div class="block">
     <label>🚖 <strong>Tipo de viagem</strong></label>
     <select id="tipoViagem">
@@ -259,8 +259,8 @@ input::placeholder{ color:#777; }
 </div>
 
 <script src="core/global.js"></script>
-<script src="core/taxas.js?v=4"></script>
-<script src="core/dinamico.js?v=4"></script>
+<script src="core/taxas.js"></script>
+<script src="core/dinamico.js"></script>
 
 <script>
 const origem = App.get("origem");
@@ -295,7 +295,7 @@ function calcular(){
   detalhes.push(["🚖 Viagem base", valorBase]);
   detalhesWhats.push(`🚖 *Viagem base*: R$ ${valorBase.toFixed(2)}`);
 
-  if(Dinamico.ativo){
+  if(window.Dinamico && Dinamico.ativo){
     const acres = valorBase * (Dinamico.multiplicador - 1);
     total += acres;
     detalhes.push([`⚡ Tarifa dinâmica (${Dinamico.multiplicador}x)`, acres]);
@@ -329,23 +329,23 @@ function calcular(){
 
   if(desvioManual.checked){
     const v = Number(valorDesvioManual.value || 0);
-    if(v>0){
+    if(v > 0){
       total += v;
       detalhes.push(["🛣️ Desvio manual", v]);
       detalhesWhats.push(`🛣️ *Desvio manual*: +R$ ${v.toFixed(2)}`);
     }
   }
 
-  const animal = Number(animalSel.value||0);
-  if(animal>0){
+  const animal = Number(animalSel.value || 0);
+  if(animal > 0){
     total += animal;
     detalhes.push(["🐶 Transporte animal", animal]);
     detalhesWhats.push(`🐶 *Transporte animal*: +R$ ${animal.toFixed(2)}`);
   }
 
-  const min = Number(minutosEspera.value||0);
-  if(min>=Taxas.espera.blocoMinutos){
-    const acres = Math.floor(min/Taxas.espera.blocoMinutos)*Taxas.espera.valorPorBloco;
+  const min = Number(minutosEspera.value || 0);
+  if(min >= Taxas.espera.blocoMinutos){
+    const acres = Math.floor(min / Taxas.espera.blocoMinutos) * Taxas.espera.valorPorBloco;
     total += acres;
     detalhes.push([`⏱️ Tempo de espera (${min} min)`, acres]);
     detalhesWhats.push(`⏱️ *Tempo de espera*: +R$ ${acres.toFixed(2)}`);
@@ -364,7 +364,7 @@ function calcular(){
 
 document.querySelectorAll("select,input").forEach(el=>{
   el.addEventListener("change",()=>{
-    el.closest(".option")?.classList.toggle("active",el.checked);
+    el.closest(".option")?.classList.toggle("active", el.checked);
     totalDiv.classList.remove("total");
     void totalDiv.offsetWidth;
     totalDiv.classList.add("total");
