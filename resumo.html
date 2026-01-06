@@ -286,24 +286,35 @@ function calcular(){
 
   const tipo = tipoViagem.value;
 
-  if (tipo === "bate_volta" || tipo === "ida_volta") {
-    const acres = valorBase * Taxas.tipoViagem[tipo];
-    total += acres;
-    detalhes.push(["♻️ Tipo de viagem", acres]);
-    detalhesWhats.push(`♻️ *Tipo de viagem*: +R$ ${acres.toFixed(2)}`);
-  }
+  // Tipo de viagem
+if (tipo === "bate_volta") {
+  const acres = valorBase * 0.80; // +80%
+  total += acres;
 
-  if (tipo === "ida_volta_espera") {
-    const subtotal = valorBase * 1;
-    const acres = subtotal * 0.20;
-    total += subtotal + acres;
+  detalhes.push(["♻️ Bate e volta (+80%)", acres]);
+  detalhesWhats.push(`♻️ *Bate e volta*: +R$ ${acres.toFixed(2)}`);
+}
 
-    detalhes.push(["🚕 Ida e volta", subtotal]);
-    detalhes.push(["⏳ Acréscimo de espera (10%)", acres]);
+if (tipo === "ida_volta") {
+  const acres = valorBase; // +100% (ida + volta)
+  total += acres;
 
-    detalhesWhats.push(`🚕 *Ida e volta*: R$ ${subtotal.toFixed(2)}`);
-    detalhesWhats.push(`⏳ *Acréscimo de espera (10%)*: +R$ ${acres.toFixed(2)}`);
-  }
+  detalhes.push(["🚕 Ida e volta", acres]);
+  detalhesWhats.push(`🚕 *Ida e volta*: +R$ ${acres.toFixed(2)}`);
+}
+
+if (tipo === "ida_volta_espera") {
+  const idaVolta = valorBase * 1;        // ida + volta
+  const acres = idaVolta * 0.20;         // 10% de espera
+  total += (idaVolta - valorBase) + acres;
+  // subtrai valorBase porque ele já entrou no total no início
+
+  detalhes.push(["🚕 Ida e volta", idaVolta - valorBase]);
+  detalhes.push(["⏳ Acréscimo de espera (10%)", acres]);
+
+  detalhesWhats.push(`🚕 *Ida e volta*: +R$ ${(idaVolta - valorBase).toFixed(2)}`);
+  detalhesWhats.push(`⏳ *Acréscimo de espera (10%)*: +R$ ${acres.toFixed(2)}`);
+}
 
   if (desvioSimples.checked) {
     total += Taxas.desvioRotaSimples;
