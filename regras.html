@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="theme/components.css">
 
 <style>
-/* ===== BASE ===== */
 body{
   min-height:100vh;
   margin:0;
@@ -29,7 +28,6 @@ body{
   gap:18px;
 }
 
-/* ===== MARCA ===== */
 .header{
   text-align:center;
   padding:26px 20px;
@@ -59,7 +57,6 @@ body{
   color:#ccc;
 }
 
-/* ===== SEÇÕES ===== */
 .section{
   background:linear-gradient(
     145deg,
@@ -80,7 +77,6 @@ body{
   gap:8px;
 }
 
-/* ===== REGRAS ===== */
 .rules{
   list-style:none;
   padding:0;
@@ -102,7 +98,6 @@ body{
   min-width:18px;
 }
 
-/* ===== ALERTA ===== */
 .alert{
   background:rgba(245,197,66,.12);
   border:1px solid rgba(245,197,66,.35);
@@ -112,7 +107,6 @@ body{
   color:#ffe9b3;
 }
 
-/* ===== BOTÃO ===== */
 .back{
   margin-top:6px;
 }
@@ -128,7 +122,6 @@ body{
   font-size:.95rem;
 }
 
-/* ===== FOOTER ===== */
 .footer{
   text-align:center;
   font-size:.75rem;
@@ -141,10 +134,9 @@ body{
 
 <div class="page">
 
-  <!-- MARCA -->
   <div class="header">
     <h1>RF DRIVER</h1>
-    <span>Regras oficiais de uso</span>
+    <span>Regras oficiais do grupo</span>
   </div>
 
   <!-- MOTORISTAS -->
@@ -152,14 +144,31 @@ body{
     <h2>🚗 Regras para Motoristas</h2>
 
     <ul class="rules">
-      <li><span>1.</span> Ao iniciar o dia de trabalho, o motorista deve <b>ativar a localização em tempo real por até 8 horas</b>.</li>
-      <li><span>2.</span> Apenas motoristas com localização ativa podem aceitar corridas.</li>
-      <li><span>3.</span> Caso uma corrida seja solicitada sem localização ativa, o direito passa para o próximo motorista elegível.</li>
-      <li><span>4.</span> Em caso de concorrência, a corrida será destinada ao motorista que cumprir todos os requisitos primeiro.</li>
-      <li><span>5.</span> O motorista deve respeitar os valores informados na tabela e no cálculo do app.</li>
-      <li><span>6.</span> É obrigatório manter postura profissional, educação e respeito com passageiros.</li>
-      <li><span>7.</span> Cancelamentos frequentes sem justificativa podem gerar advertências.</li>
-      <li><span>8.</span> O motorista é responsável por informar corretamente qualquer taxa adicional antes da corrida.</li>
+      <li><span>1.</span> É <b>obrigatória</b> a ativação da <b>localização em tempo real por 8 horas consecutivas</b> no grupo de localização.</li>
+
+      <li><span>2.</span> A localização indica que o motorista está <b>online e apto a receber solicitações</b>. Sem localização ativa, não é permitido pegar corridas.</li>
+
+      <li><span>3.</span> Não é permitido desligar a localização antes do prazo e ligá-la novamente. A reativação só é permitida após o período completo de 8 horas.</li>
+
+      <li><span>4.</span> O descumprimento da regra de localização pode gerar <b>advertência, suspensão temporária ou outras punições</b>, conforme decisão da administração.</li>
+
+      <li><span>5.</span> Somente são consideradas <b>corridas elegíveis</b> aquelas que contenham <b>origem e destino</b>. Corridas incompletas são proibidas.</li>
+
+      <li><span>6.</span> O motorista que pegar corrida sem origem ou destino será <b>suspenso automaticamente por 24 horas</b>.</li>
+
+      <li><span>7.</span> Para retornar antes das 24 horas, o motorista poderá pagar uma <b>taxa de R$ 5,00</b>, após confirmação da administração.</li>
+
+      <li><span>8.</span> Para aceitar uma corrida, o motorista deve digitar exclusivamente <b>EU</b> ou <b>PV</b>. Qualquer outra mensagem não será considerada válida.</li>
+
+      <li><span>9.</span> Em períodos de <b>tarifa dinâmica</b>, o motorista deve informar corretamente o valor da corrida ao passageiro antes do início.</li>
+
+      <li><span>10.</span> É obrigatória a utilização de <b>vestimenta adequada e profissional</b>. É proibido qualquer tipo de roupa sensual ou inadequada.</li>
+
+      <li><span>11.</span> Mulheres: proibido shorts, bermudas curtas ou rasgadas, decotes ou roupas que exponham excessivamente o corpo.</li>
+
+      <li><span>12.</span> Homens: proibido calção, bermudas rasgadas e camisetas regata ou de alça.</li>
+
+      <li><span>13.</span> A apresentação do motorista deve transmitir <b>seriedade, respeito, segurança e confiança</b> em todas as viagens.</li>
     </ul>
   </div>
 
@@ -168,27 +177,29 @@ body{
     <h2>🧍 Regras para Passageiros</h2>
 
     <ul class="rules">
-      <li><span>1.</span> Ao solicitar uma corrida, informe corretamente <b>origem, destino e quantidade de passageiros</b>.</li>
-      <li><span>2.</span> Valores adicionais podem ser aplicados conforme regras da tabela (espera, animal, desvios, etc.).</li>
-      <li><span>3.</span> O pagamento deve ser realizado conforme combinado com o motorista.</li>
+      <li><span>1.</span> O passageiro deve informar corretamente <b>origem e destino</b> ao solicitar a corrida.</li>
+
+      <li><span>2.</span> Corridas sem informações completas podem ser recusadas.</li>
+
+      <li><span>3.</span> Valores devem ser respeitados conforme informado pelo motorista antes da viagem.</li>
+
       <li><span>4.</span> Cancelamentos após confirmação podem gerar cobrança.</li>
-      <li><span>5.</span> Respeito e educação são obrigatórios durante toda a viagem.</li>
+
+      <li><span>5.</span> É obrigatório manter <b>respeito e educação</b> com o motorista durante toda a viagem.</li>
+
       <li><span>6.</span> Danos ao veículo são de responsabilidade do passageiro.</li>
-      <li><span>7.</span> Em caso de dúvidas, utilize sempre o cálculo do app como referência.</li>
     </ul>
   </div>
 
-  <!-- AVISO -->
   <div class="alert">
-    ⚠️ O descumprimento das regras pode resultar em advertência ou remoção do grupo.
+    ⚠️ Todas as regras podem ser alteradas a qualquer momento, com ou sem aviso prévio.
+    É responsabilidade do motorista acompanhar e respeitar as regras vigentes.
   </div>
 
-  <!-- VOLTAR -->
   <div class="back">
     <button onclick="history.back()">⬅ Voltar</button>
   </div>
 
-  <!-- FOOTER -->
   <div class="footer">
     RF Driver • Mobilidade com excelência
   </div>
